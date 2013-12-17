@@ -4,7 +4,13 @@
 package com.epam.devteam.dao.impl;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.UserDao;
@@ -16,7 +22,8 @@ import com.epam.devteam.entity.User;
  * 
  */
 public class PostgresqlUserDao implements UserDao {
-
+    private static final Logger LOGGER = Logger
+	    .getLogger(PostgresqlUserDao.class);
     private Connection connection;
 
     /**
@@ -68,8 +75,28 @@ public class PostgresqlUserDao implements UserDao {
 
     @Override
     public List<User> listUsers() throws DaoException {
-	// TODO Auto-generated method stub
-	return null;
+	List<User> users = null;
+	User user = null;
+	Statement statement = null;
+	ResultSet resultSet = null;
+	try {
+	    statement = connection.createStatement();
+	    LOGGER.debug("A statement was created");
+	    resultSet = statement.executeQuery("SELECT * FROM users");
+	    users = new ArrayList<User>();
+	    while (resultSet.next()) {
+		user = new User();
+		user.setId(resultSet.getLong("id"));
+		user.setPassword(resultSet.getString("password"));
+		user.setFirstname(resultSet.getString("firstname"));
+		user.setLastname(resultSet.getString("lastname"));
+		user.setPatronymic(resultSet.getString("patronymic"));
+		user.setBirthdate(resultSet.getDate("birthdate"));
+		users.add(user);
+	    }
+	} catch (SQLException e) {
+	    LOGGER.warn("Can't create a statement.");
+	}
+	return users;
     }
-
 }

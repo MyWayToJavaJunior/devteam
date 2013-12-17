@@ -26,14 +26,23 @@ public class PostgresqlDaoFactory extends DaoFactory {
 	super();
     }
 
+    /**
+     * Is used to set connection pool to the dao factory.
+     * 
+     * @param connectionPool The connection pool to set.
+     */
     @Override
     public void setConnectionPool(ConnectionPool connectionPool) {
 	this.connectionPool = connectionPool;
     }
-
+    
+    /**
+     * Is used to take user dao.
+     * @return The user dao implementation.
+     * @throws DaoException If something fails.
+     */
     @Override
     public UserDao takeUserDao() throws DaoException {
-	// Connection connection = createConnection();
 	Connection connection = connectionPool.takeConnection();
 	if (connection == null) {
 	    throw new DaoException("Cannot take connection!");
