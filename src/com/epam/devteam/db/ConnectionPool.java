@@ -6,6 +6,7 @@ package com.epam.devteam.db;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
@@ -23,7 +24,7 @@ public enum ConnectionPool {
 
     private static final Logger LOGGER = Logger.getLogger(ConnectionPool.class);
     private static final String DRIVER_NAME = "org.postgresql.Driver";
-    private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
+    private static final String URL = "jdbc:postgresql://localhost:5432/devteam";
     private static final String USER = "postgres";
     private static final String PASSWORD = "postgres";
     private static final int CONNECTIONS_QUANTITY = 10;
@@ -35,7 +36,7 @@ public enum ConnectionPool {
      * It is not possible to initialize this object outside of this class.
      */
     private ConnectionPool() {
-	// init(); ????
+	//init();
     }
 
     /**
@@ -47,11 +48,13 @@ public enum ConnectionPool {
 
 	try {
 	    Class.forName(DRIVER_NAME);
+	    LOGGER.debug("Database driver was initialized.");
 	} catch (ClassNotFoundException e) {
-	    LOGGER.error("Data base driver not found");
+	    LOGGER.error("Data base driver not found.");
 	    throw new ConnectionPoolException();
 	}
 	semaphore = new Semaphore(CONNECTIONS_QUANTITY);
+	freeConnections = new ArrayBlockingQueue<Connection>(CONNECTIONS_QUANTITY);
 	for (int i = 0; i < CONNECTIONS_QUANTITY; i++) {
 	    Connection connection;
 	    try {
@@ -79,6 +82,7 @@ public enum ConnectionPool {
 	    if (semaphore.tryAcquire(MAX_WAIT_TIME, TimeUnit.MILLISECONDS)) {
 		connection = freeConnections.poll(MAX_WAIT_TIME,
 			TimeUnit.MILLISECONDS);
+		LOGGER.debug("Connection has been taken.");
 	    }
 	} catch (InterruptedException e) {
 	    LOGGER.warn("Can't take connection");
@@ -96,6 +100,7 @@ public enum ConnectionPool {
 	    freeConnections.offer(connection, MAX_WAIT_TIME,
 		    TimeUnit.MILLISECONDS);
 	    semaphore.release();
+	    LOGGER.debug("Connection has been returned.");
 	} catch (InterruptedException e) {
 	    LOGGER.warn("Can't return connection!");
 	}

@@ -81,12 +81,18 @@ public class PostgresqlUserDao implements UserDao {
 	ResultSet resultSet = null;
 	try {
 	    statement = connection.createStatement();
-	    LOGGER.debug("A statement was created");
-	    resultSet = statement.executeQuery("SELECT * FROM users");
+	    LOGGER.debug("A statement was created.");
+	} catch (SQLException e) {
+	    LOGGER.warn("Can not create a statement.");
+	}
+	
+	try {
+	    resultSet = statement.executeQuery("SELECT * FROM users;");
 	    users = new ArrayList<User>();
 	    while (resultSet.next()) {
 		user = new User();
 		user.setId(resultSet.getLong("id"));
+		user.setEmail(resultSet.getString("email"));
 		user.setPassword(resultSet.getString("password"));
 		user.setFirstname(resultSet.getString("firstname"));
 		user.setLastname(resultSet.getString("lastname"));
@@ -95,7 +101,7 @@ public class PostgresqlUserDao implements UserDao {
 		users.add(user);
 	    }
 	} catch (SQLException e) {
-	    LOGGER.warn("Can't create a statement.");
+	    LOGGER.warn("Can not execute query.");
 	}
 	return users;
     }

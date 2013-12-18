@@ -45,7 +45,7 @@ public class PostgresqlDaoFactory extends DaoFactory {
     public UserDao takeUserDao() throws DaoException {
 	Connection connection = connectionPool.takeConnection();
 	if (connection == null) {
-	    throw new DaoException("Cannot take connection!");
+	    throw new DaoException("Can not take connection.");
 	}
 	return new PostgresqlUserDao(connection);
     }
