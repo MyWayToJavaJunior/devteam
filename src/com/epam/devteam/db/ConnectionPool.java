@@ -8,65 +8,82 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
+
+import com.epam.devteam.util.property.PropertyManager;
+import com.epam.devteam.util.property.PropertyManagerException;
 
 /**
  * @date Dec 15, 2013
  * @author Andrey Kovalskiy
  * 
  */
-public enum ConnectionPool {
-
-    INSTANCE;
+public class ConnectionPool {
 
     private static final Logger LOGGER = Logger.getLogger(ConnectionPool.class);
-    private static final String DRIVER_NAME = "org.postgresql.Driver";
-    private static final String URL = "jdbc:postgresql://localhost:5432/devteam";
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "postgres";
-    private static final int CONNECTIONS_QUANTITY = 10;
-    private static final long MAX_WAIT_TIME = 5000;
-    private Semaphore semaphore;
+    private static volatile ConnectionPool instance;
+    private String driverName;
+    private String url;
+    private String user;
+    private String password;
+    private int connections;
+    private long waitTime;
     private BlockingQueue<Connection> freeConnections;
 
-    /**
-     * It is not possible to initialize this object outside of this class.
-     */
-    private ConnectionPool() {
-	//init();
+    public static ConnectionPool getInstance() throws ConnectionPoolException {
+	ConnectionPool localInstance = instance;
+	if (localInstance == null) {
+	    synchronized (ConnectionPool.class) {
+		localInstance = instance;
+		if (localInstance == null) {
+		    instance = localInstance = new ConnectionPool();
+		    instance.init();
+		}
+	    }
+	}
+	return localInstance;
     }
 
     /**
-     * Is is used to initialize connection pool instance.
+     * It is used to initialize connection pool instance.
      * 
      * @throws ConnectionPoolException
      */
-    public void init() throws ConnectionPoolException {
-
+    private void init() throws ConnectionPoolException {
 	try {
-	    Class.forName(DRIVER_NAME);
-	    LOGGER.debug("Database driver was initialized.");
-	} catch (ClassNotFoundException e) {
-	    LOGGER.error("Data base driver not found.");
+	    PropertyManager propertyManager = PropertyManager.getInstance();
+	    String currentDatabase = propertyManager.getString("db.currentdb");
+	    driverName = propertyManager.getString("db." + currentDatabase
+		    + ".driver");
+	    url = propertyManager.getString("db." + currentDatabase + ".url");
+	    user = propertyManager.getString("db." + currentDatabase + ".user");
+	    password = propertyManager.getString("db." + currentDatabase
+		    + ".password");
+	    connections = propertyManager.getInt("db." + currentDatabase
+		    + ".connections");
+	    waitTime = propertyManager.getLong("db." + currentDatabase
+		    + ".waitTime");
+	    LOGGER.debug("Connection pool fields were initialized.");
+	} catch (PropertyManagerException e) {
+	    LOGGER.error("Connection pool fields can not be initialized.");
 	    throw new ConnectionPoolException();
 	}
-	semaphore = new Semaphore(CONNECTIONS_QUANTITY);
-	freeConnections = new ArrayBlockingQueue<Connection>(CONNECTIONS_QUANTITY);
-	for (int i = 0; i < CONNECTIONS_QUANTITY; i++) {
-	    Connection connection;
-	    try {
-		connection = DriverManager.getConnection(URL, USER, PASSWORD);
-	    } catch (SQLException e) {
-		LOGGER.error("Can't initialize pool connections!");
-		throw new ConnectionPoolException();
-	    }
+	try {
+	    Class.forName(driverName);
+	    LOGGER.debug("Database driver was initialized.");
+	} catch (ClassNotFoundException e) {
+	    LOGGER.error("Data base driver was not found.");
+	    throw new ConnectionPoolException();
+	}
+	freeConnections = new ArrayBlockingQueue<Connection>(connections);
+	for (int i = 0; i < connections; i++) {
+	    Connection connection = createConnection();
 	    freeConnections.add(connection);
 	}
-	LOGGER.debug("Connection pool was initialized with "
-		+ CONNECTIONS_QUANTITY + "connections.");
+	LOGGER.debug("Connection pool was initialized with " + connections
+		+ " connections.");
     }
 
     /**
@@ -74,19 +91,22 @@ public enum ConnectionPool {
      * will wait for a while. If there is still no free connections method will
      * return null.
      * 
-     * @return Free connection, otherwise null.
+     * @return Free connection from the connection pool.
+     * @throws ConnectionPoolException If connection can not be taken or is not
+     *             valid and can not be created.
      */
-    public Connection takeConnection() {
+    public Connection takeConnection() throws ConnectionPoolException {
 	Connection connection = null;
 	try {
-	    if (semaphore.tryAcquire(MAX_WAIT_TIME, TimeUnit.MILLISECONDS)) {
-		connection = freeConnections.poll(MAX_WAIT_TIME,
-			TimeUnit.MILLISECONDS);
-		LOGGER.debug("Connection has been taken.");
-	    }
+	    connection = freeConnections.poll(waitTime, TimeUnit.MILLISECONDS);
 	} catch (InterruptedException e) {
-	    LOGGER.warn("Can't take connection");
+	    LOGGER.warn("Interrupted while waiting");
 	}
+	if (!isConnectionValid(connection)) {
+	    LOGGER.debug("Connection is not valid.");
+	    connection = createConnection();
+	}
+	LOGGER.debug("Connection has been taken");
 	return connection;
     }
 
@@ -97,12 +117,10 @@ public enum ConnectionPool {
      */
     public void returnConnection(Connection connection) {
 	try {
-	    freeConnections.offer(connection, MAX_WAIT_TIME,
-		    TimeUnit.MILLISECONDS);
-	    semaphore.release();
+	    freeConnections.offer(connection, waitTime, TimeUnit.MILLISECONDS);
 	    LOGGER.debug("Connection has been returned.");
 	} catch (InterruptedException e) {
-	    LOGGER.warn("Can't return connection!");
+	    LOGGER.debug("Connection can not be returned");
 	}
     }
 
@@ -113,11 +131,49 @@ public enum ConnectionPool {
 	for (Connection connection : freeConnections) {
 	    try {
 		connection.close();
-		semaphore.release();
+		LOGGER.debug("Connection has been closed.");
 	    } catch (SQLException e) {
-		LOGGER.error("Can't close connection!");
+		LOGGER.error("Connection can not be closed.");
 	    }
 	}
+    }
+
+    /**
+     * Is used to create new connection.
+     * 
+     * @return The new connection.
+     * @throws ConnectionPoolException If connection can not be created.
+     */
+    private Connection createConnection() throws ConnectionPoolException {
+	Connection connection;
+	try {
+	    connection = DriverManager.getConnection(url, user, password);
+	    LOGGER.debug("Connection has been created");
+	} catch (SQLException e) {
+	    LOGGER.warn("Connection cannot be created.");
+	    throw new ConnectionPoolException();
+	}
+	return connection;
+    }
+
+    /**
+     * Is used to check if the connection has not been closed and still is
+     * valid.
+     * 
+     * @return true if connection is valid, false otherwise.
+     * @throws ConnectionPoolException If something wrong with connection
+     *             validation.
+     */
+    private boolean isConnectionValid(Connection connection)
+	    throws ConnectionPoolException {
+	boolean result = false;
+	try {
+	    result = connection.isValid((int) waitTime);
+	} catch (SQLException e) {
+	    LOGGER.warn("Connection validation failed.");
+	    throw new ConnectionPoolException();
+	}
+	return result;
     }
 
 }

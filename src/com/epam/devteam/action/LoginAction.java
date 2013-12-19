@@ -9,9 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.epam.devteam.dao.DaoFactory;
-import com.epam.devteam.dao.DaoFactoryTypes;
 import com.epam.devteam.dao.UserDao;
-import com.epam.devteam.db.ConnectionPool;
 import com.epam.devteam.entity.User;
 
 /**
@@ -31,10 +29,7 @@ public class LoginAction implements Action {
 	    return "home";
 	}
 	try {
-	    DaoFactory df = DaoFactory
-		    .takeDaoFactory(DaoFactoryTypes.POSTGRESQL);
-	    ConnectionPool.INSTANCE.init();
-	    df.setConnectionPool(ConnectionPool.INSTANCE);
+	    DaoFactory df = DaoFactory.takeDaoFactory();
 	    UserDao ud = df.takeUserDao();
 	    List<User> users = ud.listUsers();
 	    for (User user : users) {

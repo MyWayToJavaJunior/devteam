@@ -3,8 +3,6 @@
  */
 package com.epam.devteam.dao.impl;
 
-import java.sql.Connection;
-
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
 import com.epam.devteam.dao.UserDao;
@@ -39,14 +37,9 @@ public class PostgresqlDaoFactory extends DaoFactory {
     /**
      * Is used to take user dao.
      * @return The user dao implementation.
-     * @throws DaoException If something fails.
      */
     @Override
     public UserDao takeUserDao() throws DaoException {
-	Connection connection = connectionPool.takeConnection();
-	if (connection == null) {
-	    throw new DaoException("Can not take connection.");
-	}
-	return new PostgresqlUserDao(connection);
+	return new PostgresqlUserDao(connectionPool);
     }
 }

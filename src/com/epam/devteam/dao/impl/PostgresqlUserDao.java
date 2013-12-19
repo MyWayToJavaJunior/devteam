@@ -14,17 +14,19 @@ import org.apache.log4j.Logger;
 
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.UserDao;
+import com.epam.devteam.db.ConnectionPool;
+import com.epam.devteam.db.ConnectionPoolException;
 import com.epam.devteam.entity.User;
 
 /**
  * @date Dec 15, 2013
- * @author anjey
+ * @author Andrey Kovalskiy
  * 
  */
 public class PostgresqlUserDao implements UserDao {
     private static final Logger LOGGER = Logger
 	    .getLogger(PostgresqlUserDao.class);
-    private Connection connection;
+    private ConnectionPool connectionPool;
 
     /**
      * Initializes a newly created {@code PostgresqlUserDao} object.
@@ -39,8 +41,8 @@ public class PostgresqlUserDao implements UserDao {
      * 
      * @param connection The connection to use to connect to the database.
      */
-    public PostgresqlUserDao(Connection connection) {
-	this.connection = connection;
+    public PostgresqlUserDao(ConnectionPool connectionPool) {
+	this.connectionPool = connectionPool;
     }
 
     @Override
@@ -77,15 +79,24 @@ public class PostgresqlUserDao implements UserDao {
     public List<User> listUsers() throws DaoException {
 	List<User> users = null;
 	User user = null;
+	Connection connection = null;
 	Statement statement = null;
 	ResultSet resultSet = null;
+
+	try {
+	    connection = connectionPool.takeConnection();
+	} catch (ConnectionPoolException e) {
+	    LOGGER.warn("Connection can not be taken.");
+	    throw new DaoException();
+	}
 	try {
 	    statement = connection.createStatement();
-	    LOGGER.debug("A statement was created.");
+	    LOGGER.debug("Statement has been created.");
 	} catch (SQLException e) {
-	    LOGGER.warn("Can not create a statement.");
+	    LOGGER.warn("Statement can not be created.");
+	    finish(connection, statement);
+	    throw new DaoException();
 	}
-	
 	try {
 	    resultSet = statement.executeQuery("SELECT * FROM users;");
 	    users = new ArrayList<User>();
@@ -101,8 +112,23 @@ public class PostgresqlUserDao implements UserDao {
 		users.add(user);
 	    }
 	} catch (SQLException e) {
-	    LOGGER.warn("Can not execute query.");
+	    LOGGER.warn("Query can not be executed.");
+	    finish(connection, statement);
+	    throw new DaoException();
 	}
+	finish(connection, statement);
 	return users;
+    }
+
+    private void finish(Connection connection, Statement statement) {
+	if (statement != null) {
+	    try {
+		statement.close();
+		LOGGER.debug("Statement has been closed.");
+	    } catch (SQLException e) {
+		LOGGER.warn("Statement can not be closed.");
+	    }
+	};
+	connectionPool.returnConnection(connection);
     }
 }
