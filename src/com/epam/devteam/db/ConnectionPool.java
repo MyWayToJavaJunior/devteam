@@ -54,17 +54,13 @@ public class ConnectionPool {
     private void init() throws ConnectionPoolException {
 	try {
 	    PropertyManager propertyManager = PropertyManager.getInstance();
-	    String currentDatabase = propertyManager.getString("db.currentdb");
-	    driverName = propertyManager.getString("db." + currentDatabase
-		    + ".driver");
-	    url = propertyManager.getString("db." + currentDatabase + ".url");
-	    user = propertyManager.getString("db." + currentDatabase + ".user");
-	    password = propertyManager.getString("db." + currentDatabase
-		    + ".password");
-	    connections = propertyManager.getInt("db." + currentDatabase
-		    + ".connections");
-	    waitTime = propertyManager.getLong("db." + currentDatabase
-		    + ".waitTime");
+	    String db = "db." + propertyManager.getString("db.name");
+	    driverName = propertyManager.getString(db + ".driver");
+	    url = propertyManager.getString(db + ".url");
+	    user = propertyManager.getString(db + ".user");
+	    password = propertyManager.getString(db + ".password");
+	    connections = propertyManager.getInt(db + ".connections");
+	    waitTime = propertyManager.getLong(db + ".waitTime");
 	    LOGGER.debug("Connection pool fields were initialized.");
 	} catch (PropertyManagerException e) {
 	    LOGGER.error("Connection pool fields can not be initialized.");
@@ -100,13 +96,15 @@ public class ConnectionPool {
 	try {
 	    connection = freeConnections.poll(waitTime, TimeUnit.MILLISECONDS);
 	} catch (InterruptedException e) {
-	    LOGGER.warn("Interrupted while waiting");
+	    LOGGER.warn("Connection can not be taken: interrupted while waiting");
+	    throw new ConnectionPoolException();
 	}
 	if (!isConnectionValid(connection)) {
 	    LOGGER.debug("Connection is not valid.");
-	    connection = createConnection();
+	    Connection newConnection = createConnection();
+	    connection = newConnection;
 	}
-	LOGGER.debug("Connection has been taken");
+	LOGGER.debug("Connection has been taken.");
 	return connection;
     }
 
@@ -148,7 +146,7 @@ public class ConnectionPool {
 	Connection connection;
 	try {
 	    connection = DriverManager.getConnection(url, user, password);
-	    LOGGER.debug("Connection has been created");
+	    LOGGER.debug("Connection has been created.");
 	} catch (SQLException e) {
 	    LOGGER.warn("Connection cannot be created.");
 	    throw new ConnectionPoolException();

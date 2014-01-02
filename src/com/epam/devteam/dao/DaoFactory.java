@@ -80,7 +80,7 @@ public abstract class DaoFactory {
 	try {
 	    PropertyManager propertyManager = PropertyManager.getInstance();
 	    databaseType = DatabaseType.valueOf(propertyManager.getString(
-		    "db.currentdb").toUpperCase());
+		    "db.name").toUpperCase());
 	    LOGGER.debug("Database type was initialized as " + databaseType);
 	} catch (PropertyManagerException e) {
 	    LOGGER.error("Database type can not be initialized.");
