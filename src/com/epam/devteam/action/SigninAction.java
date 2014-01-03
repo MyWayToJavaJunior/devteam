@@ -17,7 +17,7 @@ import com.epam.devteam.entity.User;
  * @author anjey
  * 
  */
-public class LoginAction implements Action {
+public class SigninAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request,

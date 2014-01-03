@@ -5,23 +5,23 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Main</title>
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/css/reset.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="css/text.css"
+<link rel="stylesheet" type="text/css" href="/devteam/css/reset.css"
 	media="screen" />
-<link rel="stylesheet" type="text/css" href="css/960.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="css/grid.css"
+<link rel="stylesheet" type="text/css" href="/devteam/css/text.css"
 	media="screen" />
-<link rel="stylesheet" type="text/css" href="css/layout.css"
+<link rel="stylesheet" type="text/css" href="/devteam/css/960.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/devteam/css/grid.css"
 	media="screen" />
-<link rel="stylesheet" type="text/css" href="css/nav.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/devteam/css/layout.css"
+	media="screen" />
+<link rel="stylesheet" type="text/css" href="/devteam/css/nav.css" media="screen" />
 </head>
 <body>
 	<div class="container_16">
 		<!--Header-->
 		<div class="grid_16">
 			<h1 id="branding">
-				<a href="">Development team</a>
+				<a href="main">Development team</a>
 			</h1>
 		</div>
 		<div class="clear"></div>
@@ -38,8 +38,8 @@
 						<li><a href="">Downloads</a></li>
 						<li><a href="">Documentation</a></li>
 					</ul></li>
-				<li><a href="GET/request">Online request</a></li>
-				<li class="secondary"><a href="GET/login" title="Sign in">Sign
+				<li><a href="request">Online request</a></li>
+				<li class="secondary"><a href="login" title="Sign in">Sign
 						in</a></li>
 			</ul>
 		</div>

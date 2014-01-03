@@ -18,10 +18,8 @@ public class ActionFactory {
 	    req = request.getMethod() + request.getPathInfo();
 	    System.out.println(req);
 	}
-	if ("GET/login".equals(req) || "POST/login".equals(req)) {
-	    action = new LoginAction();
-	} else if ("GET/home".equals(req)) {
-	    action = new HomeAction();
+	if ("GET/signin".equals(req) || "POST/signin".equals(req)) {
+	    action = new SigninAction();
 	} else if ("GET/request".equals(req)) {
 	    action = new RequestCreateAction();
 	} else {
