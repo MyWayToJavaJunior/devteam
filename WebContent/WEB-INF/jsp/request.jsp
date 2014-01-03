@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Main</title>
+<title>Online Request</title>
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/css/reset.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="css/text.css"
@@ -46,14 +46,57 @@
 		<div class="clear"></div>
 		<!--Page title-->
 		<div class="grid_16">
-			<h3 id="page_title" align="center">Welcome to the development
-				team site!</h3>
+			<h3 id="page_title" align="center">Leave your request.</h3>
 		</div>
 		<div class="clear"></div>
 		<!--Site body-->
-		<div class="grid_16">
-			<h1 align="center">Page body</h1>
+		<div class="grid_4" style="height: 1px"></div>
+		<div class="grid_8">
+			<form>
+				<fieldset>
+					<legend>Request</legend>
+					<p>
+						<label>First name</label> <input type="text" name="first_name"
+							value="" />
+					</p>
+					<p>
+						<label>Last name</label> <input type="text" name="last_name"
+							value="" />
+					</p>
+					<p>
+						<label>Company</label> <input type="text" name="company" value="" />
+					</p>
+					<p>
+						<label>Position</label> <input type="text" name="position"
+							value="" />
+					</p>
+					<p>
+						<label>Contact phone</label> <input type="text" name="phone"
+							value="" />
+					</p>
+					<p>
+						<label>Contact email</label> <input type="text" name="email"
+							value="" />
+					</p>
+					<p>
+						<label>Country</label> <input type="text" name="country" value="" />
+					</p>
+					<p>
+						<label>Address</label> <input type="text" name="address" value="" />
+					</p>
+					<p>
+						<label>Request message</label>
+						<textarea cols="107" rows="6" name="message"></textarea>
+					</p>
+					<p>
+						<label>Attach file</label> <input type="file" size="40">
+					</p>
+
+					<input type="submit" value="Submit">
+				</fieldset>
+			</form>
 		</div>
+		<div class="grid_4" style="height: 1px"></div>
 		<div class="clear"></div>
 		<!--Footer-->
 		<div class="grid_16" id="site_info">
