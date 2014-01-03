@@ -20,7 +20,7 @@ public class ActionFactory {
 	}
 	if ("GET/signin".equals(req) || "POST/signin".equals(req)) {
 	    action = new SigninAction();
-	} else if ("GET/request".equals(req)) {
+	} else if ("GET/request".equals(req) || "POST/request_create".equals(req)) {
 	    action = new RequestCreateAction();
 	} else {
 	    action = new MainAction();

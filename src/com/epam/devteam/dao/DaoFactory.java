@@ -19,22 +19,7 @@ import com.epam.devteam.util.property.PropertyManagerException;
  */
 public abstract class DaoFactory {
     private static final Logger LOGGER = Logger.getLogger(DaoFactory.class);
-    private static DatabaseType databaseType = null;
-
-    /**
-     * Is used to set connection pool to the dao factory.
-     * 
-     * @param connectionPool The connection pool to set.
-     */
-    public abstract void setConnectionPool(ConnectionPool connectionPool);
-
-    /**
-     * Is used to take user dao.
-     * 
-     * @return The user dao implementation.
-     * @throws DaoException If something fails.
-     */
-    public abstract UserDao takeUserDao() throws DaoException;
+    private static DatabaseType databaseType;
 
     /**
      * Is used to take dao factory implementation to work with required
@@ -76,7 +61,7 @@ public abstract class DaoFactory {
      *             database property is wrong.
      * @see DatabaseType
      */
-    public static void initDatabaseType() throws DaoException {
+    private static void initDatabaseType() throws DaoException {
 	try {
 	    PropertyManager propertyManager = PropertyManager.getInstance();
 	    databaseType = DatabaseType.valueOf(propertyManager.getString(
@@ -87,4 +72,28 @@ public abstract class DaoFactory {
 	    throw new DaoException();
 	}
     }
+
+    /**
+     * Is used to set connection pool to the dao factory.
+     * 
+     * @param connectionPool The connection pool to set.
+     */
+    public abstract void setConnectionPool(ConnectionPool connectionPool);
+
+    /**
+     * Is used to get user dao.
+     * 
+     * @return The user dao implementation.
+     * @throws DaoException If something fails.
+     */
+    public abstract UserDao getUserDao() throws DaoException;
+
+    /**
+     * Is used to get request dao.
+     * 
+     * @return The request dao implementation.
+     * @throws DaoException If something fails.
+     */
+    public abstract RequestDao getRequestDao() throws DaoException;
+    
 }

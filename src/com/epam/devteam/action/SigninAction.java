@@ -22,7 +22,7 @@ public class SigninAction implements Action {
     @Override
     public String execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
-	if ("login".equals(request.getParameter("command"))) {
+	/*if ("login".equals(request.getParameter("command"))) {
 	    System.out.println(request.getParameter("username"));
 	    System.out.println(request.getParameter("password"));
 	    System.out.println("Welcome user!");
@@ -38,8 +38,8 @@ public class SigninAction implements Action {
 	} catch (Exception e) {
 	    System.out.println("You fucking failed!");
 	    e.printStackTrace();
-	}
+	}*/
 
-	return "login";
+	return "signin";
     }
 }

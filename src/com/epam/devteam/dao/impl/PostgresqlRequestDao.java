@@ -44,8 +44,6 @@ public class PostgresqlRequestDao extends RequestDao {
 	    throw new DaoException();
 	}
 	try {
-	    Request object1 = new Request(1L,new Date(new java.util.Date().getTime()),Request.Status.PENDING,null,123L,321L); 
-	    object = object1;
 	    statement.setDate(1, object.getDate());
 	    statement.setString(2, object.getStatus().toString());
 	    statement.setLong(3, object.getCustomerId());
