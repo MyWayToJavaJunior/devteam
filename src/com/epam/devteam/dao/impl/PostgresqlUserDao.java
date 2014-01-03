@@ -4,10 +4,12 @@
 package com.epam.devteam.dao.impl;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -47,8 +49,38 @@ public class PostgresqlUserDao implements UserDao {
 
     @Override
     public void createUser(User user) throws DaoException {
-	// TODO Auto-generated method stub
+	Connection connection = null;
+	PreparedStatement statement = null;
 
+	try {
+	    connection = connectionPool.takeConnection();
+	} catch (ConnectionPoolException e) {
+	    LOGGER.warn("Connection can not be taken.");
+	    throw new DaoException();
+	}
+	try {
+	    statement = connection
+		    .prepareStatement("INSERT INTO users (id,email,password,firstname,lastname,patronymic,birthdate) VALUES (?,?,?,?,?,?,?)");
+	    LOGGER.debug("Statement has been created.");
+	} catch (SQLException e) {
+	    LOGGER.warn("Statement can not be created.");
+	    finish(connection, statement);
+	    throw new DaoException();
+	}
+
+	try {
+	    statement.setInt(1, 2);
+	    statement.setString(2, "k@mail.ru");
+	    statement.setString(3, "123456");
+	    statement.setString(4, "alex");
+	    statement.setString(5, "kim");
+	    statement.setString(6, "hen");
+	    statement.setDate(7, new Date(new java.util.Date().getTime()));
+	    statement.execute();
+	} catch (SQLException e) {
+	    LOGGER.warn("User cannot be created.");
+	}
+	finish(connection, statement);
     }
 
     @Override
@@ -82,7 +114,7 @@ public class PostgresqlUserDao implements UserDao {
 	Connection connection = null;
 	Statement statement = null;
 	ResultSet resultSet = null;
-
+	createUser(null);
 	try {
 	    connection = connectionPool.takeConnection();
 	} catch (ConnectionPoolException e) {
@@ -128,7 +160,8 @@ public class PostgresqlUserDao implements UserDao {
 	    } catch (SQLException e) {
 		LOGGER.warn("Statement can not be closed.");
 	    }
-	};
+	}
+	;
 	connectionPool.returnConnection(connection);
     }
 }

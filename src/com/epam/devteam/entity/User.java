@@ -23,6 +23,8 @@ public class User implements Serializable {
     private String lastname;
     private String patronymic;
     private Date birthdate;
+    private String address;
+    private String phone;
 
     /**
      * Initializes a newly created {@code User} object with empty fields.
@@ -181,6 +183,47 @@ public class User implements Serializable {
 	this.birthdate = birthdate;
     }
 
+    /**
+     * Returns the address field value.
+     * 
+     * @return the address
+     */
+    public String getAddress() {
+	return address;
+    }
+
+    /**
+     * Sets the address field value.
+     * 
+     * @param address the address to set
+     */
+    public void setAddress(String address) {
+	this.address = address;
+    }
+
+    /**
+     * Returns the phone field value.
+     * 
+     * @return the phone
+     */
+    public String getPhone() {
+	return phone;
+    }
+
+    /**
+     * Sets the phone field value.
+     * 
+     * @param phone the phone to set
+     */
+    public void setPhone(String phone) {
+	this.phone = phone;
+    }
+
+    /**
+     * Indicates whether some other object is "equal to" this one.
+     * 
+     * @param obj The reference object with which to compare.
+     */
     @Override
     public boolean equals(Object obj) {
 	if (this == obj) {
@@ -203,6 +246,9 @@ public class User implements Serializable {
 	}
     }
 
+    /**
+     * Returns a hash code value for the object.
+     */
     @Override
     public int hashCode() {
 	return (int) (31 * id.hashCode()
@@ -219,7 +265,9 @@ public class User implements Serializable {
 	StringBuffer sb = new StringBuffer();
 	sb.append("user:").append(lastname).append(" ").append(firstname)
 		.append(" ").append(patronymic).append(" birthdate:")
-		.append(birthdate).append(" email:").append(email);
+		.append(birthdate).append(" email:").append(email)
+		.append(" address:").append(address).append(" phone:")
+		.append(phone);
 	return sb.toString();
     }
 }

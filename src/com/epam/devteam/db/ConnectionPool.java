@@ -24,7 +24,7 @@ public class ConnectionPool {
 
     private static final Logger LOGGER = Logger.getLogger(ConnectionPool.class);
     private static volatile ConnectionPool instance;
-    private String driverName;
+    private String driver;
     private String url;
     private String user;
     private String password;
@@ -55,7 +55,7 @@ public class ConnectionPool {
 	try {
 	    PropertyManager propertyManager = PropertyManager.getInstance();
 	    String db = "db." + propertyManager.getString("db.name");
-	    driverName = propertyManager.getString(db + ".driver");
+	    driver = propertyManager.getString(db + ".driver");
 	    url = propertyManager.getString(db + ".url");
 	    user = propertyManager.getString(db + ".user");
 	    password = propertyManager.getString(db + ".password");
@@ -63,11 +63,11 @@ public class ConnectionPool {
 	    waitTime = propertyManager.getLong(db + ".waitTime");
 	    LOGGER.debug("Connection pool fields were initialized.");
 	} catch (PropertyManagerException e) {
-	    LOGGER.error("Connection pool fields can not be initialized.");
+	    LOGGER.error("Connection pool fields cannot be initialized.");
 	    throw new ConnectionPoolException();
 	}
 	try {
-	    Class.forName(driverName);
+	    Class.forName(driver);
 	    LOGGER.debug("Database driver was initialized.");
 	} catch (ClassNotFoundException e) {
 	    LOGGER.error("Data base driver was not found.");
@@ -88,15 +88,15 @@ public class ConnectionPool {
      * return null.
      * 
      * @return Free connection from the connection pool.
-     * @throws ConnectionPoolException If connection can not be taken or is not
-     *             valid and can not be created.
+     * @throws ConnectionPoolException If connection cannot be taken or is not
+     *             valid and cannot be created.
      */
     public Connection takeConnection() throws ConnectionPoolException {
 	Connection connection = null;
 	try {
 	    connection = freeConnections.poll(waitTime, TimeUnit.MILLISECONDS);
 	} catch (InterruptedException e) {
-	    LOGGER.warn("Connection can not be taken: interrupted while waiting");
+	    LOGGER.warn("Interrupted while waiting");
 	    throw new ConnectionPoolException();
 	}
 	if (!isConnectionValid(connection)) {
@@ -104,7 +104,7 @@ public class ConnectionPool {
 	    Connection newConnection = createConnection();
 	    connection = newConnection;
 	}
-	LOGGER.debug("Connection has been taken.");
+	//LOGGER.debug("Connection has been taken.");
 	return connection;
     }
 
@@ -118,7 +118,7 @@ public class ConnectionPool {
 	    freeConnections.offer(connection, waitTime, TimeUnit.MILLISECONDS);
 	    LOGGER.debug("Connection has been returned.");
 	} catch (InterruptedException e) {
-	    LOGGER.debug("Connection can not be returned");
+	    LOGGER.debug("Connection cannot be returned");
 	}
     }
 
@@ -131,7 +131,7 @@ public class ConnectionPool {
 		connection.close();
 		LOGGER.debug("Connection has been closed.");
 	    } catch (SQLException e) {
-		LOGGER.error("Connection can not be closed.");
+		LOGGER.error("Connection cannot be closed.");
 	    }
 	}
     }
@@ -140,7 +140,7 @@ public class ConnectionPool {
      * Is used to create new connection.
      * 
      * @return The new connection.
-     * @throws ConnectionPoolException If connection can not be created.
+     * @throws ConnectionPoolException If connection cannot be created.
      */
     private Connection createConnection() throws ConnectionPoolException {
 	Connection connection;
