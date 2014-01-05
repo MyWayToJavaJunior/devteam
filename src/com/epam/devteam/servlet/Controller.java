@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.epam.devteam.action.Action;
 import com.epam.devteam.action.ActionFactory;
 
@@ -14,6 +16,7 @@ import com.epam.devteam.action.ActionFactory;
  * Servlet implementation class Controller
  */
 public class Controller extends HttpServlet {
+    private static final Logger LOGGER = Logger.getLogger(Controller.class);
     private static final long serialVersionUID = 1L;
 
     /**
@@ -53,8 +56,8 @@ public class Controller extends HttpServlet {
 		response.sendRedirect(view);
 	    }
 	} catch (Exception e) {
-	    throw new ServletException("Executing action failed.", e);
+	    LOGGER.error("Executing action failed.", e);
 	}
     }
-    
+
 }

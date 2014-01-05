@@ -1,49 +1,63 @@
 package com.epam.devteam.entity;
 
-import java.io.Serializable;
+import java.sql.Date;
 
-public class Employee extends User implements Serializable {
-    /**
-     * Serial version id.
-     */
+/**
+ * @date Jan 4, 2014
+ * @author Andrey Kovalskiy
+ */
+public class Employee extends User {
+
     private static final long serialVersionUID = 1L;
-    private String position;
-    private String company;
+    private String qualification;
 
     /**
-     * Returns the position field value.
-     * 
-     * @return the position
+     * Initializes a newly created {@code Employee} object.
      */
-    public String getPosition() {
-	return position;
+    public Employee() {
+	super();
     }
 
     /**
-     * Sets the position field value.
+     * Initializes a newly created {@code Employee} object with the given field
+     * values.
      * 
-     * @param position the position to set
+     * @param id The user id.
+     * @param email The user email.
+     * @param password The user password.
+     * @param registrationDate The date of registration.
+     * @param firstName The user first name.
+     * @param lastName The user last name.
+     * @param birthDate The user birth date.
+     * @param phone The contact phone number.
+     * @param role The employee role {@link UserRole}.
+     * @param qualifiaction The employee qualification.
      */
-    public void setPosition(String position) {
-	this.position = position;
+    public Employee(Integer id, String email, String password,
+	    Date registrationDate, UserRole role, String firstName,
+	    String lastName, Date birthDate, String address, String phone,
+	    String qualification) {
+	super(id, email, password, registrationDate, role, firstName, lastName,
+		birthDate, address, phone);
+	this.qualification = qualification;
     }
 
     /**
-     * Returns the company field value.
+     * Returns the qualification field value.
      * 
-     * @return the company
+     * @return The qualification.
      */
-    public String getCompany() {
-	return company;
+    public String getQualification() {
+	return qualification;
     }
 
     /**
-     * Sets the company field value.
+     * Sets the qualification field value.
      * 
-     * @param company the company to set
+     * @param qualification The qualification to set.
      */
-    public void setCompany(String company) {
-	this.company = company;
+    public void setQualification(String qualification) {
+	this.qualification = qualification;
     }
 
     /**
@@ -64,15 +78,17 @@ public class Employee extends User implements Serializable {
 	    return (this.getId().equals(otherEmployee.getId()))
 		    && (this.getEmail().equals(otherEmployee.getEmail()))
 		    && (this.getPassword().equals(otherEmployee.getPassword()))
-		    && (this.getFirstname()
-			    .equals(otherEmployee.getFirstname()))
-		    && (this.getLastname().equals(otherEmployee.getLastname()))
-		    && (this.getPatronymic().equals(otherEmployee
-			    .getPatronymic()))
-		    && (this.getBirthdate()
-			    .equals(otherEmployee.getBirthdate()))
-		    && (this.company.equals(otherEmployee.company))
-		    && (this.position.equals(otherEmployee.position));
+		    && (this.getRegistrationDate().equals(otherEmployee
+			    .getRegistrationDate()))
+		    && (this.getRole().equals(otherEmployee.getRole()))
+		    && (this.getFirstName()
+			    .equals(otherEmployee.getFirstName()))
+		    && (this.getLastName().equals(otherEmployee.getLastName()))
+		    && (this.getBirthDate()
+			    .equals(otherEmployee.getBirthDate()))
+		    && (this.getAddress().equals(otherEmployee.getAddress()))
+		    && (this.getPhone().equals(otherEmployee.getPhone()))
+		    && (this.qualification.equals(otherEmployee.qualification));
 	} else {
 	    return false;
 	}
@@ -84,8 +100,7 @@ public class Employee extends User implements Serializable {
     @Override
     public int hashCode() {
 	return super.hashCode()
-		+ ((position == null) ? 0 : position.hashCode())
-		+ ((company == null) ? 0 : company.hashCode());
+		+ ((qualification == null) ? 0 : qualification.hashCode());
     }
 
 }

@@ -22,8 +22,8 @@ public abstract class DaoFactory {
     private static DatabaseType databaseType;
 
     /**
-     * Is used to take dao factory implementation to work with required
-     * database. Database type is defined in property file.
+     * Is used to get dao factory implementation to work with required database.
+     * Database type is defined in property file.
      * 
      * @param daoFactoryTypes The implementation type.
      * @return The dao factory instance.
@@ -31,25 +31,27 @@ public abstract class DaoFactory {
      *             fails with connection pool.
      * @see DatabaseType
      */
-    public static DaoFactory takeDaoFactory() throws DaoException {
+    public static DaoFactory getDaoFactory() throws DaoException {
 	DaoFactory daoFactory = null;
+	ConnectionPool connectionPool = null;
 	if (databaseType == null) {
 	    initDatabaseType();
 	}
+	try {
+	    connectionPool = ConnectionPool.getInstance();
+	} catch (ConnectionPoolException e) {
+	    LOGGER.warn("Connection pool cannot be initialized.");
+	    throw new DaoException();
+	}
 	switch (databaseType) {
 	case POSTGRESQL:
-	    daoFactory = new PostgresqlDaoFactory();
+	    daoFactory = new PostgresqlDaoFactory(connectionPool);
 	    break;
 	default:
-	    LOGGER.warn("Database type is defined but not available!");
+	    LOGGER.warn("Database type is defined but not available.");
 	    throw new DaoException();
 	}
-	try {
-	    daoFactory.setConnectionPool(ConnectionPool.getInstance());
-	} catch (ConnectionPoolException e) {
-	    LOGGER.error("Connection pool can not be initialized");
-	    throw new DaoException();
-	}
+
 	return daoFactory;
     }
 
@@ -68,17 +70,10 @@ public abstract class DaoFactory {
 		    "db.name").toUpperCase());
 	    LOGGER.debug("Database type was initialized as " + databaseType);
 	} catch (PropertyManagerException e) {
-	    LOGGER.error("Database type can not be initialized.");
+	    LOGGER.warn("Database type can not be initialized.");
 	    throw new DaoException();
 	}
     }
-
-    /**
-     * Is used to set connection pool to the dao factory.
-     * 
-     * @param connectionPool The connection pool to set.
-     */
-    public abstract void setConnectionPool(ConnectionPool connectionPool);
 
     /**
      * Is used to get user dao.
@@ -86,7 +81,15 @@ public abstract class DaoFactory {
      * @return The user dao implementation.
      * @throws DaoException If something fails.
      */
-    public abstract UserDao getUserDao() throws DaoException;
+    public abstract UserDao getUserDao();
+
+    /**
+     * Is used to get customer dao.
+     * 
+     * @return The request dao implementation.
+     * @throws DaoException If something fails.
+     */
+    public abstract CustomerDao getCustomerDao();
 
     /**
      * Is used to get request dao.
@@ -94,6 +97,6 @@ public abstract class DaoFactory {
      * @return The request dao implementation.
      * @throws DaoException If something fails.
      */
-    public abstract RequestDao getRequestDao() throws DaoException;
-    
+    public abstract RequestDao getRequestDao();
+
 }

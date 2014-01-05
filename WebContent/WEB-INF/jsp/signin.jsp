@@ -13,19 +13,19 @@
 		<div class="grid_4" style="height: 1px"></div>
 		<div class="grid_8">
 			<div class="box" align="center">
-				<form action="POST/signin">
+				<form action="signin" method="post">
 					<fieldset>
 						<legend>Sign in</legend>
 						<label>Email</label><br>
-						<input type="text" name="username" /><br>
+						<input type="text" name="email" /><br>
 						<label>Password</label><br>
 						<input type="password" name="password" /><br>
 						<input type="submit" value="Sign in"/>
 					</fieldset>
 				</form>
-				<form action="POST/signup">
+				<form action="create_account" method="post">
 					<fieldset>
-						<legend>Sign up</legend>
+						<legend>Create account</legend>
 						<label>Email:</label><br>
 						<input type="text" name="email"/><br>
 						<label>Create password:</label><br>
@@ -36,16 +36,16 @@
 						<input type="text" name="first_name"/><br>
 						<label>Last Name:</label><br>
 						<input type="text" name="last_name"/><br>
+						<label>Birth Date:</label><br>
+						<input type="text" name="birth_date"/><br>
 						<label>Address:</label><br>
 						<input type="text" name="address"/><br>
 						<label>Phone number:</label><br>
 						<input type="text" name="phone"/><br>
-						<label>Country: </label><br>
-						<select name="Country">
-							<option value="">Select Country...</option>
-							<option value="Canada">Canada</option>
-							<option value="United States">United States</option>
-						</select><br>
+						<label>Company:</label><br>
+						<input type="text" name="company"/><br>
+						<label>Position:</label><br>
+						<input type="text" name="position"/><br>
 						<input type="submit" value="Sign up"/>
 					</fieldset>
 				</form>

@@ -3,43 +3,57 @@
  */
 package com.epam.devteam.action;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
+import com.epam.devteam.dao.CustomerDao;
+import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
-import com.epam.devteam.dao.UserDao;
-import com.epam.devteam.entity.User;
+import com.epam.devteam.entity.Customer;
 
 /**
- * @date Dec 14, 2013
- * @author anjey
+ * @date Jan 5, 2014
+ * @author Andrey Kovalskiy
  * 
  */
 public class SigninAction implements Action {
+    private static final Logger LOGGER = Logger.getLogger(SigninAction.class);
 
     @Override
     public String execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
-	/*if ("login".equals(request.getParameter("command"))) {
-	    System.out.println(request.getParameter("username"));
-	    System.out.println(request.getParameter("password"));
-	    System.out.println("Welcome user!");
-	    return "home";
+	Customer customer = null;
+	HttpSession session = request.getSession();
+	DaoFactory factory;
+	CustomerDao dao =null;
+	try {
+	    factory = DaoFactory.getDaoFactory();
+	    dao = factory.getCustomerDao();
+	} catch (DaoException e) {
+	    LOGGER.warn("Dao cannot be created.");
+	  //throw new ActionException();
+	    return "error";
 	}
 	try {
-	    DaoFactory df = DaoFactory.takeDaoFactory();
-	    UserDao ud = df.takeUserDao();
-	    List<User> users = ud.listUsers();
-	    for (User user : users) {
-		System.out.println(user);
-	    }
-	} catch (Exception e) {
-	    System.out.println("You fucking failed!");
-	    e.printStackTrace();
-	}*/
+	    customer = dao.find(request.getParameter("email"),
+		    request.getParameter("password"));
+	} catch (DaoException e) {
+	    LOGGER.warn("Request cannot be executed.");
+	    //throw new ActionException();
+	    return "error";
+	}
+	if (customer == null) {
+	    System.out.println("User not found.");
+	    return "signin";
+	} else {
+	    session.setAttribute("user", customer);
+	    System.out.println("welcome: " + customer.getEmail());
+	    return "main";
+	}
 
-	return "signin";
     }
+
 }

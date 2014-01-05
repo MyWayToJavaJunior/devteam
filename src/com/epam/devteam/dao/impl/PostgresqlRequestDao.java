@@ -11,13 +11,31 @@ import org.apache.log4j.Logger;
 
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.RequestDao;
+import com.epam.devteam.db.ConnectionPool;
 import com.epam.devteam.db.ConnectionPoolException;
 import com.epam.devteam.entity.Request;
 
 public class PostgresqlRequestDao extends RequestDao {
     private static final Logger LOGGER = Logger
 	    .getLogger(PostgresqlRequestDao.class);
+    
+    /**
+     * Initializes a newly created {@code PostgresqlRequestDao} object.
+     */
+    public PostgresqlRequestDao() {
+	super();
+    }
 
+    /**
+     * Initializes a newly created {@code PostgresqlRequestDao} object and
+     * connection with the given connection value.
+     * 
+     * @param connection The connection to use to connect to the database.
+     */
+    public PostgresqlRequestDao(ConnectionPool connectionPool) {
+	setConnectionPool(connectionPool);
+    }
+    
     /**
      * Is used to create given request in the database.
      * 

@@ -4,7 +4,7 @@
 package com.epam.devteam.entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * @date Dec 15, 2013
@@ -12,17 +12,16 @@ import java.util.Date;
  * 
  */
 public class User implements Serializable {
-    /**
-     * Serial version id.
-     */
+
     private static final long serialVersionUID = 1L;
-    private Long id;
+    private Integer id;
     private String email;
     private String password;
-    private String firstname;
-    private String lastname;
-    private String patronymic;
-    private Date birthdate;
+    private Date registrationDate;
+    private UserRole role;
+    private String firstName;
+    private String lastName;
+    private Date birthDate;
     private String address;
     private String phone;
 
@@ -37,48 +36,55 @@ public class User implements Serializable {
      * Initializes a newly created {@code User} object with the given field
      * values.
      * 
-     * @param id the user id.
-     * @param email the user email.
-     * @param password the user password.
-     * @param firstname the user first name.
-     * @param lastname the user last name.
-     * @param patronymic the user patronymic.
-     * @param birthdate the user birthdate.
+     * @param id The user id.
+     * @param email The user email.
+     * @param password The user password.
+     * @param registrationDate The date of registration.
+     * @param role The user role.
+     * @param firstName The user first name.
+     * @param lastName The user last name.
+     * @param birthDate The user birth date.
+     * @param address The user address.
+     * @param phone The contact phone number
      */
-    public User(long id, String email, String password, String firstname,
-	    String lastname, String patronymic, Date birthdate) {
+    public User(Integer id, String email, String password,
+	    Date registrationDate, UserRole role, String firstName,
+	    String lastName, Date birthDate, String address, String phone) {
 	super();
 	this.id = id;
 	this.email = email;
 	this.password = password;
-	this.firstname = firstname;
-	this.lastname = lastname;
-	this.patronymic = patronymic;
-	this.birthdate = birthdate;
+	this.registrationDate = registrationDate;
+	this.role = role;
+	this.firstName = firstName;
+	this.lastName = lastName;
+	this.birthDate = birthDate;
+	this.address = address;
+	this.phone = phone;
     }
 
     /**
      * Returns the id field value.
      * 
-     * @return the id
+     * @return The id.
      */
-    public Long getId() {
+    public Integer getId() {
 	return id;
     }
 
     /**
      * Sets the id field value.
      * 
-     * @param id the id to set
+     * @param id The id to set.
      */
-    public void setId(Long id) {
+    public void setId(Integer id) {
 	this.id = id;
     }
 
     /**
      * Returns the email field value.
      * 
-     * @return the email
+     * @return The email.
      */
     public String getEmail() {
 	return email;
@@ -87,7 +93,7 @@ public class User implements Serializable {
     /**
      * Sets the email field value.
      * 
-     * @param email the email to set
+     * @param email The email to set.
      */
     public void setEmail(String email) {
 	this.email = email;
@@ -96,7 +102,7 @@ public class User implements Serializable {
     /**
      * Returns the password field value.
      * 
-     * @return the password
+     * @return The password.
      */
     public String getPassword() {
 	return password;
@@ -105,88 +111,106 @@ public class User implements Serializable {
     /**
      * Sets the password field value.
      * 
-     * @param password the password to set
+     * @param password The password to set.
      */
     public void setPassword(String password) {
 	this.password = password;
     }
 
     /**
-     * Returns the firstname field value.
+     * Returns the registrationDate field value.
      * 
-     * @return the firstname
+     * @return The registrationDate.
      */
-    public String getFirstname() {
-	return firstname;
+    public Date getRegistrationDate() {
+	return registrationDate;
     }
 
     /**
-     * Sets the firstname field value.
+     * Sets the registrationDate field value.
      * 
-     * @param firstname the firstname to set
+     * @param registrationDate The registrationDate to set.
      */
-    public void setFirstname(String firstname) {
-	this.firstname = firstname;
+    public void setRegistrationDate(Date registrationDate) {
+	this.registrationDate = registrationDate;
     }
 
     /**
-     * Returns the lastname field value.
+     * Returns the user role field value.
      * 
-     * @return the lastname
+     * @return The user role.
      */
-    public String getLastname() {
-	return lastname;
+    public UserRole getRole() {
+	return role;
     }
 
     /**
-     * Sets the lastname field value.
+     * Sets the role field value.
      * 
-     * @param lastname the lastname to set
+     * @param role The role to set.
      */
-    public void setLastname(String lastname) {
-	this.lastname = lastname;
+    public void setRole(UserRole role) {
+	this.role = role;
     }
 
     /**
-     * Returns the patronymic field value.
+     * Returns the firstName field value.
      * 
-     * @return the patronymic
+     * @return The firstName.
      */
-    public String getPatronymic() {
-	return patronymic;
+    public String getFirstName() {
+	return firstName;
     }
 
     /**
-     * Sets the patronymic field value.
+     * Sets the firstName field value.
      * 
-     * @param patronymic the patronymic to set
+     * @param firstName The firstName to set.
      */
-    public void setPatronymic(String patronymic) {
-	this.patronymic = patronymic;
+    public void setFirstName(String firstName) {
+	this.firstName = firstName;
     }
 
     /**
-     * Returns the birthdate field value.
+     * Returns the lastName field value.
      * 
-     * @return the birthdate
+     * @return The lastName.
      */
-    public Date getBirthdate() {
-	return birthdate;
+    public String getLastName() {
+	return lastName;
     }
 
     /**
-     * Sets the birthdate field value.
+     * Sets the lastName field value.
      * 
-     * @param birthdate the birthdate to set
+     * @param lastName The lastName to set.
      */
-    public void setBirthdate(Date birthdate) {
-	this.birthdate = birthdate;
+    public void setLastName(String lastName) {
+	this.lastName = lastName;
+    }
+
+    /**
+     * Returns the birthDate field value.
+     * 
+     * @return The birthDate.
+     */
+    public Date getBirthDate() {
+	return birthDate;
+    }
+
+    /**
+     * Sets the birthDate field value.
+     * 
+     * @param birthDate The birthDate to set.
+     */
+    public void setBirthDate(Date birthDate) {
+	this.birthDate = birthDate;
     }
 
     /**
      * Returns the address field value.
      * 
-     * @return the address
+     * @return The address.
      */
     public String getAddress() {
 	return address;
@@ -195,7 +219,7 @@ public class User implements Serializable {
     /**
      * Sets the address field value.
      * 
-     * @param address the address to set
+     * @param address The address to set.
      */
     public void setAddress(String address) {
 	this.address = address;
@@ -204,7 +228,7 @@ public class User implements Serializable {
     /**
      * Returns the phone field value.
      * 
-     * @return the phone
+     * @return The phone.
      */
     public String getPhone() {
 	return phone;
@@ -213,7 +237,7 @@ public class User implements Serializable {
     /**
      * Sets the phone field value.
      * 
-     * @param phone the phone to set
+     * @param phone The phone to set.
      */
     public void setPhone(String phone) {
 	this.phone = phone;
@@ -237,10 +261,15 @@ public class User implements Serializable {
 	    return (this.id.equals(otherUser.id))
 		    && (this.email.equals(otherUser.email))
 		    && (this.password.equals(otherUser.password))
-		    && (this.firstname.equals(otherUser.firstname))
-		    && (this.lastname.equals(otherUser.lastname))
-		    && (this.patronymic.equals(otherUser.patronymic))
-		    && (this.birthdate.equals(otherUser.birthdate));
+		    && (this.registrationDate
+			    .equals(otherUser.registrationDate))
+		    && (this.role.equals(otherUser.role))
+		    && (this.firstName.equals(otherUser.firstName))
+		    && (this.lastName.equals(otherUser.lastName))
+		    && (this.birthDate.equals(otherUser.birthDate))
+		    && (this.address.equals(otherUser.address))
+		    && (this.phone.equals(otherUser.phone));
+
 	} else {
 	    return false;
 	}
@@ -254,20 +283,27 @@ public class User implements Serializable {
 	return (int) (31 * id.hashCode()
 		+ ((email == null) ? 0 : email.hashCode()) + ((password == null) ? 0
 		    : password.hashCode()))
-		+ ((firstname == null) ? 0 : firstname.hashCode())
-		+ ((lastname == null) ? 0 : lastname.hashCode())
-		+ ((patronymic == null) ? 0 : patronymic.hashCode())
-		+ ((birthdate == null) ? 0 : birthdate.hashCode());
+		+ ((registrationDate == null) ? 0 : registrationDate.hashCode())
+		+ ((role == null) ? 0 : role.hashCode())
+		+ ((firstName == null) ? 0 : firstName.hashCode())
+		+ ((lastName == null) ? 0 : lastName.hashCode())
+		+ ((birthDate == null) ? 0 : birthDate.hashCode())
+		+ ((address == null) ? 0 : address.hashCode())
+		+ ((phone == null) ? 0 : phone.hashCode());
     }
 
+    /**
+     * Returns a string representation of the object.
+     */
     @Override
     public String toString() {
 	StringBuffer sb = new StringBuffer();
-	sb.append("user:").append(lastname).append(" ").append(firstname)
-		.append(" ").append(patronymic).append(" birthdate:")
-		.append(birthdate).append(" email:").append(email)
+	sb.append("user:").append(lastName).append(" ").append(firstName)
+		.append(" role:").append(role).append(" birthdate:")
+		.append(birthDate).append(" email:").append(email)
 		.append(" address:").append(address).append(" phone:")
-		.append(phone);
+		.append(phone).append(" registered:").append(registrationDate)
+		.append(" id:").append(id);
 	return sb.toString();
     }
 }

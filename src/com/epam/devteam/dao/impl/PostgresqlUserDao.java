@@ -134,13 +134,13 @@ public class PostgresqlUserDao implements UserDao {
 	    users = new ArrayList<User>();
 	    while (resultSet.next()) {
 		user = new User();
-		user.setId(resultSet.getLong("id"));
+		/*user.setId(resultSet.getLong("id"));
 		user.setEmail(resultSet.getString("email"));
 		user.setPassword(resultSet.getString("password"));
 		user.setFirstname(resultSet.getString("firstname"));
 		user.setLastname(resultSet.getString("lastname"));
 		user.setPatronymic(resultSet.getString("patronymic"));
-		user.setBirthdate(resultSet.getDate("birthdate"));
+		user.setBirthdate(resultSet.getDate("birthdate"));*/
 		users.add(user);
 	    }
 	} catch (SQLException e) {

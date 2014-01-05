@@ -3,6 +3,7 @@
  */
 package com.epam.devteam.dao.impl;
 
+import com.epam.devteam.dao.CustomerDao;
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
 import com.epam.devteam.dao.RequestDao;
@@ -19,19 +20,9 @@ public class PostgresqlDaoFactory extends DaoFactory {
     private ConnectionPool connectionPool;
 
     /**
-     * Initializes a newly created {@code Object} object.
+     * Initializes a newly created {@code PostgresqlDaoFactory} object.
      */
-    public PostgresqlDaoFactory() {
-	super();
-    }
-
-    /**
-     * Is used to set connection pool to the dao factory.
-     * 
-     * @param connectionPool The connection pool to set.
-     */
-    @Override
-    public void setConnectionPool(ConnectionPool connectionPool) {
+    public PostgresqlDaoFactory(ConnectionPool connectionPool) {
 	this.connectionPool = connectionPool;
     }
 
@@ -42,8 +33,19 @@ public class PostgresqlDaoFactory extends DaoFactory {
      * @throws DaoException If something fails.
      */
     @Override
-    public UserDao getUserDao() throws DaoException {
+    public UserDao getUserDao() {
 	return new PostgresqlUserDao(connectionPool);
+    }
+
+    /**
+     * Is used to get customer dao.
+     * 
+     * @return The request dao implementation.
+     * @throws DaoException If something fails.
+     */
+    @Override
+    public CustomerDao getCustomerDao() {
+	return new PostgresqlCustomerDao(connectionPool);
     }
 
     /**
@@ -53,8 +55,7 @@ public class PostgresqlDaoFactory extends DaoFactory {
      * @throws DaoException If something fails.
      */
     @Override
-    public RequestDao getRequestDao() throws DaoException {
-	return new PostgresqlRequestDao();
+    public RequestDao getRequestDao() {
+	return new PostgresqlRequestDao(connectionPool);
     }
-
 }
