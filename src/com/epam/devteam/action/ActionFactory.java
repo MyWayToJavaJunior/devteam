@@ -25,7 +25,9 @@ public class ActionFactory {
 	actions.put("GET/main", new ShowMainPageAction());
 	actions.put("GET/error", new ShowErrorPageAction());
 	actions.put("GET/signin", new ShowSigninPageAction());
+	actions.put("GET/signout", new SignoutAction());
 	actions.put("POST/signin", new SigninAction());
+	actions.put("POST/create_account", new CreateAccountAction());
 	return actions;
     }
 

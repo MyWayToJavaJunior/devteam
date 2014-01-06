@@ -12,7 +12,17 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
-
+	<jsp-config>
+		<taglib>
+			<taglib-uri>
+				/WEB-INF/tld/devteamtaglib.tld
+			</taglib-uri>
+			<taglib-location>
+				/WEB-INF/tld/devteamtaglib.tld
+			</taglib-location>
+		</taglib>
+	</jsp-config>
+	
 	<servlet>
 		<description></description>
 		<display-name>Controller</display-name>

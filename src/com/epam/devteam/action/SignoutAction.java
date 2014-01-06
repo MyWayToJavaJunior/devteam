@@ -7,16 +7,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @date Jan 5, 2014
+ * @date Jan 6, 2014 	
  * @author anjey
- * 
+ *
  */
-public class ShowMainPageAction implements Action {
+public class SignoutAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
-            System.out.println(request.getSession().getAttribute("user"));
+	request.getSession().removeAttribute("user");
 	return "main";
     }
+
 }

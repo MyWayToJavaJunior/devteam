@@ -19,12 +19,11 @@
 					<li><a href="">Documentation</a></li>
 				</ul></li>
 			<li><a href="request">Online request</a></li>
-			<li class="secondary"><a href="signin" title="Sign in">Sign
-					in</a></li>
+			<li class="secondary"><tlib:signin /></li>
 		</ul>
 	</div>
 	<div class="grid_16">
-		<h3 id="page_title" align="center">Page Title</h3>
+		<h3 id="loginfo" align="right"><tlib:loginfo /></h3>
 	</div>
 </div>
 <div class="clear"></div>

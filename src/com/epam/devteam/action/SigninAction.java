@@ -28,22 +28,20 @@ public class SigninAction implements Action {
 	Customer customer = null;
 	HttpSession session = request.getSession();
 	DaoFactory factory;
-	CustomerDao dao =null;
+	CustomerDao dao = null;
 	try {
 	    factory = DaoFactory.getDaoFactory();
 	    dao = factory.getCustomerDao();
 	} catch (DaoException e) {
 	    LOGGER.warn("Dao cannot be created.");
-	  //throw new ActionException();
-	    return "error";
+	    throw new ActionException();
 	}
 	try {
 	    customer = dao.find(request.getParameter("email"),
 		    request.getParameter("password"));
 	} catch (DaoException e) {
 	    LOGGER.warn("Request cannot be executed.");
-	    //throw new ActionException();
-	    return "error";
+	    throw new ActionException();
 	}
 	if (customer == null) {
 	    System.out.println("User not found.");

@@ -17,13 +17,14 @@ import com.epam.devteam.entity.Customer;
 import com.epam.devteam.entity.UserRole;
 
 /**
- * @date Jan 4, 2014 	
+ * @date Jan 4, 2014
  * @author Andrey Kovalskiy
- *
+ * 
  */
-public class CreateAccountAction implements Action{
-    private static final Logger LOGGER = Logger.getLogger(CreateAccountAction.class);
-    
+public class CreateAccountAction implements Action {
+    private static final Logger LOGGER = Logger
+	    .getLogger(CreateAccountAction.class);
+
     @Override
     public String execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {

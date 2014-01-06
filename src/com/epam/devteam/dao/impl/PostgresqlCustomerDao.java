@@ -140,8 +140,17 @@ public class PostgresqlCustomerDao extends CustomerDao {
 	    if (resultSet.next()) {
 		System.out.println("yep!");
 		customer = new Customer();
+		customer.setId(resultSet.getInt("id"));
 		customer.setEmail(resultSet.getString("email"));
-		customer.setPassword(resultSet.getString("password"));
+		//customer.setPassword(resultSet.getString("password"));
+		customer.setRegistrationDate(resultSet.getDate("registration_date"));
+		customer.setFirstName(resultSet.getString("first_name"));
+		customer.setLastName(resultSet.getString("last_name"));
+		customer.setBirthDate(resultSet.getDate("birth_date"));
+		customer.setAddress(resultSet.getString("address"));
+		customer.setPhone(resultSet.getString("phone"));
+		customer.setCompany(resultSet.getString("company"));
+		customer.setPosition(resultSet.getString("position"));
 	    }
 	} catch (SQLException e) {
 	    e.printStackTrace();

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import com.epam.devteam.action.Action;
+import com.epam.devteam.action.ActionException;
 import com.epam.devteam.action.ActionFactory;
 
 /**
@@ -46,18 +47,20 @@ public class Controller extends HttpServlet {
 
     protected void doAction(HttpServletRequest request,
 	    HttpServletResponse response) throws ServletException, IOException {
+	Action action = ActionFactory.getAction(request);
+	String view;
 	try {
-	    Action action = ActionFactory.getAction(request);
-	    String view = action.execute(request, response);
-	    if (view.equals(request.getPathInfo().substring(1))) {
-		request.getRequestDispatcher("/WEB-INF/jsp/" + view + ".jsp")
-			.forward(request, response);
-	    } else {
-		response.sendRedirect(view);
-	    }
-	} catch (Exception e) {
+	    view = action.execute(request, response);
+	} catch (ActionException e) {
 	    LOGGER.error("Executing action failed.", e);
+	    view = "error";
 	}
-    }
+	if (view.equals(request.getPathInfo().substring(1))) {
+	    request.getRequestDispatcher("/WEB-INF/jsp/" + view + ".jsp")
+		    .forward(request, response);
+	} else {
+	    response.sendRedirect(view);
+	}
 
+    }
 }
