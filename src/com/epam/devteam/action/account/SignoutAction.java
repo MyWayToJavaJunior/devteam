@@ -1,10 +1,13 @@
 /**
  * 
  */
-package com.epam.devteam.action;
+package com.epam.devteam.action.account;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.epam.devteam.action.Action;
+import com.epam.devteam.action.ActionException;
 
 /**
  * @date Jan 6, 2014 	

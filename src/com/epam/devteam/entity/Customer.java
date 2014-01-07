@@ -35,11 +35,11 @@ public class Customer extends User {
      * @param position The position of the customer.
      */
     public Customer(Integer id, String email, String password,
-	    Date registrationDate, UserRole role, String firstName,
-	    String lastName, Date birthDate, String address, String phone,
-	    String company, String position) {
-	super(id, email, password, registrationDate, role, firstName, lastName,
-		birthDate, address, phone);
+	    Date registrationDate, UserRole role, Boolean isActive,
+	    String firstName, String lastName, Date birthDate, String address,
+	    String phone, String company, String position) {
+	super(id, email, password, registrationDate, role, isActive, firstName,
+		lastName, birthDate, address, phone);
 	this.company = company;
 	this.position = position;
     }
@@ -101,6 +101,7 @@ public class Customer extends User {
 		    && (this.getRegistrationDate().equals(otherCustomer
 			    .getRegistrationDate()))
 		    && (this.getRole().equals(otherCustomer.getRole()))
+		    && (this.isActive() == otherCustomer.isActive())
 		    && (this.getFirstName()
 			    .equals(otherCustomer.getFirstName()))
 		    && (this.getLastName().equals(otherCustomer.getLastName()))

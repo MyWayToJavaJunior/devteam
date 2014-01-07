@@ -55,7 +55,7 @@ public class Controller extends HttpServlet {
 	    LOGGER.error("Executing action failed.", e);
 	    view = "error";
 	}
-	if (view.equals(request.getPathInfo().substring(1))) {
+	if ("GET".equals(request.getMethod())) {
 	    request.getRequestDispatcher("/WEB-INF/jsp/" + view + ".jsp")
 		    .forward(request, response);
 	} else {

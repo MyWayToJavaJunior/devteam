@@ -34,11 +34,11 @@ public class Employee extends User {
      * @param qualifiaction The employee qualification.
      */
     public Employee(Integer id, String email, String password,
-	    Date registrationDate, UserRole role, String firstName,
-	    String lastName, Date birthDate, String address, String phone,
-	    String qualification) {
-	super(id, email, password, registrationDate, role, firstName, lastName,
-		birthDate, address, phone);
+	    Date registrationDate, UserRole role, Boolean isActive,
+	    String firstName, String lastName, Date birthDate, String address,
+	    String phone, String qualification) {
+	super(id, email, password, registrationDate, role, isActive, firstName,
+		lastName, birthDate, address, phone);
 	this.qualification = qualification;
     }
 
@@ -81,6 +81,7 @@ public class Employee extends User {
 		    && (this.getRegistrationDate().equals(otherEmployee
 			    .getRegistrationDate()))
 		    && (this.getRole().equals(otherEmployee.getRole()))
+		    && (this.isActive() == otherEmployee.isActive())
 		    && (this.getFirstName()
 			    .equals(otherEmployee.getFirstName()))
 		    && (this.getLastName().equals(otherEmployee.getLastName()))

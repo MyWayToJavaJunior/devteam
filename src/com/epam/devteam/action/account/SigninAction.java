@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.epam.devteam.action;
+package com.epam.devteam.action.account;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,6 +9,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import com.epam.devteam.action.Action;
+import com.epam.devteam.action.ActionException;
 import com.epam.devteam.dao.CustomerDao;
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
@@ -25,10 +27,17 @@ public class SigninAction implements Action {
     @Override
     public String execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
-	Customer customer = null;
 	HttpSession session = request.getSession();
+	Customer customer;
 	DaoFactory factory;
-	CustomerDao dao = null;
+	CustomerDao dao;
+
+	if (!isFormValuesValid(request, session)) {
+	    session.setAttribute("signinError",
+		    "Please enter email and password.");
+	    LOGGER.debug("Sign in form fields are not valid.");
+	    return "main";
+	}
 	try {
 	    factory = DaoFactory.getDaoFactory();
 	    dao = factory.getCustomerDao();
@@ -44,14 +53,31 @@ public class SigninAction implements Action {
 	    throw new ActionException();
 	}
 	if (customer == null) {
-	    System.out.println("User not found.");
-	    return "signin";
+	    session.setAttribute("signinError",
+		    "Account with such email and password is not found.");
+	    LOGGER.debug("Account is not found.");
 	} else {
 	    session.setAttribute("user", customer);
-	    System.out.println("welcome: " + customer.getEmail());
-	    return "main";
+	    if (session.getAttribute("signinError") != null) {
+		session.removeAttribute("signinError");
+	    }
+	    LOGGER.debug("User " + customer.getEmail() + " has registered.");
 	}
+	return "main";
 
+    }
+
+    private boolean isFormValuesValid(HttpServletRequest request,
+	    HttpSession session) {
+	String email = request.getParameter("email");
+	String password = request.getParameter("password");
+	if (email.isEmpty()) {
+	    return false;
+	}
+	if (password.isEmpty()) {
+	    return false;
+	}
+	return true;
     }
 
 }

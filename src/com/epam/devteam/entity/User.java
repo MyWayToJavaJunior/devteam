@@ -19,6 +19,7 @@ public class User implements Serializable {
     private String password;
     private Date registrationDate;
     private UserRole role;
+    private Boolean isActive;
     private String firstName;
     private String lastName;
     private Date birthDate;
@@ -48,14 +49,16 @@ public class User implements Serializable {
      * @param phone The contact phone number
      */
     public User(Integer id, String email, String password,
-	    Date registrationDate, UserRole role, String firstName,
-	    String lastName, Date birthDate, String address, String phone) {
+	    Date registrationDate, UserRole role, Boolean isActive,
+	    String firstName, String lastName, Date birthDate, String address,
+	    String phone) {
 	super();
 	this.id = id;
 	this.email = email;
 	this.password = password;
 	this.registrationDate = registrationDate;
 	this.role = role;
+	this.isActive = isActive;
 	this.firstName = firstName;
 	this.lastName = lastName;
 	this.birthDate = birthDate;
@@ -151,6 +154,24 @@ public class User implements Serializable {
      */
     public void setRole(UserRole role) {
 	this.role = role;
+    }
+
+    /**
+     * Returns the isActive field value.
+     * 
+     * @return The isActive.
+     */
+    public Boolean isActive() {
+	return isActive;
+    }
+
+    /**
+     * Sets the isActive field value.
+     * 
+     * @param isActive The isActive to set.
+     */
+    public void setActive(Boolean isActive) {
+	this.isActive = isActive;
     }
 
     /**
@@ -264,6 +285,7 @@ public class User implements Serializable {
 		    && (this.registrationDate
 			    .equals(otherUser.registrationDate))
 		    && (this.role.equals(otherUser.role))
+		    && (this.isActive == otherUser.isActive)
 		    && (this.firstName.equals(otherUser.firstName))
 		    && (this.lastName.equals(otherUser.lastName))
 		    && (this.birthDate.equals(otherUser.birthDate))
@@ -285,6 +307,7 @@ public class User implements Serializable {
 		    : password.hashCode()))
 		+ ((registrationDate == null) ? 0 : registrationDate.hashCode())
 		+ ((role == null) ? 0 : role.hashCode())
+		+ isActive.hashCode()
 		+ ((firstName == null) ? 0 : firstName.hashCode())
 		+ ((lastName == null) ? 0 : lastName.hashCode())
 		+ ((birthDate == null) ? 0 : birthDate.hashCode())
