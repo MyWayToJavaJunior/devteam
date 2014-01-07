@@ -1,7 +1,7 @@
 <div class="container_16" id="header">
 	<div class="grid_16">
 		<h1 id="branding">
-			<a href="main">Development team</a>
+			<a href="do/main">Development team</a>
 		</h1>
 	</div>
 	<div class="clear"></div>
@@ -18,7 +18,7 @@
 					<li><a href="">Downloads</a></li>
 					<li><a href="">Documentation</a></li>
 				</ul></li>
-			<li><a href="request">Online request</a></li>
+			<li><a href="do/request">Online request</a></li>
 			<li class="secondary"><tlib:signin /></li>
 		</ul>
 	</div>

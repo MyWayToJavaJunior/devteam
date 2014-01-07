@@ -3,6 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<base href="${pageContext.request.contextPath}/">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Sign in</title>
 <%@include file="cssimport.jsp"%>
@@ -13,7 +14,7 @@
 		<div class="grid_4" style="height: 1px"></div>
 		<div class="grid_8">
 			<div class="box" align="center">
-				<form action="signin" method="post">
+				<form action="do/signin" method="post">
 					<fieldset>
 						<legend>Sign in</legend>
 						<label>Email</label><br>
@@ -23,7 +24,7 @@
 						<input type="submit" value="Sign in"/>
 					</fieldset>
 				</form>
-				<form action="create_account" method="post">
+				<form action="do/create_account" method="post">
 					<fieldset>
 						<legend>Create account</legend>
 						<label>Email:</label><br>

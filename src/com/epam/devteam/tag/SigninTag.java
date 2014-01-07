@@ -27,9 +27,9 @@ public class SigninTag extends TagSupport {
 	User user = (User) pageContext.getSession().getAttribute("user");
 	String str;
 	if (user == null) {
-	    str = "<a href='signin'>Sign in</a>";
+	    str = "<a href='do/signin'>Sign in</a>";
 	} else {
-	    str = "<a href='signout'>Sign out</a>";
+	    str = "<a href='do/signout'>Sign out</a>";
 	}
 	try {
 	    JspWriter out = pageContext.getOut();

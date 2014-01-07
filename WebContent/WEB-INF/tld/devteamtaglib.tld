@@ -16,4 +16,5 @@
 		<tag-class> com.epam.devteam.tag.LogInfoTag </tag-class>
 		<body-content> empty </body-content>
 	</tag>
+	
 </taglib>

@@ -1,17 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<link rel="stylesheet" type="text/css" href="/devteam/css/reset.css"
+<link rel="stylesheet" type="text/css" href="css/reset.css"
 	media="screen" />
-<link rel="stylesheet" type="text/css" href="/devteam/css/text.css"
+<link rel="stylesheet" type="text/css" href="css/text.css"
 	media="screen" />
-<link rel="stylesheet" type="text/css" href="/devteam/css/960.css"
+<link rel="stylesheet" type="text/css" href="css/960.css"
 	media="screen" />
-<link rel="stylesheet" type="text/css" href="/devteam/css/grid.css"
+<link rel="stylesheet" type="text/css" href="css/grid.css"
 	media="screen" />
-<link rel="stylesheet" type="text/css" href="/devteam/css/layout.css"
+<link rel="stylesheet" type="text/css" href="css/layout.css"
 	media="screen" />
-<link rel="stylesheet" type="text/css" href="/devteam/css/nav.css"
+<link rel="stylesheet" type="text/css" href="css/nav.css"
 	media="screen" />
-</html>
