@@ -19,7 +19,7 @@ public class User implements Serializable {
     private String password;
     private Date registrationDate;
     private UserRole role;
-    private Boolean isActive;
+    private boolean isActive;
     private String firstName;
     private String lastName;
     private Date birthDate;
@@ -49,7 +49,7 @@ public class User implements Serializable {
      * @param phone The contact phone number
      */
     public User(Integer id, String email, String password,
-	    Date registrationDate, UserRole role, Boolean isActive,
+	    Date registrationDate, UserRole role, boolean isActive,
 	    String firstName, String lastName, Date birthDate, String address,
 	    String phone) {
 	super();
@@ -161,7 +161,7 @@ public class User implements Serializable {
      * 
      * @return The isActive.
      */
-    public Boolean isActive() {
+    public boolean isActive() {
 	return isActive;
     }
 
@@ -170,7 +170,7 @@ public class User implements Serializable {
      * 
      * @param isActive The isActive to set.
      */
-    public void setActive(Boolean isActive) {
+    public void setActive(boolean isActive) {
 	this.isActive = isActive;
     }
 
@@ -307,7 +307,7 @@ public class User implements Serializable {
 		    : password.hashCode()))
 		+ ((registrationDate == null) ? 0 : registrationDate.hashCode())
 		+ ((role == null) ? 0 : role.hashCode())
-		+ isActive.hashCode()
+		+ Boolean.valueOf(isActive).hashCode()
 		+ ((firstName == null) ? 0 : firstName.hashCode())
 		+ ((lastName == null) ? 0 : lastName.hashCode())
 		+ ((birthDate == null) ? 0 : birthDate.hashCode())

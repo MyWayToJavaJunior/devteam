@@ -1,16 +1,22 @@
-package com.epam.devteam.action.account;
+/**
+ * 
+ */
+package com.epam.devteam.action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.epam.devteam.action.Action;
-import com.epam.devteam.action.ActionException;
-
-public class ShowAccountPageAction implements Action {
+/**
+ * @date Jan 10, 2014
+ * @author Andrey Kovalskiy
+ * 
+ */
+public class ShowSuccessPageAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
-	return "user-account";
+	return "success";
     }
+
 }

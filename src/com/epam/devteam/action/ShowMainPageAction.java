@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * @date Jan 5, 2014
- * @author anjey
+ * @author Andrey Kovalskiy
  * 
  */
 public class ShowMainPageAction implements Action {

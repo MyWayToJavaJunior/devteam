@@ -29,7 +29,7 @@ public interface Dao<T> {
      *         {@code null}.
      * @throws DaoException If something fails at database level.
      */
-    T find(Long id) throws DaoException;
+    T find(Integer id) throws DaoException;
 
     /**
      * Is used to update the given object.

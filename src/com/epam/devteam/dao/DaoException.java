@@ -5,7 +5,7 @@ package com.epam.devteam.dao;
 
 /**
  * @date Dec 15, 2013 	
- * @author anjey
+ * @author Andrey Kovalskiy
  *
  */
 public class DaoException extends Exception {

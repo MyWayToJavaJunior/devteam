@@ -78,25 +78,9 @@ public abstract class DaoFactory {
     /**
      * Is used to get user dao.
      * 
-     * @return The user dao implementation.
+     * @return The request dao implementation.
      * @throws DaoException If something fails.
      */
     public abstract UserDao getUserDao();
-
-    /**
-     * Is used to get customer dao.
-     * 
-     * @return The request dao implementation.
-     * @throws DaoException If something fails.
-     */
-    public abstract CustomerDao getCustomerDao();
-
-    /**
-     * Is used to get request dao.
-     * 
-     * @return The request dao implementation.
-     * @throws DaoException If something fails.
-     */
-    public abstract RequestDao getRequestDao();
 
 }

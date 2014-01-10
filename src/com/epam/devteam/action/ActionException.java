@@ -5,7 +5,7 @@ package com.epam.devteam.action;
 
 /**
  * @date Dec 14, 2013 	
- * @author anjey
+ * @author Andrey Kovalskiy
  *
  */
 public class ActionException extends Exception {

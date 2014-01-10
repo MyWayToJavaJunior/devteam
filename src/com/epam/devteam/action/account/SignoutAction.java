@@ -11,7 +11,7 @@ import com.epam.devteam.action.ActionException;
 
 /**
  * @date Jan 6, 2014 	
- * @author anjey
+ * @author Andrey Kovalskiy
  *
  */
 public class SignoutAction implements Action {

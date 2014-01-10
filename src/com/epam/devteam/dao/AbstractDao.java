@@ -10,7 +10,8 @@ import com.epam.devteam.db.ConnectionPool;
  * @author Andrey Kovalskiy
  * 
  */
-public abstract class AbstractDao<T> implements Dao<T> {
+public abstract class AbstractDao {
+
     private ConnectionPool connectionPool;
 
     /**

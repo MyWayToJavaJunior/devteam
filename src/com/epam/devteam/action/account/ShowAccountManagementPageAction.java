@@ -6,11 +6,12 @@ import javax.servlet.http.HttpServletResponse;
 import com.epam.devteam.action.Action;
 import com.epam.devteam.action.ActionException;
 
-public class ShowAccountPageAction implements Action {
+public class ShowAccountManagementPageAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
-	return "user-account";
+	return "manage-account";
     }
+
 }

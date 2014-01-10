@@ -16,27 +16,26 @@
 <body>
 	<div class="container showgrid">
 
-		<div id="pageheader" class="span-24 last">
+		<div id="header" class="span-24 last">
 			<t:header />
 		</div>
 		<hr />
 		<c:choose>
 			<c:when test="${sidebar eq true}">
-				<div id="pagesidebar" class="span-5 colborder">
+				<div id="sidebar" class="span-5 colborder">
 					<t:sidebar />
 				</div>
-				<div id="pagebody" class="span-18 last">
+				<div id="body" class="span-18 last">
 					<jsp:doBody />
 				</div>
-
 			</c:when>
 			<c:otherwise>
 				<jsp:doBody />
 			</c:otherwise>
 		</c:choose>
 		<hr />
-		<div id="pagefooter" class="span-24 last">
-			<h1>Footer</h1>
+		<div id="footer" class="span-24 last">
+			<t:footer />
 		</div>
 
 	</div>

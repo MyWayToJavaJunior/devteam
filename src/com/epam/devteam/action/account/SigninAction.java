@@ -11,10 +11,10 @@ import org.apache.log4j.Logger;
 
 import com.epam.devteam.action.Action;
 import com.epam.devteam.action.ActionException;
-import com.epam.devteam.dao.CustomerDao;
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
-import com.epam.devteam.entity.Customer;
+import com.epam.devteam.dao.UserDao;
+import com.epam.devteam.entity.User;
 
 /**
  * @date Jan 5, 2014
@@ -28,49 +28,40 @@ public class SigninAction implements Action {
     public String execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
 	HttpSession session = request.getSession();
-	Customer customer;
-	DaoFactory factory;
-	CustomerDao dao;
-
-	if (!isFormValuesValid(request, session)) {
-	    session.setAttribute("signinError",
-		    "Please enter email and password.");
+	String email = request.getParameter("email");
+	String password = request.getParameter("password");
+	if (!isFormValuesValid(email, password)) {
+	    session.setAttribute("error",
+		    "account.signin.error.fieldsNotCorrect");
 	    LOGGER.debug("Sign in form fields are not valid.");
 	    return "main";
 	}
+	DaoFactory factory;
 	try {
 	    factory = DaoFactory.getDaoFactory();
-	    dao = factory.getCustomerDao();
 	} catch (DaoException e) {
 	    LOGGER.warn("Dao cannot be created.");
 	    throw new ActionException();
 	}
+	UserDao userDao = factory.getUserDao();
+	User user;
 	try {
-	    customer = dao.find(request.getParameter("email"),
-		    request.getParameter("password"));
+	    user = userDao.find(email, password);
 	} catch (DaoException e) {
 	    LOGGER.warn("Request cannot be executed.");
 	    throw new ActionException();
 	}
-	if (customer == null) {
-	    session.setAttribute("signinError",
-		    "Account with such email and password is not found.");
-	    LOGGER.debug("Account is not found.");
+	if (user == null) {
+	    session.setAttribute("error", "account.create.error.notFound");
+	    LOGGER.debug("Account" + email + "is not found.");
 	} else {
-	    session.setAttribute("user", customer);
-	    if (session.getAttribute("signinError") != null) {
-		session.removeAttribute("signinError");
-	    }
-	    LOGGER.debug("User " + customer.getEmail() + " has registered.");
+	    session.setAttribute("user", user);
+	    LOGGER.debug("User " + user.getEmail() + " has been registered.");
 	}
 	return "main";
-
     }
 
-    private boolean isFormValuesValid(HttpServletRequest request,
-	    HttpSession session) {
-	String email = request.getParameter("email");
-	String password = request.getParameter("password");
+    private boolean isFormValuesValid(String email, String password) {
 	if (email.isEmpty()) {
 	    return false;
 	}

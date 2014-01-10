@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
@@ -47,12 +48,14 @@ public class Controller extends HttpServlet {
 
     protected void doAction(HttpServletRequest request,
 	    HttpServletResponse response) throws ServletException, IOException {
+	HttpSession session = request.getSession();
 	Action action = ActionFactory.getAction(request);
 	String view;
 	try {
 	    view = action.execute(request, response);
 	} catch (ActionException e) {
-	    LOGGER.error("Executing action failed.", e);
+	    LOGGER.error("Action execute failed.", e);
+	    session.setAttribute("error", "action.failed");
 	    view = "error";
 	}
 	if ("GET".equals(request.getMethod())) {

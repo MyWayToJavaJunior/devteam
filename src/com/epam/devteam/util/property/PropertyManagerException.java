@@ -5,7 +5,7 @@ package com.epam.devteam.util.property;
 
 /**
  * @date Dec 18, 2013
- * @author anjey
+ * @author Andrey Kovalskiy
  * 
  */
 public class PropertyManagerException extends Exception {

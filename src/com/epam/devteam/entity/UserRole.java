@@ -4,15 +4,11 @@
 package com.epam.devteam.entity;
 
 /**
- * @date Jan 4, 2014 	
- * @author anjey
- *
+ * @date Jan 4, 2014
+ * @author Andrey Kovalskiy
+ * 
  */
 public enum UserRole {
-    ADMINISTRATOR, MANAGER, DEVELOPER, CUSTOMER;
-    
-    @Override
-    public String toString() {
-        return this.name().toLowerCase();
-    }
+    UNAUTHORIZED_USER, AUTHORIZED_USER, ADMINISTRATOR, MANAGER, DEVELOPER, CUSTOMER;
+
 }
