@@ -4,7 +4,7 @@
 <%@ attribute name="body" fragment="true"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
-<html>
+<html class="theme1">
 <head>
 <title>${title}</title>
 <base href="${pageContext.request.contextPath}/">

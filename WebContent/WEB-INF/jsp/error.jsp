@@ -6,7 +6,7 @@
 <t:genericpage sidebar="false" title="Error">
 	<jsp:body>
 		<div class="span-24 last">
-			<div class="error" align="center">
+			<div align="center">
 				<h1>
 					<t:status />
 				</h1>

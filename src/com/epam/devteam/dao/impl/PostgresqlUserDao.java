@@ -24,13 +24,13 @@ import com.epam.devteam.entity.UserRole;
 public class PostgresqlUserDao extends AbstractDao implements UserDao {
     private static final Logger LOGGER = Logger
 	    .getLogger(PostgresqlUserDao.class);
-    private static String sqlEmployeeCreate = "INSERT INTO users (email, password, registration_date, role, is_active, first_name, last_name,  birth_date, address, phone, qualification) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-    private static String sqlCustomerCreate = "INSERT INTO users (email, password, registration_date, role, is_active, first_name, last_name,  birth_date, address, phone, company, position) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
-    private static String sqlEmployeeUpdate = "UPDATE users set role = ?, is_active = ?, first_name = ?, last_name = ?,  birth_date = ?, address = ?, phone = ?, qualification = ?  WHERE id = ?";
-    private static String sqlCustomerUpdate = "UPDATE users set role = ?, is_active = ?, first_name = ?, last_name = ?,  birth_date = ?, address = ?, phone = ?, company = ?, position = ?  WHERE id = ?";
-    private static String sqlUserSelectByEmailPassword = "SELECT * FROM users WHERE (users.email=? AND users.password=?)";
-    private static String sqlUserSelectById = "SELECT * FROM users WHERE (users.id=?)";
-    private static String sqlAllUsersSelectByEmailPassword = "SELECT * from users";
+    private final static String sqlEmployeeCreate = "INSERT INTO users (email, password, registration_date, role, is_active, first_name, last_name,  birth_date, address, phone, qualification) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+    private final static String sqlCustomerCreate = "INSERT INTO users (email, password, registration_date, role, is_active, first_name, last_name,  birth_date, address, phone, company, position) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+    private final static String sqlEmployeeUpdate = "UPDATE users set role = ?, is_active = ?, first_name = ?, last_name = ?,  birth_date = ?, address = ?, phone = ?, qualification = ?  WHERE id = ?";
+    private final static String sqlCustomerUpdate = "UPDATE users set role = ?, is_active = ?, first_name = ?, last_name = ?,  birth_date = ?, address = ?, phone = ?, company = ?, position = ?  WHERE id = ?";
+    private final static String sqlUserSelectByEmailPassword = "SELECT * FROM users WHERE (users.email=? AND users.password=?)";
+    private final static String sqlUserSelectById = "SELECT * FROM users WHERE (users.id=?)";
+    private final static String sqlAllUsersSelectByEmailPassword = "SELECT * from users";
 
     /**
      * Initializes a newly created {@code PostgresqlCustomerDao} object.
@@ -87,9 +87,14 @@ public class PostgresqlUserDao extends AbstractDao implements UserDao {
 	    statement.setDate(8, user.getBirthDate());
 	    statement.setString(9, user.getAddress());
 	    statement.setString(10, user.getPhone());
+	} catch (SQLException e) {
+	    LOGGER.warn("Statement cannot be created.");
+	    throw new DaoException();
+	}
+	try {
 	    statement.execute();
 	} catch (SQLException e) {
-	    LOGGER.warn("Statement cannot be created.", e);
+	    LOGGER.warn("Statement cannot be executed.");
 	    throw new DaoException();
 	}
 	freeConnection(connection, statement);

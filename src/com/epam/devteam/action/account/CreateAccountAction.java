@@ -37,12 +37,13 @@ public class CreateAccountAction implements Action {
 	    HttpServletResponse response) throws ActionException {
 	HttpSession session;
 	DaoFactory factory;
+	UserDao dao;
 	User user;
-	UserRole role;
 	String email;
 	String password1;
 	String password2;
-
+	UserRole role;
+	
 	session = request.getSession();
 	email = request.getParameter("email");
 	password1 = request.getParameter("password1");
@@ -57,15 +58,13 @@ public class CreateAccountAction implements Action {
 	if (!isFormValuesValid(session, email, password1, password2)) {
 	    return request.getHeader("referer");
 	}
-
 	try {
 	    factory = DaoFactory.getDaoFactory();
 	} catch (DaoException e) {
 	    LOGGER.warn("Dao factory cannot be taked.");
 	    throw new ActionException();
 	}
-	UserDao dao = factory.getUserDao();
-
+	dao = factory.getUserDao();
 	switch (role) {
 	case CUSTOMER:
 	    user = new Customer();

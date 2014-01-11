@@ -1,6 +1,6 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
-<div class="notice">
+<div class="banner">
 	<h1>
-		<a href="do/main">Footer</a>
+		Footer
 	</h1>
 </div>

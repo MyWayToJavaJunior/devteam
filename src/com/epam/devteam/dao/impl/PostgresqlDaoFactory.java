@@ -5,6 +5,7 @@ package com.epam.devteam.dao.impl;
 
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
+import com.epam.devteam.dao.OrderDao;
 import com.epam.devteam.dao.UserDao;
 import com.epam.devteam.db.ConnectionPool;
 
@@ -32,6 +33,16 @@ public class PostgresqlDaoFactory extends DaoFactory {
      */
     public UserDao getUserDao() {
 	return new PostgresqlUserDao(connectionPool);
+    }
+
+    /**
+     * Is used to get order dao.
+     * 
+     * @return The order dao implementation.
+     * @throws DaoException If something fails.
+     */
+    public OrderDao getOrderDao() {
+	return new PostgresqlOrderDao(connectionPool);
     }
 
 }

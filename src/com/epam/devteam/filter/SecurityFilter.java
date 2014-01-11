@@ -22,8 +22,6 @@ public class SecurityFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-
-	actions.put("GET/", UserRole.UNAUTHORIZED_USER);
 	actions.put("GET/main", UserRole.UNAUTHORIZED_USER);
 	actions.put("GET/error", UserRole.UNAUTHORIZED_USER);
 	actions.put("GET/success", UserRole.UNAUTHORIZED_USER);
@@ -36,36 +34,56 @@ public class SecurityFilter implements Filter {
 	actions.put("GET/manage-accounts", UserRole.ADMINISTRATOR);
 	actions.put("POST/manage-account", UserRole.ADMINISTRATOR);
 	actions.put("GET/manage-account", UserRole.ADMINISTRATOR);
-
+	actions.put("GET/create-order", UserRole.CUSTOMER);
+	actions.put("POST/create-order", UserRole.CUSTOMER);
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
 	    FilterChain chain) throws IOException, ServletException {
-	System.out.println("Hello from filter");
 	HttpServletRequest httpRequest = (HttpServletRequest) request;
 	HttpServletResponse httpResponse = (HttpServletResponse) response;
 	HttpSession session = httpRequest.getSession();
 	User user = (User) session.getAttribute("user");
-	UserRole role = actions.get(httpRequest.getRequestURI());
-	System.out.println(httpRequest.getRequestURI());
+	// System.out.println(httpRequest.getRequestURI());
+	UserRole role = actions.get(httpRequest.getMethod()
+		+ httpRequest.getPathInfo());
 	if (role == null) {
-	    chain.doFilter(request, response);
+	    chain.doFilter(httpRequest, httpResponse);
 	    return;
 	}
-	System.out.println(role);
-	switch(role){
+	if (user == null) {
+	    if (role.equals(UserRole.UNAUTHORIZED_USER)) {
+		chain.doFilter(httpRequest, httpResponse);
+		return;
+	    } else {
+		session.setAttribute("error", "accessDenied");
+		httpResponse.sendRedirect("error");
+		return;
+	    }
+	}
+	switch (role) {
 	case ADMINISTRATOR:
-	    if(!user.getRole().equals(role)){
-		httpRequest.getRequestDispatcher("main").forward(httpRequest, httpResponse);
+	    if (!user.getRole().equals(role)) {
+		session.setAttribute("error", "action.accessDenied");
+		httpResponse.sendRedirect("error");
 	    }
 	    break;
+	case CUSTOMER:
+	    if (!user.getRole().equals(role)) {
+		session.setAttribute("error", "action.accessDenied");
+		httpResponse.sendRedirect("error");
+	    }
+	    break;
+	default:
+	    chain.doFilter(httpRequest, httpResponse);
+	    return;
 	}
+	chain.doFilter(httpRequest, httpResponse);
     }
 
     @Override
     public void destroy() {
-	// TODO Auto-generated method stub
 
     }
 

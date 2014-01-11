@@ -19,6 +19,8 @@ import com.epam.devteam.action.account.ShowAccountPageAction;
 import com.epam.devteam.action.account.ShowAccountsManagementPageAction;
 import com.epam.devteam.action.account.SigninAction;
 import com.epam.devteam.action.account.SignoutAction;
+import com.epam.devteam.action.order.CreateOrderAction;
+import com.epam.devteam.action.order.ShowCreateOrderPageAction;
 
 /**
  * @date Jan 5, 2014
@@ -44,13 +46,14 @@ public class ActionFactory {
 		new ShowAccountsManagementPageAction());
 	actions.put("POST/manage-account", new ManageAccountAction());
 	actions.put("GET/manage-account", new ShowAccountManagementPageAction());
+	actions.put("GET/create-order", new ShowCreateOrderPageAction());
+	actions.put("POST/create-order", new CreateOrderAction());
 
 	return actions;
     }
 
     public static Action getAction(HttpServletRequest request) {
 	String req = request.getMethod() + request.getPathInfo();
-	System.out.println(req);
 	Action action = actions.get(req);
 	if (action == null) {
 	    action = actions.get("GET/main");
