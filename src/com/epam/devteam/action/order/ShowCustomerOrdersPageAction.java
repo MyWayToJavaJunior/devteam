@@ -1,4 +1,4 @@
-package com.epam.devteam.action.account;
+package com.epam.devteam.action.order;
 
 import java.util.List;
 
@@ -12,36 +12,40 @@ import com.epam.devteam.action.Action;
 import com.epam.devteam.action.ActionException;
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
-import com.epam.devteam.dao.UserDao;
+import com.epam.devteam.dao.OrderDao;
+import com.epam.devteam.entity.order.Order;
 import com.epam.devteam.entity.user.User;
 
-public class ShowAccountsManagementPageAction implements Action {
+public class ShowCustomerOrdersPageAction implements Action {
     private static final Logger LOGGER = Logger
-	    .getLogger(ShowAccountsManagementPageAction.class);
+	    .getLogger(ShowCustomerOrdersPageAction.class);
 
     @Override
     public String execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
-
-	List<User> users;
+	LOGGER.debug("Action start.");
+	HttpSession session;
 	DaoFactory factory;
-	UserDao userDao;
+	OrderDao dao;
+	User user;
+	List<Order> orders = null;
 	try {
 	    factory = DaoFactory.getDaoFactory();
-	    userDao = factory.getUserDao();
 	} catch (DaoException e) {
-	    LOGGER.warn("Dao cannot be created.");
+	    LOGGER.warn("Dao factory cannot be taked.");
 	    throw new ActionException();
 	}
+	dao = factory.getOrderDao();
+	session = request.getSession();
+	user = (User) session.getAttribute("user");
 	try {
-	    users = userDao.list();
+	    orders = dao.listByCustomerId(user.getId());
 	} catch (DaoException e) {
-	    LOGGER.warn("Request cannot be executed.");
+	    LOGGER.warn("Order cannot be created.");
 	    throw new ActionException();
 	}
-	HttpSession session = request.getSession();
-	session.setAttribute("users", users);
-	return "manage-accounts";
+	session.setAttribute("orders", orders);
+	return "customer-orders";
     }
 
 }

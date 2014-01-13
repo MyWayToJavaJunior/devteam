@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.epam.devteam.entity;
+package com.epam.devteam.entity.user;
 
 /**
  * @date Jan 4, 2014

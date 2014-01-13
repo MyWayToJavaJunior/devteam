@@ -11,10 +11,11 @@ import com.epam.devteam.action.ActionException;
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
 import com.epam.devteam.dao.UserDao;
-import com.epam.devteam.entity.Customer;
-import com.epam.devteam.entity.Employee;
-import com.epam.devteam.entity.User;
-import com.epam.devteam.entity.UserRole;
+import com.epam.devteam.entity.user.Customer;
+import com.epam.devteam.entity.user.Employee;
+import com.epam.devteam.entity.user.User;
+import com.epam.devteam.entity.user.UserRole;
+import com.epam.devteam.util.DateManager;
 
 /**
  * @date Jan 8, 2014
@@ -63,6 +64,7 @@ public class SaveAccountAction implements Action {
 		.getParameter("is-active")));
 	account.setFirstName(request.getParameter("first-name"));
 	account.setLastName(request.getParameter("last-name"));
+	DateManager.dateFromRequest(request);
 	account.setBirthDate(null);
 	account.setAddress(request.getParameter("address"));
 	account.setPhone(request.getParameter("phone"));

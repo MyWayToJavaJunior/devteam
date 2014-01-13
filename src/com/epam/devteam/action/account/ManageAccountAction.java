@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 import com.epam.devteam.action.Action;
 import com.epam.devteam.action.ActionException;
-import com.epam.devteam.entity.User;
+import com.epam.devteam.entity.user.User;
 
 public class ManageAccountAction implements Action {
     private static final Logger LOGGER = Logger

@@ -40,4 +40,14 @@
 		<filter-name>setSecurityFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+
+	<context-param>
+		<param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+		<param-value>messages</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>javax.servlet.jsp.jstl.fmt.fallbackLocale</param-name>
+		<param-value>en_US</param-value>
+	</context-param>
 </web-app>

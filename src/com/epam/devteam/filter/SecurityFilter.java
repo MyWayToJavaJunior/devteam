@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.epam.devteam.entity.User;
-import com.epam.devteam.entity.UserRole;
+import com.epam.devteam.entity.user.User;
+import com.epam.devteam.entity.user.UserRole;
 
 public class SecurityFilter implements Filter {
     private Map<String, UserRole> actions = new HashMap<String, UserRole>();
@@ -24,6 +24,7 @@ public class SecurityFilter implements Filter {
     public void init(FilterConfig filterConfig) throws ServletException {
 	actions.put("GET/main", UserRole.UNAUTHORIZED_USER);
 	actions.put("GET/error", UserRole.UNAUTHORIZED_USER);
+	actions.put("GET/download-file", UserRole.AUTHORIZED_USER);
 	actions.put("GET/success", UserRole.UNAUTHORIZED_USER);
 	actions.put("POST/signin", UserRole.UNAUTHORIZED_USER);
 	actions.put("GET/signout", UserRole.AUTHORIZED_USER);
@@ -34,8 +35,14 @@ public class SecurityFilter implements Filter {
 	actions.put("GET/manage-accounts", UserRole.ADMINISTRATOR);
 	actions.put("POST/manage-account", UserRole.ADMINISTRATOR);
 	actions.put("GET/manage-account", UserRole.ADMINISTRATOR);
+	actions.put("GET/order", UserRole.AUTHORIZED_USER);
+	actions.put("GET/customer-orders", UserRole.CUSTOMER);
 	actions.put("GET/create-order", UserRole.CUSTOMER);
 	actions.put("POST/create-order", UserRole.CUSTOMER);
+	actions.put("GET/all-orders", UserRole.MANAGER);
+	actions.put("GET/process-order", UserRole.MANAGER);
+	actions.put("POST/create-feedback", UserRole.MANAGER);
+	actions.put("GET/feedback", UserRole.AUTHORIZED_USER);
     }
 
     @Override
@@ -64,20 +71,17 @@ public class SecurityFilter implements Filter {
 	}
 	switch (role) {
 	case ADMINISTRATOR:
-	    if (!user.getRole().equals(role)) {
-		session.setAttribute("error", "action.accessDenied");
-		httpResponse.sendRedirect("error");
-	    }
-	    break;
 	case CUSTOMER:
+	case MANAGER:
 	    if (!user.getRole().equals(role)) {
 		session.setAttribute("error", "action.accessDenied");
 		httpResponse.sendRedirect("error");
+		return;
 	    }
 	    break;
+
 	default:
-	    chain.doFilter(httpRequest, httpResponse);
-	    return;
+	    break;
 	}
 	chain.doFilter(httpRequest, httpResponse);
     }

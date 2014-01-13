@@ -17,10 +17,10 @@ import com.epam.devteam.action.ActionException;
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
 import com.epam.devteam.dao.UserDao;
-import com.epam.devteam.entity.Customer;
-import com.epam.devteam.entity.Employee;
-import com.epam.devteam.entity.User;
-import com.epam.devteam.entity.UserRole;
+import com.epam.devteam.entity.user.Customer;
+import com.epam.devteam.entity.user.Employee;
+import com.epam.devteam.entity.user.User;
+import com.epam.devteam.entity.user.UserRole;
 import com.epam.devteam.util.property.PropertyManager;
 
 /**

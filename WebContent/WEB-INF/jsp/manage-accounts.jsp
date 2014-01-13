@@ -14,31 +14,35 @@
 			<h1>Edit Users</h1>
 			<form action="do/manage-account" method="post">
 			<table>
-			<thead>
-				<tr>
-					<th>Id</th>
-					<th>Email</th>
-					<th>First Name</th>
-					<th>Last Name</th>
-					<th>Role</th>
-					<th>Is Active</th>
-					<th>Registration Date</th>
-				</tr>
-			</thead>
-			<tbody>
-			<c:forEach var="user" items="${users}">
-				<tr>
-					<td><input type="radio" name="account-id" value="${user.id}" />${user.id}</td>
-					<td>${user.email}</td>
-					<td>${user.firstName}</td>
-					<td>${user.lastName}</td>
-					<td>${user.role}</td>
-					<td>${user.active}</td>
-					<td>${user.registrationDate}</td>
-				</tr>
-			</c:forEach>
-			</tbody>
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Email</th>
+						<th>First Name</th>
+						<th>Last Name</th>
+						<th>Role</th>
+						<th>Is Active</th>
+						<th>Registration Date</th>
+					</tr>
+				</thead>
 			</table>
+			<div style="height: 300px; overflow: auto;">
+				<table>
+					<tbody>
+					<c:forEach var="user" items="${users}">
+						<tr>
+							<td><input type="radio" name="account-id" value="${user.id}" />${user.id}</td>
+							<td>${user.email}</td>
+							<td>${user.firstName}</td>
+							<td>${user.lastName}</td>
+							<td>${user.role}</td>
+							<td>${user.active}</td>
+							<td>${user.registrationDate}</td>
+						</tr>
+					</c:forEach>
+					</tbody>
+				</table>
+			</div>
 			<input type="submit" value="Edit user">
 			</form>
 		</c:if>	

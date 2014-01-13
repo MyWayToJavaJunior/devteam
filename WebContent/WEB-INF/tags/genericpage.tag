@@ -2,9 +2,11 @@
 <%@	attribute name="sidebar" required="true"%>
 <%@	attribute name="title" required="true"%>
 <%@ attribute name="body" fragment="true"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
-<html class="theme1">
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<fmt:setBundle basename="messages" var="msg" scope="session" />
+<html>
 <head>
 <title>${title}</title>
 <base href="${pageContext.request.contextPath}/">
@@ -14,9 +16,9 @@
 	media="print">
 </head>
 <body>
-	<div class="container showgrid">
+	<div class="container">
 
-		<div id="header" class="span-24 last">
+		<div id="header" class="banner span-24 last">
 			<t:header />
 		</div>
 		<hr />
@@ -34,7 +36,7 @@
 			</c:otherwise>
 		</c:choose>
 		<hr />
-		<div id="footer" class="span-24 last">
+		<div id="footer" class="banner span-24 last">
 			<t:footer />
 		</div>
 

@@ -1,4 +1,4 @@
-package com.epam.devteam.action.order;
+package com.epam.devteam.action.feedback;
 
 import java.io.InputStream;
 import java.sql.Date;
@@ -19,26 +19,27 @@ import com.epam.devteam.action.Action;
 import com.epam.devteam.action.ActionException;
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
+import com.epam.devteam.dao.FeedbackDao;
 import com.epam.devteam.dao.OrderDao;
-import com.epam.devteam.entity.order.Order;
 import com.epam.devteam.entity.order.OrderStatus;
-import com.epam.devteam.entity.order.OrderSubject;
-import com.epam.devteam.entity.user.Customer;
+import com.epam.devteam.entity.response.Feedback;
+import com.epam.devteam.entity.user.Employee;
 
-public class CreateOrderAction implements Action {
+public class CreateFeedbackAction implements Action {
     private static final Logger LOGGER = Logger
-	    .getLogger(CreateOrderAction.class);
+	    .getLogger(CreateFeedbackAction.class);
 
     @Override
     public String execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
-	HttpSession session = null;
-	DaoFactory factory = null;
-	OrderDao dao = null;
-	Customer customer = null;
-	Order order = null;
-	OrderSubject subject = null;
-	String topic = null;
+	HttpSession session;
+	DaoFactory factory;
+	FeedbackDao feedbackDao;
+	OrderDao orderDao;
+	Feedback feedback;
+	Employee manager;
+	int orderId = 0;
+	OrderStatus status = null;
 	String message = null;
 	String fileName = null;
 	byte[] fileContent = null;
@@ -53,16 +54,22 @@ public class CreateOrderAction implements Action {
 		if (item.isFormField()) {
 		    fieldName = item.getFieldName();
 		    fieldValue = item.getString();
-		    if ("subject".equals(fieldName)) {
+		    if ("order-id".equals(fieldName)) {
+			System.out.println(fieldValue);
 			try {
-			    subject = OrderSubject.valueOf(fieldValue);
+			    orderId = Integer.parseInt(fieldValue);
 			} catch (IllegalArgumentException e) {
-			    LOGGER.warn("Unknown order subject: " + fieldValue);
+			    LOGGER.warn("Order id is not defined or not correct.");
 			    throw new ActionException();
 			}
 		    }
-		    if ("topic".equals(fieldName)) {
-			topic = fieldValue;
+		    if ("status".equals(fieldName)) {
+			try {
+			    status = OrderStatus.valueOf(fieldValue);
+			} catch (IllegalArgumentException e) {
+			    LOGGER.warn("Unknown order status: " + fieldValue);
+			    throw new ActionException();
+			}
 		    }
 		    if ("message".equals(fieldName)) {
 			message = fieldValue;
@@ -81,47 +88,48 @@ public class CreateOrderAction implements Action {
 	    LOGGER.warn("Multipart request cannot be parsed.", e);
 	    throw new ActionException();
 	}
-	if (!isFormValuesValid(session, topic, message)) {
+	session = request.getSession();
+	if (!isFormValuesValid(session, message)) {
 	    LOGGER.debug("Action failed: form fields are not valid");
 	    return request.getHeader("referer");
 	}
-	session = request.getSession();
-	customer = (Customer) session.getAttribute("user");
-	order = new Order();
-	order.setDate(new Date(new java.util.Date().getTime()));
-	order.setStatus(OrderStatus.PENDING);
-	order.setSubject(subject);
-	order.setTopic(topic);
-	order.setMessage(message);
-	order.setFileName(fileName);
-	order.setFileContent(fileContent);
-	order.setCustomer(customer);
+	manager = (Employee) session.getAttribute("user");
+	feedback = new Feedback();
+	feedback.setDate(new Date(new java.util.Date().getTime()));
+	feedback.setOrderId(orderId);
+	feedback.setMessage(message);
+	feedback.setFileName(fileName);
+	feedback.setFileContent(fileContent);
+	feedback.setManager(manager);
 	try {
 	    factory = DaoFactory.getDaoFactory();
 	} catch (DaoException e) {
 	    LOGGER.warn("Dao factory cannot be taked.");
 	    throw new ActionException();
 	}
-	dao = factory.getOrderDao();
+	feedbackDao = factory.getFeedbackDao();
 	try {
-	    dao.create(order);
+	    feedbackDao.create(feedback);
 	} catch (DaoException e) {
-	    LOGGER.warn("Order cannot be created.");
+	    LOGGER.warn("Feedback cannot be created.");
+	    throw new ActionException();
+	}
+	orderDao = factory.getOrderDao();
+	try {
+	    orderDao.updateStatus(orderId, status);
+	} catch (DaoException e) {
+	    LOGGER.warn("Order cannot be updated.");
 	    throw new ActionException();
 	}
 	LOGGER.debug("Order has been created.");
-	session.setAttribute("success", "order.create.success");
+	session.setAttribute("success", "feedback.create.success");
 	return "success";
     }
 
-    private boolean isFormValuesValid(HttpSession session, String topic,
-	    String message) throws ActionException {
-	if (message == null || topic == null) {
+    private boolean isFormValuesValid(HttpSession session, String message)
+	    throws ActionException {
+	if (message == null) {
 	    LOGGER.warn("Form field error was found.");
-	    return false;
-	}
-	if (topic.isEmpty()) {
-	    session.setAttribute("error", "order.create.topicEmpty");
 	    return false;
 	}
 	if (message.isEmpty()) {

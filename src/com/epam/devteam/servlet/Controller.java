@@ -1,6 +1,7 @@
 package com.epam.devteam.servlet;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -58,6 +59,11 @@ public class Controller extends HttpServlet {
 	    session.setAttribute("error", "action.failed");
 	    view = "error";
 	}
+	System.out.println(request.getMethod() + request.getPathInfo());
+	Enumeration<String> atr = session.getAttributeNames();
+	while (atr.hasMoreElements()) {
+	    System.out.println(atr.nextElement());
+	}
 	if ("GET".equals(request.getMethod())) {
 	    request.getRequestDispatcher("/WEB-INF/jsp/" + view + ".jsp")
 		    .forward(request, response);
@@ -66,5 +72,4 @@ public class Controller extends HttpServlet {
 	}
 
     }
-
 }

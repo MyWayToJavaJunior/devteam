@@ -1,6 +1,4 @@
-package com.epam.devteam.action.account;
-
-import java.util.List;
+package com.epam.devteam.action.feedback;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,36 +10,39 @@ import com.epam.devteam.action.Action;
 import com.epam.devteam.action.ActionException;
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
-import com.epam.devteam.dao.UserDao;
-import com.epam.devteam.entity.user.User;
+import com.epam.devteam.dao.FeedbackDao;
+import com.epam.devteam.entity.order.Order;
+import com.epam.devteam.entity.response.Feedback;
 
-public class ShowAccountsManagementPageAction implements Action {
+public class ShowFeedbackAction implements Action {
     private static final Logger LOGGER = Logger
-	    .getLogger(ShowAccountsManagementPageAction.class);
+	    .getLogger(ShowFeedbackAction.class);
 
     @Override
     public String execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
-
-	List<User> users;
+	HttpSession session;
 	DaoFactory factory;
-	UserDao userDao;
+	FeedbackDao dao;
+	Feedback feedback;
+	Order order;
 	try {
 	    factory = DaoFactory.getDaoFactory();
-	    userDao = factory.getUserDao();
 	} catch (DaoException e) {
-	    LOGGER.warn("Dao cannot be created.");
+	    LOGGER.warn("Dao factory cannot be taked.");
 	    throw new ActionException();
 	}
+	dao = factory.getFeedbackDao();
+	session = request.getSession();
+	order = (Order) session.getAttribute("order");
 	try {
-	    users = userDao.list();
+	    feedback = dao.findByOrderId(order.getId());
 	} catch (DaoException e) {
-	    LOGGER.warn("Request cannot be executed.");
+	    LOGGER.warn("Feedback cannot be found.");
 	    throw new ActionException();
 	}
-	HttpSession session = request.getSession();
-	session.setAttribute("users", users);
-	return "manage-accounts";
+	session.setAttribute("feedback", feedback);
+	return "feedback";
     }
 
 }
