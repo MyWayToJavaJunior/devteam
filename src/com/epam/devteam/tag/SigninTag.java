@@ -11,7 +11,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import org.apache.log4j.Logger;
 
-import com.epam.devteam.entity.User;
+import com.epam.devteam.entity.user.User;
 
 /**
  * @date Jan 6, 2014

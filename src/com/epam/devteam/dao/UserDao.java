@@ -3,8 +3,7 @@
  */
 package com.epam.devteam.dao;
 
-import com.epam.devteam.entity.User;
-
+import com.epam.devteam.entity.user.User;
 
 /**
  * @date Dec 15, 2013

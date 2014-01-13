@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@ attribute name="localAccount" required="true"
-	type="com.epam.devteam.entity.User"%>
+	type="com.epam.devteam.entity.user.User"%>
 <div class="span-14">
 	<div>
 		<t:status />
@@ -71,18 +71,21 @@
 					test="${user.role == 'ADMINISTRATOR' and localAccount.role != 'ADMINISTRATOR'}">
 					<div class="span-6 colborder">
 						<select class="span-6" name="is-active">
-							<option value="${localAccount.active}" selected>${localAccount.active ? 'Active' : 'Not Active'}</option>
-							<option value="true">Active</option>
-							<option value="false">Not Active</option>
+							<option value="true" ${localAccount.active ? 'selected' :''}>Active</option>
+							<option value="false" ${not localAccount.active ? 'selected' :''}>Not
+								Active</option>
 						</select>
 					</div>
 					<div class="span-6 last">
 						<select class="span-6" name="role">
-							<option value="${localAccount.role}" selected>${localAccount.role}</option>
-							<option value="CUSTOMER">Customer</option>
-							<option value="DEVELOPER">Developer</option>
-							<option value="MANAGER">Manager</option>
-							<option value="ADMINISTRATOR">Administrator</option>
+							<option value="CUSTOMER"
+								${localAccount.role == 'CUSTOMER' ? 'selected' : ''}>Customer</option>
+							<option value="DEVELOPER"
+								${localAccount.role == 'DEVELOPER' ? 'selected' : ''}>Developer</option>
+							<option value="MANAGER"
+								${localAccount.role == 'MANAGER' ? 'selected' : ''}>Manager</option>
+							<option value="ADMINISTRATOR"
+								${localAccount.role == 'ADMINISTRATOR' ? 'selected' : ''}>Administrator</option>
 						</select>
 					</div>
 				</c:when>
@@ -90,7 +93,8 @@
 					<input type="hidden" name="is-active"
 						value="${localAccount.active}" />
 					<input type="hidden" name="role" value="${localAccount.role}" />
-					<div class="span-6 colborder">${localAccount.active ? 'Active' : 'Not Active'}</div>
+					<div class="span-6 colborder">${localAccount.active ? 'Active' : 'Not Active'}
+					</div>
 					<div class="span-6 last">${localAccount.role}</div>
 				</c:otherwise>
 			</c:choose>

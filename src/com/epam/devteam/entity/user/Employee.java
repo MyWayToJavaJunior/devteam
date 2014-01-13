@@ -1,4 +1,4 @@
-package com.epam.devteam.entity;
+package com.epam.devteam.entity.user;
 
 import java.sql.Date;
 

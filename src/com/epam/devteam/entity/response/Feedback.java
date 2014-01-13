@@ -1,60 +1,49 @@
-package com.epam.devteam.entity.order;
+package com.epam.devteam.entity.response;
 
 import java.io.Serializable;
 import java.sql.Date;
 
-import com.epam.devteam.entity.user.Customer;
+import com.epam.devteam.entity.user.Employee;
 
-/**
- * @date Jan 11, 2014
- * @author Andrey Kovalskiy
- */
-public class Order implements Serializable {
+public class Feedback implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private Integer id;
+    private int id;
     private Date date;
-    private OrderStatus status;
-    private OrderSubject subject;
-    private String topic;
+    private int orderId;
+    private Employee manager;
     private String message;
     private String fileName;
     private byte[] fileContent;
-    private Customer customer;
 
     /**
-     * Initializes a newly created {@code Order} object.
+     * Initializes a newly created {@code Feedback} object.
      */
-    public Order() {
+    public Feedback() {
 	super();
     }
 
     /**
-     * Initializes a newly created {@code Object} object.
+     * Initializes a newly created {@code Feedback} object.
      * 
      * @param id
      * @param date
-     * @param status
-     * @param subject
-     * @param topic
+     * @param orderId
+     * @param manager
      * @param message
      * @param fileName
      * @param fileContent
-     * @param customer
      */
-    public Order(Integer id, Date date, OrderStatus status,
-	    OrderSubject subject, String topic, String message,
-	    String fileName, byte[] fileContent, Customer customer) {
+    public Feedback(int id, Date date, int orderId, Employee manager,
+	    String message, String fileName, byte[] fileContent) {
 	super();
 	this.id = id;
 	this.date = date;
-	this.status = status;
-	this.subject = subject;
-	this.topic = topic;
+	this.orderId = orderId;
+	this.manager = manager;
 	this.message = message;
 	this.fileName = fileName;
 	this.fileContent = fileContent;
-	this.customer = customer;
     }
 
     /**
@@ -62,7 +51,7 @@ public class Order implements Serializable {
      * 
      * @return The id.
      */
-    public Integer getId() {
+    public int getId() {
 	return id;
     }
 
@@ -71,7 +60,7 @@ public class Order implements Serializable {
      * 
      * @param id The id to set.
      */
-    public void setId(Integer id) {
+    public void setId(int id) {
 	this.id = id;
     }
 
@@ -94,57 +83,39 @@ public class Order implements Serializable {
     }
 
     /**
-     * Returns the status field value.
+     * Returns the orderId field value.
      * 
-     * @return The status.
+     * @return The orderId.
      */
-    public OrderStatus getStatus() {
-	return status;
+    public int getOrderId() {
+	return orderId;
     }
 
     /**
-     * Sets the status field value.
+     * Sets the orderId field value.
      * 
-     * @param status The status to set.
+     * @param orderId The orderId to set.
      */
-    public void setStatus(OrderStatus status) {
-	this.status = status;
+    public void setOrderId(int orderId) {
+	this.orderId = orderId;
     }
 
     /**
-     * Returns the subject field value.
+     * Returns the manager field value.
      * 
-     * @return The subject.
+     * @return The manager.
      */
-    public OrderSubject getSubject() {
-	return subject;
+    public Employee getManager() {
+	return manager;
     }
 
     /**
-     * Sets the subject field value.
+     * Sets the manager field value.
      * 
-     * @param subject The subject to set.
+     * @param manager The manager to set.
      */
-    public void setSubject(OrderSubject subject) {
-	this.subject = subject;
-    }
-
-    /**
-     * Returns the topic field value.
-     * 
-     * @return The topic.
-     */
-    public String getTopic() {
-	return topic;
-    }
-
-    /**
-     * Sets the topic field value.
-     * 
-     * @param topic The topic to set.
-     */
-    public void setTopic(String topic) {
-	this.topic = topic;
+    public void setManager(Employee manager) {
+	this.manager = manager;
     }
 
     /**
@@ -201,24 +172,6 @@ public class Order implements Serializable {
 	this.fileContent = fileContent;
     }
 
-    /**
-     * Returns the customer field value.
-     * 
-     * @return The customer.
-     */
-    public Customer getCustomer() {
-	return customer;
-    }
-
-    /**
-     * Sets the customer field value.
-     * 
-     * @param customer The customer to set.
-     */
-    public void setCustomer(Customer customer) {
-	this.customer = customer;
-    }
-
     /*
      * (non-Javadoc)
      * 
@@ -228,16 +181,13 @@ public class Order implements Serializable {
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result
-		+ ((customer == null) ? 0 : customer.hashCode());
 	result = prime * result + ((date == null) ? 0 : date.hashCode());
 	result = prime * result
 		+ ((fileName == null) ? 0 : fileName.hashCode());
-	result = prime * result + ((id == null) ? 0 : id.hashCode());
+	result = prime * result + id;
+	result = prime * result + ((manager == null) ? 0 : manager.hashCode());
 	result = prime * result + ((message == null) ? 0 : message.hashCode());
-	result = prime * result + ((status == null) ? 0 : status.hashCode());
-	result = prime * result + ((subject == null) ? 0 : subject.hashCode());
-	result = prime * result + ((topic == null) ? 0 : topic.hashCode());
+	result = prime * result + orderId;
 	return result;
     }
 
@@ -254,12 +204,7 @@ public class Order implements Serializable {
 	    return false;
 	if (getClass() != obj.getClass())
 	    return false;
-	Order other = (Order) obj;
-	if (customer == null) {
-	    if (other.customer != null)
-		return false;
-	} else if (!customer.equals(other.customer))
-	    return false;
+	Feedback other = (Feedback) obj;
 	if (date == null) {
 	    if (other.date != null)
 		return false;
@@ -270,24 +215,19 @@ public class Order implements Serializable {
 		return false;
 	} else if (!fileName.equals(other.fileName))
 	    return false;
-	if (id == null) {
-	    if (other.id != null)
+	if (id != other.id)
+	    return false;
+	if (manager == null) {
+	    if (other.manager != null)
 		return false;
-	} else if (!id.equals(other.id))
+	} else if (!manager.equals(other.manager))
 	    return false;
 	if (message == null) {
 	    if (other.message != null)
 		return false;
 	} else if (!message.equals(other.message))
 	    return false;
-	if (status != other.status)
-	    return false;
-	if (subject != other.subject)
-	    return false;
-	if (topic == null) {
-	    if (other.topic != null)
-		return false;
-	} else if (!topic.equals(other.topic))
+	if (orderId != other.orderId)
 	    return false;
 	return true;
     }
@@ -299,10 +239,9 @@ public class Order implements Serializable {
      */
     @Override
     public String toString() {
-	return "Order [id=" + id + ", date=" + date + ", status=" + status
-		+ ", subject=" + subject + ", topic=" + topic + ", message="
-		+ message + ", fileName=" + fileName + ", customer=" + customer
-		+ "]";
+	return "Feedback [id=" + id + ", date=" + date + ", orderId=" + orderId
+		+ ", manager=" + manager + ", message=" + message
+		+ ", fileName=" + fileName + "]";
     }
 
 }

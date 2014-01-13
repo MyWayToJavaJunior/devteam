@@ -14,7 +14,7 @@ import com.epam.devteam.action.ActionException;
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
 import com.epam.devteam.dao.UserDao;
-import com.epam.devteam.entity.User;
+import com.epam.devteam.entity.user.User;
 
 /**
  * @date Jan 7, 2014

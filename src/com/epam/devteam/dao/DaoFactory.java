@@ -91,4 +91,12 @@ public abstract class DaoFactory {
      */
     public abstract OrderDao getOrderDao();
 
+    /**
+     * Is used to get order feedback dao.
+     * 
+     * @return The order dao implementation.
+     * @throws DaoException If something fails.
+     */
+    public abstract FeedbackDao getFeedbackDao();
+
 }

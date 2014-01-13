@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.epam.devteam.entity;
+package com.epam.devteam.entity.user;
 
 import java.io.Serializable;
 import java.sql.Date;

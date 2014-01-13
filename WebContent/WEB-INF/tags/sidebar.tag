@@ -8,4 +8,7 @@
 <c:if test="${user.role == 'CUSTOMER'}">
 	<t:customer-tools />
 </c:if>
+<c:if test="${user.role == 'MANAGER'}">
+	<t:manager-tools />
+</c:if>
 

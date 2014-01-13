@@ -16,10 +16,10 @@ import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.UserDao;
 import com.epam.devteam.db.ConnectionPool;
 import com.epam.devteam.db.ConnectionPoolException;
-import com.epam.devteam.entity.Customer;
-import com.epam.devteam.entity.Employee;
-import com.epam.devteam.entity.User;
-import com.epam.devteam.entity.UserRole;
+import com.epam.devteam.entity.user.Customer;
+import com.epam.devteam.entity.user.Employee;
+import com.epam.devteam.entity.user.User;
+import com.epam.devteam.entity.user.UserRole;
 
 public class PostgresqlUserDao extends AbstractDao implements UserDao {
     private static final Logger LOGGER = Logger

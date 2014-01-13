@@ -1,37 +1,38 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <select name="day">
 	<option value="" selected>day</option>
-	<option value="1">1</option>
-	<option value="2">2</option>
-	<option value="3">3</option>
-	<option value="4">4</option>
-	<option value="5">5</option>
-	<option value="6">6</option>
-	<option value="7">7</option>
-	<option value="8">8</option>
-	<option value="9">9</option>
-	<option value="10">10</option>
-	<option value="11">11</option>
-	<option value="12">12</option>
-	<option value="13">13</option>
-	<option value="14">14</option>
-	<option value="15">15</option>
-	<option value="16">16</option>
-	<option value="17">17</option>
-	<option value="18">18</option>
-	<option value="19">19</option>
-	<option value="20">20</option>
-	<option value="21">21</option>
-	<option value="22">22</option>
-	<option value="23">23</option>
-	<option value="24">24</option>
-	<option value="25">25</option>
-	<option value="26">26</option>
-	<option value="27">27</option>
-	<option value="28">28</option>
-	<option value="29">29</option>
-	<option value="30">30</option>
-	<option value="31">31</option>
+	<option value="1" ${day == '1' ? selected : ''}>1</option>
+	<option value="2" ${day == '2' ? selected : ''}>2</option>
+	<option value="3" ${day == '3' ? selected : ''}>3</option>
+	<option value="4" ${day == '4' ? selected : ''}>4</option>
+	<option value="5" ${day == '5' ? selected : ''}>5</option>
+	<option value="6" ${day == '6' ? selected : ''}>6</option>
+	<option value="7" ${day == '7' ? selected : ''}>7</option>
+	<option value="8" ${day == '8' ? selected : ''}>8</option>
+	<option value="9" ${day == '9' ? selected : ''}>9</option>
+	<option value="10" ${day == '10' ? selected : ''}>10</option>
+	<option value="11" ${day == '11' ? selected : ''}>11</option>
+	<option value="12" ${day == '12' ? selected : ''}>12</option>
+	<option value="13" ${day == '13' ? selected : ''}>13</option>
+	<option value="14" ${day == '14' ? selected : ''}>14</option>
+	<option value="15" ${day == '15' ? selected : ''}>15</option>
+	<option value="16" ${day == '16' ? selected : ''}>16</option>
+	<option value="17" ${day == '17' ? selected : ''}>17</option>
+	<option value="18" ${day == '18' ? selected : ''}>18</option>
+	<option value="19" ${day == '19' ? selected : ''}>19</option>
+	<option value="20" ${day == '20' ? selected : ''}>20</option>
+	<option value="21" ${day == '21' ? selected : ''}>21</option>
+	<option value="22" ${day == '22' ? selected : ''}>22</option>
+	<option value="23" ${day == '23' ? selected : ''}>23</option>
+	<option value="24" ${day == '24' ? selected : ''}>24</option>
+	<option value="25" ${day == '25' ? selected : ''}>25</option>
+	<option value="26" ${day == '26' ? selected : ''}>26</option>
+	<option value="27" ${day == '27' ? selected : ''}>27</option>
+	<option value="28" ${day == '28' ? selected : ''}>28</option>
+	<option value="29" ${day == '29' ? selected : ''}>29</option>
+	<option value="30" ${day == '30' ? selected : ''}>30</option>
+	<option value="31" ${day == '31' ? selected : ''}>31</option>
 </select>
 <select name="month">
 	<option value="" selected>month</option>
