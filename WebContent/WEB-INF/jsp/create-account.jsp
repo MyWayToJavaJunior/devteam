@@ -5,17 +5,8 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <t:genericpage sidebar="false" title="Account">
 	<jsp:body>
-		<c:choose>
-			<c:when test="${empty user}">
-				<div class="prepend-9">
-					<t:account-create />
-				</div>
-			</c:when>
-				<c:otherwise>
-					<div class="prepend-5">
-						<t:account-edit localAccount="${user}" />
-					</div>
-				</c:otherwise>
-			</c:choose>
+		<div class="prepend-9">
+			<t:account-create />
+		</div>
 	</jsp:body>
 </t:genericpage>

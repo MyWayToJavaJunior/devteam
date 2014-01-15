@@ -354,6 +354,46 @@ public class PostgresqlUserDao extends AbstractDao implements UserDao {
 	return user;
     }
 
+    @Override
+    public boolean containsUser(String email) throws DaoException {
+	Connection connection = null;
+	Statement statement = null;
+	ResultSet resultSet = null;
+	boolean result = false;
+	try {
+	    connection = getConnectionPool().takeConnection();
+	    LOGGER.debug("Connection has been taken");
+	} catch (ConnectionPoolException e) {
+	    LOGGER.warn("Connection cannot be taken.");
+	    throw new DaoException(e);
+	}
+	try {
+	    statement = connection.createStatement();
+	    LOGGER.debug("Statement has been created");
+	} catch (SQLException e) {
+	    LOGGER.warn("Statement cannot be created.");
+	    freeConnection(connection, statement);
+	    throw new DaoException();
+	}
+	try {
+	    resultSet = statement
+		    .executeQuery("SELECT users.id FROM users WHERE users.email='"
+			    + email + "';");
+	    LOGGER.debug("Statement has been executed.");
+	    if (resultSet.next()) {
+		result = true;
+	    } else {
+		result = false;
+	    }
+	} catch (SQLException e) {
+	    LOGGER.warn("Statement cannot be executed.");
+	    freeConnection(connection, statement);
+	    throw new DaoException(e);
+	}
+	freeConnection(connection, statement);
+	return result;
+    }
+
     /**
      * Is used to close statement and return connection to the connection pool.
      * 

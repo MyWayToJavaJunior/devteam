@@ -15,8 +15,9 @@ import com.epam.devteam.action.account.EditAccountAction;
 import com.epam.devteam.action.account.ManageAccountAction;
 import com.epam.devteam.action.account.SaveAccountAction;
 import com.epam.devteam.action.account.ShowAccountManagementPageAction;
-import com.epam.devteam.action.account.ShowAccountPageAction;
 import com.epam.devteam.action.account.ShowAccountsManagementPageAction;
+import com.epam.devteam.action.account.ShowCreateAccountPageAction;
+import com.epam.devteam.action.account.ShowEditAccountPageAction;
 import com.epam.devteam.action.account.SigninAction;
 import com.epam.devteam.action.account.SignoutAction;
 import com.epam.devteam.action.feedback.CreateFeedbackAction;
@@ -45,9 +46,12 @@ public class ActionFactory {
 	actions.put("POST/set-language", new SetLanguageAction());
 	actions.put("POST/signin", new SigninAction());
 	actions.put("GET/signout", new SignoutAction());
-	actions.put("GET/user-account", new ShowAccountPageAction());
-	actions.put("POST/edit-account", new EditAccountAction());
+	
+	actions.put("GET/create-account", new ShowCreateAccountPageAction());
 	actions.put("POST/create-account", new CreateAccountAction());
+	actions.put("GET/edit-account", new ShowEditAccountPageAction());
+	actions.put("POST/edit-account", new EditAccountAction());
+	
 	actions.put("POST/save-account", new SaveAccountAction());
 	actions.put("GET/manage-accounts",
 		new ShowAccountsManagementPageAction());

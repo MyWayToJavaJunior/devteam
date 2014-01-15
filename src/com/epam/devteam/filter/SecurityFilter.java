@@ -10,11 +10,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import com.epam.devteam.entity.user.User;
 import com.epam.devteam.entity.user.UserRole;
 
 public class SecurityFilter implements Filter {
@@ -22,7 +18,7 @@ public class SecurityFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-	actions.put("GET/main", UserRole.UNAUTHORIZED_USER);
+	/*actions.put("GET/main", UserRole.UNAUTHORIZED_USER);
 	actions.put("GET/error", UserRole.UNAUTHORIZED_USER);
 	actions.put("GET/download-file", UserRole.AUTHORIZED_USER);
 	actions.put("GET/success", UserRole.UNAUTHORIZED_USER);
@@ -31,6 +27,8 @@ public class SecurityFilter implements Filter {
 	actions.put("GET/user-account", UserRole.UNAUTHORIZED_USER);
 	actions.put("POST/edit-account", UserRole.AUTHORIZED_USER);
 	actions.put("POST/create-account", UserRole.UNAUTHORIZED_USER);
+	
+	
 	actions.put("POST/save-account", UserRole.AUTHORIZED_USER);
 	actions.put("GET/manage-accounts", UserRole.ADMINISTRATOR);
 	actions.put("POST/manage-account", UserRole.ADMINISTRATOR);
@@ -42,13 +40,13 @@ public class SecurityFilter implements Filter {
 	actions.put("GET/all-orders", UserRole.MANAGER);
 	actions.put("GET/process-order", UserRole.MANAGER);
 	actions.put("POST/create-feedback", UserRole.MANAGER);
-	actions.put("GET/feedback", UserRole.AUTHORIZED_USER);
+	actions.put("GET/feedback", UserRole.AUTHORIZED_USER);*/
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
 	    FilterChain chain) throws IOException, ServletException {
-	HttpServletRequest httpRequest = (HttpServletRequest) request;
+	/*HttpServletRequest httpRequest = (HttpServletRequest) request;
 	HttpServletResponse httpResponse = (HttpServletResponse) response;
 	HttpSession session = httpRequest.getSession();
 	User user = (User) session.getAttribute("user");
@@ -82,8 +80,8 @@ public class SecurityFilter implements Filter {
 
 	default:
 	    break;
-	}
-	chain.doFilter(httpRequest, httpResponse);
+	}*/
+	chain.doFilter(request, response);
     }
 
     @Override

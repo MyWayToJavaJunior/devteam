@@ -8,19 +8,18 @@
 			<fieldset>
 				<legend>${user.role}</legend>
 				<p>
-					<label>
-						<fmt:message bundle="${msg}" key="tag.account.user" />:
+					<label> <fmt:message bundle="${msg}" key="tag.account.user" />:
 					</label> ${user.firstName} ${user.lastName}
 				</p>
 				<c:if test="${user.role == 'CUSTOMER'}">
 					<p>
-						<label>
-							<fmt:message bundle="${msg}" key="tag.account.company" />:
+						<label> <fmt:message bundle="${msg}"
+								key="tag.account.company" />:
 						</label> ${user.company}
 					</p>
 					<p>
-						<label>
-							<fmt:message bundle="${msg}" key="tag.account.position" />:
+						<label> <fmt:message bundle="${msg}"
+								key="tag.account.position" />:
 						</label> ${user.position}
 					</p>
 				</c:if>
@@ -29,7 +28,7 @@
 						<fmt:message bundle="${msg}" key="tag.account.signOut" />
 					</button>
 				</form>
-				<form action="do/user-account" method="get">
+				<form action="do/edit-account" method="get">
 					<button class="span-4" type="submit">
 						<fmt:message bundle="${msg}" key="tag.account.editAccount" />
 					</button>
@@ -43,24 +42,21 @@
 					<legend>
 						<fmt:message bundle="${msg}" key="tag.account.signIn" />
 					</legend>
-					<div class="span-4 last">
-						<t:status />
-					</div>
 					<p>
-						<label for="email"><fmt:message bundle="${msg}" key="tag.account.email" /></label> 
-						<input id="email" class="span-4" type="text" name="email" />
+						<label for="email"><fmt:message bundle="${msg}"
+								key="tag.account.email" /></label> <input id="email" class="span-4"
+							type="text" name="email" />
 					</p>
 					<p>
-						<label for="email">
-							<fmt:message bundle="${msg}" key="tag.account.password" />
-						</label>
-						<input class="span-4" type="password" name="password" />
+						<label for="email"> <fmt:message bundle="${msg}"
+								key="tag.account.password" />
+						</label> <input class="span-4" type="password" name="password" />
 					</p>
 					<button class="span-4">
 						<fmt:message bundle="${msg}" key="tag.account.signIn" />
 					</button>
-					<a href="do/user-account">
-						<fmt:message bundle="${msg}" key="tag.account.createAccount" />
+					<a href="do/create-account"> <fmt:message bundle="${msg}"
+							key="tag.account.createAccount" />
 					</a>
 				</fieldset>
 			</form>

@@ -1,19 +1,18 @@
 package com.epam.devteam.servlet;
 
 import java.io.IOException;
-import java.util.Enumeration;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
 import com.epam.devteam.action.Action;
 import com.epam.devteam.action.ActionException;
 import com.epam.devteam.action.ActionFactory;
+import com.epam.devteam.action.ActionResult;
 
 /**
  * Servlet implementation class Controller
@@ -49,26 +48,30 @@ public class Controller extends HttpServlet {
 
     protected void doAction(HttpServletRequest request,
 	    HttpServletResponse response) throws ServletException, IOException {
-	HttpSession session = request.getSession();
-	Action action = ActionFactory.getAction(request);
+	Action action;
+	ActionResult result;
+	ActionResult.METHOD method;
 	String view;
+	action = ActionFactory.getAction(request);
 	try {
-	    view = action.execute(request, response);
+	    result = action.execute(request, response);
 	} catch (ActionException e) {
-	    LOGGER.error("Action execute failed.", e);
-	    session.setAttribute("error", "action.failed");
-	    view = "error";
+	    LOGGER.debug("Action execution failed.", e);
+	    LOGGER.error("Action execution failed.");
+	    request.setAttribute("error", "error.action.failed");
+	    result = new ActionResult(ActionResult.METHOD.REDIRECT, "error");
 	}
-	System.out.println(request.getMethod() + request.getPathInfo());
-	Enumeration<String> atr = session.getAttributeNames();
-	while (atr.hasMoreElements()) {
-	    System.out.println(atr.nextElement());
-	}
-	if ("GET".equals(request.getMethod())) {
+	method = result.getMethod();
+	view = result.getView();
+	LOGGER.debug(method + "/" + view);
+	switch (method) {
+	case FORWARD:
 	    request.getRequestDispatcher("/WEB-INF/jsp/" + view + ".jsp")
 		    .forward(request, response);
-	} else {
+	    break;
+	case REDIRECT:
 	    response.sendRedirect(view);
+	    break;
 	}
 
     }

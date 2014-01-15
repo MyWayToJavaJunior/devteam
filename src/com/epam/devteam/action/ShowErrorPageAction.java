@@ -7,16 +7,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @date Jan 5, 2014 	
+ * @date Jan 5, 2014
  * @author Andrey Kovalskiy
- *
+ * 
  */
 public class ShowErrorPageAction implements Action {
 
     @Override
-    public String execute(HttpServletRequest request,
+    public ActionResult execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
-	return "error";
+	return new ActionResult(ActionResult.METHOD.FORWARD, "error");
     }
 
 }
