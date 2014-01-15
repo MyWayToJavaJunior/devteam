@@ -5,6 +5,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.jstl.core.Config;
 
+import com.epam.devteam.action.exception.ActionException;
+
 public class SetLanguageAction implements Action {
 
     @Override

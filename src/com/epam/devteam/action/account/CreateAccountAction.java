@@ -13,8 +13,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import com.epam.devteam.action.Action;
-import com.epam.devteam.action.ActionException;
 import com.epam.devteam.action.ActionResult;
+import com.epam.devteam.action.exception.ActionBadRequestException;
+import com.epam.devteam.action.exception.ActionDatabaseFailException;
+import com.epam.devteam.action.exception.ActionException;
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
 import com.epam.devteam.dao.UserDao;
@@ -25,6 +27,12 @@ import com.epam.devteam.entity.user.UserRole;
 import com.epam.devteam.util.property.PropertyManager;
 
 /**
+ * The <code>CreateAccountAction</code> class is used to save new user to
+ * database. If every field is available new user will save to database and will
+ * save in session. Success message contains a link to edit new account. If new
+ * user was created by administrator success message will contain link to manage
+ * new account.
+ * 
  * @date Jan 4, 2014
  * @author Andrey Kovalskiy
  * 
@@ -32,7 +40,6 @@ import com.epam.devteam.util.property.PropertyManager;
 public class CreateAccountAction implements Action {
     private static final Logger LOGGER = Logger
 	    .getLogger(CreateAccountAction.class);
-
     private DaoFactory factory;
     private UserDao dao;
 
@@ -74,47 +81,46 @@ public class CreateAccountAction implements Action {
     @Override
     public ActionResult execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
-	HttpSession session;
 	User user;
-	String email;
-	String password1;
-	String password2;
-	String stringRole;
 	UserRole role;
+	HttpSession session = request.getSession();
+	String email = request.getParameter("email");
+	String password1 = request.getParameter("password1");
+	String password2 = request.getParameter("password2");
+	String stringRole = request.getParameter("role");
+	int id = 0;
 	boolean formFieldsValid = false;
-	boolean userAlreadyExists = false;
 	boolean emailValid = false;
 	boolean passwordValid = false;
 
-	LOGGER.debug("Action starts.");
-	email = request.getParameter("email");
-	password1 = request.getParameter("password1");
-	password2 = request.getParameter("password2");
-	stringRole = request.getParameter("role");
+	LOGGER.debug("Create user action...");
 	formFieldsValid = isFormFieldsValid(email, password1, password2,
 		stringRole);
 	if (!formFieldsValid) {
 	    LOGGER.warn("Form fields are not valid.");
-	    throw new ActionException();
+	    throw new ActionBadRequestException();
 	}
 	try {
 	    role = UserRole.valueOf(stringRole);
 	} catch (IllegalArgumentException e) {
 	    LOGGER.warn("Unknown role was defined: " + stringRole);
-	    throw new ActionException(e);
+	    throw new ActionBadRequestException(e);
 	}
+	session.setAttribute("email", email);
+	session.setAttribute("password1", password1);
+	session.setAttribute("password2", password2);
 	try {
-	    emailValid = isEmailValid(request, email);
+	    emailValid = isEmailValid(session, email);
 	} catch (Exception e) {
 	    LOGGER.warn("Email " + email + " validaition failed.");
 	    throw new ActionException(e);
 	}
 	if (!emailValid) {
 	    return new ActionResult(ActionResult.METHOD.REDIRECT,
-		    request.getHeader("referer"));
+		    "create-account");
 	}
 	try {
-	    passwordValid = isPasswordValid(request, password1, password2);
+	    passwordValid = isPasswordValid(session, password1, password2);
 	} catch (Exception e) {
 	    LOGGER.warn("Password validaition failed.");
 	}
@@ -124,14 +130,14 @@ public class CreateAccountAction implements Action {
 		    "create-account");
 	}
 	try {
-	    userAlreadyExists = userDao().containsUser(email);
+	    user = userDao().find(email);
 	} catch (DaoException e) {
 	    LOGGER.warn("User existence cannot be determined.");
-	    throw new ActionException(e);
+	    throw new ActionDatabaseFailException(e);
 	}
-	if (userAlreadyExists) {
+	if (user != null) {
 	    LOGGER.debug("User " + email + " is already exist");
-	    request.setAttribute("error", "error.account.userAlreadyExist");
+	    session.setAttribute("error", "account.userAlreadyExist");
 	    return new ActionResult(ActionResult.METHOD.REDIRECT, "error");
 	}
 	switch (role) {
@@ -146,16 +152,28 @@ public class CreateAccountAction implements Action {
 	user.setPassword(password1);
 	user.setRole(role);
 	try {
-	    userDao().create(user);
+	    id = userDao().createWithIdReturn(user);
+	    user.setId(id);
 	} catch (DaoException e) {
 	    LOGGER.warn("User cannot be created.");
-	    throw new ActionException(e);
+	    throw new ActionDatabaseFailException(e);
 	}
-	LOGGER.debug("Account " + email + " has been created.");
-	session = request.getSession();
-	session.setAttribute("user", user);
-	request.setAttribute("success", "account.createSuccess");
-	request.setAttribute("link", "do/edit-account");
+	if (session.getAttribute("user") == null) {
+	    session.setAttribute("user", user);
+	    session.setAttribute("link", "do/edit-account");
+	} else {
+	    session.setAttribute("link", "do/manage-account?id=" + id);
+	}
+	session.setAttribute("success", "account.createSuccess");
+	session.removeAttribute("email");
+	session.removeAttribute("password1");
+	session.removeAttribute("password2");
+	session.removeAttribute("error");
+	session.removeAttribute("emailError");
+	session.removeAttribute("passwordError");
+	session.removeAttribute("passwordConfirmError");
+	LOGGER.debug("User " + user.getEmail() + " has been created. User id: "
+		+ user.getId());
 	return new ActionResult(ActionResult.METHOD.REDIRECT, "success");
     }
 
@@ -196,28 +214,28 @@ public class CreateAccountAction implements Action {
      * @throws Exception If property manager cannot be taken or email pattern is
      *             not valid
      */
-    private boolean isEmailValid(HttpServletRequest request, String email)
+    private boolean isEmailValid(HttpSession session, String email)
 	    throws Exception {
 	Pattern pattern;
 	Matcher matcher;
 	PropertyManager propertyManager;
 	String emailRegex;
 	if (email.isEmpty()) {
+	    session.setAttribute("emailError", "account.emailEmpty");
 	    LOGGER.debug("User email is empty.");
-	    request.setAttribute("emailError", "account.emailEmpty");
 	    return false;
 	}
 	propertyManager = PropertyManager.getInstance();
 	emailRegex = propertyManager.getString("validation.email");
 	pattern = Pattern.compile(emailRegex);
 	matcher = pattern.matcher(email);
-	if (matcher.matches()) {
-	    return true;
-	} else {
+	if (!matcher.matches()) {
+	    session.setAttribute("emailError", "account.emailNotValid");
 	    LOGGER.debug("User email " + email + " is not valid");
-	    request.setAttribute("emailError", "account.emailNotValid");
 	    return false;
 	}
+	session.removeAttribute("emailError");
+	return true;
     }
 
     /**
@@ -231,15 +249,15 @@ public class CreateAccountAction implements Action {
      * @throws Exception If property manager cannot be taken or email pattern is
      *             not valid
      */
-    private boolean isPasswordValid(HttpServletRequest request,
-	    String password1, String password2) throws Exception {
+    private boolean isPasswordValid(HttpSession session, String password1,
+	    String password2) throws Exception {
 	Pattern pattern;
 	Matcher matcher;
 	PropertyManager propertyManager;
 	String passwordRegex;
 	if (password1.isEmpty()) {
+	    session.setAttribute("passwordError", "account.passwordEmpty");
 	    LOGGER.debug("User password is empty.");
-	    request.setAttribute("passwordError", "account.passwordEmpty");
 	    return false;
 	}
 	propertyManager = PropertyManager.getInstance();
@@ -247,16 +265,18 @@ public class CreateAccountAction implements Action {
 	pattern = Pattern.compile(passwordRegex);
 	matcher = pattern.matcher(password1);
 	if (matcher.matches()) {
+	    session.setAttribute("passwordError", "account.passwordNotValid");
 	    LOGGER.debug("User password is not valid.");
-	    request.setAttribute("passwordError", "account.passwordNotValid");
 	    return false;
 	}
+	session.removeAttribute("passwordError");
 	if (!password1.equals(password2)) {
-	    LOGGER.debug("Passwords don't match.");
-	    request.setAttribute("passwordConfirmError",
+	    session.setAttribute("passwordConfirmError",
 		    "account.passwordsDontMatch");
+	    LOGGER.debug("Passwords don't match.");
 	    return false;
 	}
+	session.removeAttribute("passwordConfirmError");
 	return true;
     }
 }

@@ -6,6 +6,8 @@ package com.epam.devteam.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.epam.devteam.action.exception.ActionException;
+
 /**
  * The <code>Action</code> interface provides a method for http request
  * processing.

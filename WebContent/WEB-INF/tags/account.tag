@@ -6,31 +6,31 @@
 	<c:choose>
 		<c:when test="${not empty user}">
 			<fieldset>
-				<legend>${user.role}</legend>
+				<legend>
+					<t:role-info role="${user.role}"></t:role-info>
+				</legend>
 				<p>
-					<label> <fmt:message bundle="${msg}" key="tag.account.user" />:
+					<label> <fmt:message bundle="${msg}" key="common.user" />:
 					</label> ${user.firstName} ${user.lastName}
 				</p>
 				<c:if test="${user.role == 'CUSTOMER'}">
 					<p>
-						<label> <fmt:message bundle="${msg}"
-								key="tag.account.company" />:
+						<label> <fmt:message bundle="${msg}" key="common.company" />:
 						</label> ${user.company}
 					</p>
 					<p>
-						<label> <fmt:message bundle="${msg}"
-								key="tag.account.position" />:
+						<label> <fmt:message bundle="${msg}" key="common.position" />:
 						</label> ${user.position}
 					</p>
 				</c:if>
 				<form action="do/signout" method="get">
 					<button class="span-4">
-						<fmt:message bundle="${msg}" key="tag.account.signOut" />
+						<fmt:message bundle="${msg}" key="action.signOut" />
 					</button>
 				</form>
 				<form action="do/edit-account" method="get">
 					<button class="span-4" type="submit">
-						<fmt:message bundle="${msg}" key="tag.account.editAccount" />
+						<fmt:message bundle="${msg}" key="action.editAccount" />
 					</button>
 				</form>
 			</fieldset>
@@ -40,23 +40,21 @@
 			<form action="do/signin" method="post">
 				<fieldset>
 					<legend>
-						<fmt:message bundle="${msg}" key="tag.account.signIn" />
+						<fmt:message bundle="${msg}" key="action.signIn" />
 					</legend>
 					<p>
-						<label for="email"><fmt:message bundle="${msg}"
-								key="tag.account.email" /></label> <input id="email" class="span-4"
-							type="text" name="email" />
+						<label><fmt:message bundle="${msg}" key="common.email" /></label>
+						<input class="span-4" type="text" name="email" />
 					</p>
 					<p>
-						<label for="email"> <fmt:message bundle="${msg}"
-								key="tag.account.password" />
+						<label> <fmt:message bundle="${msg}" key="common.password" />
 						</label> <input class="span-4" type="password" name="password" />
 					</p>
 					<button class="span-4">
-						<fmt:message bundle="${msg}" key="tag.account.signIn" />
+						<fmt:message bundle="${msg}" key="action.signIn" />
 					</button>
 					<a href="do/create-account"> <fmt:message bundle="${msg}"
-							key="tag.account.createAccount" />
+							key="action.createAccount" />
 					</a>
 				</fieldset>
 			</form>

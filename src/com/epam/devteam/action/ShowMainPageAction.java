@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import com.epam.devteam.action.exception.ActionException;
+
 /**
  * The <code>ShowMainPageAction</code> returns main.jsp page's name and method
  * to show it.

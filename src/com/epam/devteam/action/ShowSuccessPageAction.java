@@ -6,6 +6,8 @@ package com.epam.devteam.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.epam.devteam.action.exception.ActionException;
+
 /**
  * @date Jan 10, 2014
  * @author Andrey Kovalskiy
@@ -14,9 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 public class ShowSuccessPageAction implements Action {
 
     @Override
-    public String execute(HttpServletRequest request,
+    public ActionResult execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
-	return "success";
+	return new ActionResult(ActionResult.METHOD.FORWARD, "success");
     }
 
 }

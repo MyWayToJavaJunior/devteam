@@ -10,7 +10,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import com.epam.devteam.action.Action;
-import com.epam.devteam.action.ActionException;
+import com.epam.devteam.action.ActionResult;
+import com.epam.devteam.action.exception.ActionException;
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
 import com.epam.devteam.dao.UserDao;
@@ -25,7 +26,7 @@ public class SigninAction implements Action {
     private static final Logger LOGGER = Logger.getLogger(SigninAction.class);
 
     @Override
-    public String execute(HttpServletRequest request,
+    public ActionResult execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
 	HttpSession session = request.getSession();
 	String email = request.getParameter("email");
@@ -34,7 +35,7 @@ public class SigninAction implements Action {
 	    session.setAttribute("error",
 		    "account.signin.error.fieldsNotCorrect");
 	    LOGGER.debug("Sign in form fields are not valid.");
-	    return "main";
+	    return new ActionResult(ActionResult.METHOD.REDIRECT, "main");
 	}
 	DaoFactory factory;
 	try {
@@ -58,7 +59,7 @@ public class SigninAction implements Action {
 	    session.setAttribute("user", user);
 	    LOGGER.debug("User " + user.getEmail() + " has been registered.");
 	}
-	return "main";
+	return new ActionResult(ActionResult.METHOD.REDIRECT, "main");
     }
 
     private boolean isFormValuesValid(String email, String password) {

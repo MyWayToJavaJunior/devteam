@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import com.epam.devteam.action.Action;
-import com.epam.devteam.action.ActionException;
+import com.epam.devteam.action.exception.ActionException;
 import com.epam.devteam.entity.order.Order;
 
 public class ShowOrderPageAction implements Action {

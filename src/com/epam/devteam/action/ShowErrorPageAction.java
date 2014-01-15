@@ -6,6 +6,8 @@ package com.epam.devteam.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.epam.devteam.action.exception.ActionException;
+
 /**
  * @date Jan 5, 2014
  * @author Andrey Kovalskiy
