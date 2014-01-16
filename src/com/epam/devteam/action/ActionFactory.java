@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
 import com.epam.devteam.action.account.CreateAccountAction;
-import com.epam.devteam.action.account.EditAccountAction;
 import com.epam.devteam.action.account.ManageAccountAction;
 import com.epam.devteam.action.account.SaveAccountAction;
 import com.epam.devteam.action.account.ShowAccountManagementPageAction;
@@ -46,13 +46,12 @@ public class ActionFactory {
 	actions.put("POST/set-language", new SetLanguageAction());
 	actions.put("POST/signin", new SigninAction());
 	actions.put("GET/signout", new SignoutAction());
-	
+
 	actions.put("GET/create-account", new ShowCreateAccountPageAction());
 	actions.put("POST/create-account", new CreateAccountAction());
 	actions.put("GET/edit-account", new ShowEditAccountPageAction());
-	actions.put("POST/edit-account", new EditAccountAction());
-	
 	actions.put("POST/save-account", new SaveAccountAction());
+
 	actions.put("GET/manage-accounts",
 		new ShowAccountsManagementPageAction());
 	actions.put("POST/manage-account", new ManageAccountAction());
@@ -71,11 +70,15 @@ public class ActionFactory {
     }
 
     public static Action getAction(HttpServletRequest request) {
+	HttpSession session;
 	String req = request.getMethod() + request.getPathInfo();
 	Action action = actions.get(req);
 	if (action == null) {
-	    action = actions.get("GET/main");
-	    LOGGER.warn("Unknown request was detected:" + req);
+	    action = actions.get("GET/error");
+	    session = request.getSession();
+	    session.setAttribute("error", "error.badRequest");
+	    LOGGER.debug("Unknown request.");
+	    return action;
 	}
 	return action;
     }

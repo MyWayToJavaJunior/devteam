@@ -5,6 +5,6 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <t:genericpage sidebar="true" title="Account">
 	<jsp:body>
-			<t:account-edit localAccount="${user}" />
+			<t:account-edit />
 	</jsp:body>
 </t:genericpage>

@@ -31,7 +31,7 @@ import com.epam.devteam.util.property.PropertyManager;
  * database. If every field is available new user will save to database and will
  * save in session. Success message contains a link to edit new account. If new
  * user was created by administrator success message will contain link to manage
- * new account.
+ * new account. Implements <code>Action</code> interface.
  * 
  * @date Jan 4, 2014
  * @author Andrey Kovalskiy
@@ -42,32 +42,6 @@ public class CreateAccountAction implements Action {
 	    .getLogger(CreateAccountAction.class);
     private DaoFactory factory;
     private UserDao dao;
-
-    /**
-     * Is used to get dao factory. It initializes factory during the first use.
-     * 
-     * @return Dao factory.
-     * @throws DaoException If something fails.
-     */
-    private DaoFactory daoFactory() throws DaoException {
-	if (factory == null) {
-	    factory = DaoFactory.getDaoFactory();
-	}
-	return factory;
-    }
-
-    /**
-     * Is used to get user dao. It initializes dao during the first use.
-     * 
-     * @return The user.
-     * @throws DaoException If something fails.
-     */
-    private UserDao userDao() throws DaoException {
-	if (dao == null) {
-	    dao = daoFactory().getUserDao();
-	}
-	return dao;
-    }
 
     /**
      * Is used to perform required actions and define method and view for
@@ -92,9 +66,8 @@ public class CreateAccountAction implements Action {
 	boolean formFieldsValid = false;
 	boolean emailValid = false;
 	boolean passwordValid = false;
-
 	LOGGER.debug("Create user action...");
-	formFieldsValid = isFormFieldsValid(email, password1, password2,
+	formFieldsValid = areFormFieldsValid(email, password1, password2,
 		stringRole);
 	if (!formFieldsValid) {
 	    LOGGER.warn("Form fields are not valid.");
@@ -123,6 +96,7 @@ public class CreateAccountAction implements Action {
 	    passwordValid = isPasswordValid(session, password1, password2);
 	} catch (Exception e) {
 	    LOGGER.warn("Password validaition failed.");
+	    throw new ActionException(e);
 	}
 	if (!passwordValid) {
 	    LOGGER.debug("Password is not valid");
@@ -132,12 +106,12 @@ public class CreateAccountAction implements Action {
 	try {
 	    user = userDao().find(email);
 	} catch (DaoException e) {
-	    LOGGER.warn("User existence cannot be determined.");
+	    LOGGER.warn("User cannot be found because of database fail.");
 	    throw new ActionDatabaseFailException(e);
 	}
 	if (user != null) {
-	    LOGGER.debug("User " + email + " is already exist");
 	    session.setAttribute("error", "account.userAlreadyExist");
+	    LOGGER.debug("User " + email + " is already exist");
 	    return new ActionResult(ActionResult.METHOD.REDIRECT, "error");
 	}
 	switch (role) {
@@ -155,7 +129,7 @@ public class CreateAccountAction implements Action {
 	    id = userDao().createWithIdReturn(user);
 	    user.setId(id);
 	} catch (DaoException e) {
-	    LOGGER.warn("User cannot be created.");
+	    LOGGER.warn("User cannot be created because of database fail.");
 	    throw new ActionDatabaseFailException(e);
 	}
 	if (session.getAttribute("user") == null) {
@@ -186,7 +160,7 @@ public class CreateAccountAction implements Action {
      * @param role The user role
      * @return True if fields are valid, false otherwise.
      */
-    private boolean isFormFieldsValid(String email, String password1,
+    private boolean areFormFieldsValid(String email, String password1,
 	    String password2, String role) {
 	boolean result = true;
 	if (email == null) {
@@ -279,4 +253,31 @@ public class CreateAccountAction implements Action {
 	session.removeAttribute("passwordConfirmError");
 	return true;
     }
+
+    /**
+     * Is used to get dao factory. It initializes factory during the first use.
+     * 
+     * @return Dao factory.
+     * @throws DaoException If something fails.
+     */
+    private DaoFactory daoFactory() throws DaoException {
+	if (factory == null) {
+	    factory = DaoFactory.getDaoFactory();
+	}
+	return factory;
+    }
+
+    /**
+     * Is used to get user dao. It initializes dao during the first use.
+     * 
+     * @return The user.
+     * @throws DaoException If something fails.
+     */
+    private UserDao userDao() throws DaoException {
+	if (dao == null) {
+	    dao = daoFactory().getUserDao();
+	}
+	return dao;
+    }
+
 }

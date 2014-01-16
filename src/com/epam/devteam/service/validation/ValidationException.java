@@ -1,20 +1,19 @@
-/**
- * 
- */
-package com.epam.devteam.util.property;
+package com.epam.devteam.service.validation;
 
 /**
- * @date Dec 18, 2013
+ * The <code>Class</code> ...
+ * 
+ * @date Jan 16, 2014
  * @author Andrey Kovalskiy
  * 
  */
-public class PropertyManagerException extends Exception {
+public class ValidationException extends Exception {
     private static final long serialVersionUID = 1L;
 
     /**
      * Constructs a new exception with <code>null</code> as its detail message.
      */
-    public PropertyManagerException() {
+    public ValidationException() {
 	super();
     }
 
@@ -23,7 +22,7 @@ public class PropertyManagerException extends Exception {
      * 
      * @param message the detail message.
      */
-    public PropertyManagerException(String message) {
+    public ValidationException(String message) {
 	super(message);
     }
 
@@ -33,7 +32,7 @@ public class PropertyManagerException extends Exception {
      * 
      * @param cause the cause.
      */
-    public PropertyManagerException(Throwable cause) {
+    public ValidationException(Throwable cause) {
 	super(cause);
     }
 
@@ -43,7 +42,7 @@ public class PropertyManagerException extends Exception {
      * @param message the detail message.
      * @param cause the cause.
      */
-    public PropertyManagerException(String message, Throwable cause) {
+    public ValidationException(String message, Throwable cause) {
 	super(message, cause);
     }
 }

@@ -6,12 +6,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
 import com.epam.devteam.action.Action;
 import com.epam.devteam.action.ActionFactory;
 import com.epam.devteam.action.ActionResult;
+import com.epam.devteam.action.exception.ActionBadRequestException;
+import com.epam.devteam.action.exception.ActionDatabaseFailException;
 import com.epam.devteam.action.exception.ActionException;
 
 /**
@@ -20,13 +23,6 @@ import com.epam.devteam.action.exception.ActionException;
 public class Controller extends HttpServlet {
     private static final Logger LOGGER = Logger.getLogger(Controller.class);
     private static final long serialVersionUID = 1L;
-
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Controller() {
-	super();
-    }
 
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -56,9 +52,7 @@ public class Controller extends HttpServlet {
 	try {
 	    result = action.execute(request, response);
 	} catch (ActionException e) {
-	    LOGGER.debug("Action execution failed.", e);
-	    LOGGER.error("Action execution failed.");
-	    request.setAttribute("error", "error.action.failed");
+	    handleException(request.getSession(), e);
 	    result = new ActionResult(ActionResult.METHOD.REDIRECT, "error");
 	}
 	method = result.getMethod();
@@ -74,5 +68,17 @@ public class Controller extends HttpServlet {
 	    break;
 	}
 
+    }
+
+    private void handleException(HttpSession session, Exception e) {
+	LOGGER.debug("Action execution failed.", e);
+	LOGGER.error("Action execution failed.");
+	if (e.getClass().equals(ActionBadRequestException.class)) {
+	    session.setAttribute("error", "error.badRequest");
+	} else if (e.getClass().equals(ActionDatabaseFailException.class)) {
+	    session.setAttribute("error", "error.serverError");
+	} else {
+	    session.setAttribute("error", "error.serverError");
+	}
     }
 }

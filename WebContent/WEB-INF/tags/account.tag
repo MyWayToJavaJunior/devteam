@@ -29,6 +29,7 @@
 					</button>
 				</form>
 				<form action="do/edit-account" method="get">
+					<input type="hidden" name="id" value="${user.id}">
 					<button class="span-4" type="submit">
 						<fmt:message bundle="${msg}" key="action.editAccount" />
 					</button>
