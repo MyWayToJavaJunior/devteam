@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import com.epam.devteam.action.Action;
 import com.epam.devteam.action.ActionResult;
+import com.epam.devteam.action.exception.ActionBadRequestException;
 import com.epam.devteam.action.exception.ActionException;
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
@@ -42,7 +43,7 @@ public class SigninAction implements Action {
 	    factory = DaoFactory.getDaoFactory();
 	} catch (DaoException e) {
 	    LOGGER.warn("Dao cannot be created.");
-	    throw new ActionException();
+	    throw new ActionException(e);
 	}
 	UserDao userDao = factory.getUserDao();
 	User user;
@@ -50,7 +51,7 @@ public class SigninAction implements Action {
 	    user = userDao.find(email, password);
 	} catch (DaoException e) {
 	    LOGGER.warn("Request cannot be executed.");
-	    throw new ActionException();
+	    throw new ActionBadRequestException(e);
 	}
 	if (user == null) {
 	    session.setAttribute("error", "account.create.error.notFound");

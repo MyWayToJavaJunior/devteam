@@ -1,7 +1,5 @@
 package com.epam.devteam.action.account;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,20 +13,11 @@ import com.epam.devteam.action.exception.ActionException;
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
 import com.epam.devteam.dao.UserDao;
-import com.epam.devteam.entity.user.User;
 import com.epam.devteam.service.validation.RequestFieldsValidator;
 
-/**
- * The <code>ShowAccountsManagementPageAction</code> is used to show user
- * accounts management page.
- * 
- * @date Jan 17, 2014
- * @author Andrey Kovalskiy
- * 
- */
-public class ShowAccountsManagementPageAction implements Action {
+public class ActivateAccountAction implements Action {
     private static final Logger LOGGER = Logger
-	    .getLogger(ShowAccountsManagementPageAction.class);
+	    .getLogger(ActivateAccountAction.class);
     private DaoFactory factory;
     private UserDao dao;
 
@@ -45,38 +34,39 @@ public class ShowAccountsManagementPageAction implements Action {
     public ActionResult execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
 	HttpSession session = request.getSession();
-	List<User> users;
-	String tempFirstRow = (String) request.getParameter("first-row");
-	String tempRowNumber = (String) request.getParameter("row-number");
-	int firstRow = 0;
-	int rowNumber = 0;
-	if (RequestFieldsValidator.equalsNull(tempFirstRow, tempRowNumber)
-		|| RequestFieldsValidator.empty(tempFirstRow, tempRowNumber)) {
+	String tempId = request.getParameter("id");
+	boolean idFieldEqualsNull = false;
+	boolean idFieldEmpty = false;
+	int id = 0;
+	idFieldEqualsNull = RequestFieldsValidator.equalsNull(tempId);
+	if (idFieldEqualsNull) {
 	    session.setAttribute("error", "error.badRequest");
-	    LOGGER.warn("Form fields are not valid: equas null");
+	    LOGGER.debug("Id form field equals null.");
+	    return new ActionResult(ActionResult.METHOD.FORWARD, "error");
+	}
+	idFieldEmpty = RequestFieldsValidator.empty(tempId);
+	if (idFieldEmpty) {
+	    session.setAttribute("error", "error.badRequest");
+	    LOGGER.debug("Id form field value is empty.");
 	    return new ActionResult(ActionResult.METHOD.FORWARD, "error");
 	}
 	try {
-	    firstRow = Integer.parseInt(tempFirstRow);
-	    rowNumber = Integer.parseInt(tempRowNumber);
+	    id = Integer.parseInt(tempId);
 	} catch (IllegalArgumentException e) {
 	    session.setAttribute("error", "error.badRequest");
-	    LOGGER.warn("Form fields are not valid: not a number");
-	    return new ActionResult(ActionResult.METHOD.FORWARD, "error");
-	}
-	if ((rowNumber % 5 != 0) || (rowNumber > 50)) {
-	    session.setAttribute("error", "error.badRequest");
-	    LOGGER.warn("Row number is not valid");
+	    LOGGER.debug("Id format is wrong.");
 	    return new ActionResult(ActionResult.METHOD.FORWARD, "error");
 	}
 	try {
-	    users = userDao().list(firstRow, rowNumber);
+	    userDao().updateActiveStatus(id, true);
+	    ;
+	    LOGGER.warn("User has been deleted.");
 	} catch (DaoException e) {
-	    LOGGER.warn("Request cannot be executed.");
+	    LOGGER.warn("User cannot be deleted.");
 	    throw new ActionDatabaseFailException(e);
 	}
-	session.setAttribute("users", users);
-	return new ActionResult(ActionResult.METHOD.FORWARD, "manage-accounts");
+	session.setAttribute("success", "account.activateSuccess");
+	return new ActionResult(ActionResult.METHOD.FORWARD, "success");
     }
 
     /**

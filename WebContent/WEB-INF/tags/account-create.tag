@@ -28,11 +28,7 @@
 			<p>
 				<label> <fmt:message bundle="${msg}"
 						key="common.confirmPassword" />
-				</label>
-				<c:if test="${not empty passwordConfirmError}">
-					<t:error-info error="${passwordConfirmError}" />
-				</c:if>
-				<input type="password" name="password2" value="${password2}" />
+				</label> <input type="password" name="password2" value="${password2}" />
 			</p>
 			<c:choose>
 				<c:when test="${not empty user and user.role == 'ADMINISTRATOR'}">

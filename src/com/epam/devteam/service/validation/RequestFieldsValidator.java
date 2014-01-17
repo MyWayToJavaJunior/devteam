@@ -1,5 +1,9 @@
 package com.epam.devteam.service.validation;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
 import org.apache.log4j.Logger;
 
 import com.epam.devteam.util.property.PropertyManager;
@@ -87,5 +91,74 @@ public class RequestFieldsValidator {
 	    }
 	}
 	return result;
+    }
+
+    /**
+     * Is used to check whether email value is valid.
+     * 
+     * @param email The user email.
+     * @return True if email is valid, false otherwise.
+     * @throws ValidationException If property manager cannot be taken or email
+     *             pattern is not valid
+     */
+    public boolean emailValid(String email) throws ValidationException {
+	Pattern pattern;
+	Matcher matcher;
+	PropertyManager propertyManager;
+	String emailRegex;
+	try {
+	    propertyManager = PropertyManager.getInstance();
+	    emailRegex = propertyManager.getString("validation.password");
+	} catch (PropertyManagerException e) {
+	    LOGGER.debug("Email regex cannot be taken.");
+	    throw new ValidationException(e);
+	}
+	try {
+	    pattern = Pattern.compile(emailRegex);
+	} catch (PatternSyntaxException e) {
+	    LOGGER.debug("Email pattern cannot be compiled.");
+	    throw new ValidationException(e);
+	}
+	matcher = pattern.matcher(email);
+	if (!matcher.matches()) {
+	    LOGGER.debug("User email is not valid.");
+	    return false;
+	}
+	return true;
+    }
+
+    /**
+     * Is used to check whether password value is valid.
+     * 
+     * @param password The user password to validate.
+     * @return True if password is valid, false otherwise.
+     * @throws ValidationException If property manager cannot be taken or email
+     *             pattern is not valid
+     */
+    public static boolean passwordValid(String password)
+	    throws ValidationException {
+	Pattern pattern;
+	Matcher matcher;
+	PropertyManager propertyManager;
+	String passwordRegex;
+	try {
+	    propertyManager = PropertyManager.getInstance();
+	    passwordRegex = propertyManager.getString("validation.password");
+	} catch (PropertyManagerException e) {
+	    LOGGER.debug("Password regex cannot be taken.");
+	    throw new ValidationException(e);
+	}
+	try {
+	    pattern = Pattern.compile(passwordRegex);
+	} catch (PatternSyntaxException e) {
+	    LOGGER.debug("Password pattern cannot be compiled.");
+	    throw new ValidationException(e);
+	}
+	matcher = pattern.matcher(password);
+	if (!matcher.matches()) {
+	    LOGGER.debug("User password is not valid.");
+	    return false;
+	}
+	return true;
     }
 }

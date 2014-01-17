@@ -11,10 +11,11 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import com.epam.devteam.action.account.ActivateAccountAction;
+import com.epam.devteam.action.account.ChangeAccountPasswordAction;
 import com.epam.devteam.action.account.CreateAccountAction;
-import com.epam.devteam.action.account.ManageAccountAction;
+import com.epam.devteam.action.account.DeactivateAccountAction;
 import com.epam.devteam.action.account.SaveAccountAction;
-import com.epam.devteam.action.account.ShowAccountManagementPageAction;
 import com.epam.devteam.action.account.ShowAccountsManagementPageAction;
 import com.epam.devteam.action.account.ShowCreateAccountPageAction;
 import com.epam.devteam.action.account.ShowEditAccountPageAction;
@@ -40,22 +41,23 @@ public class ActionFactory {
     private static Map<String, Action> createInitialMap() {
 	Map<String, Action> actions = new HashMap<String, Action>();
 	actions.put("GET/", new ShowMainPageAction());
+	actions.put("GET/*", new ShowMainPageAction());
 	actions.put("GET/main", new ShowMainPageAction());
 	actions.put("GET/error", new ShowErrorPageAction());
 	actions.put("GET/success", new ShowSuccessPageAction());
 	actions.put("POST/set-language", new SetLanguageAction());
 	actions.put("POST/signin", new SigninAction());
 	actions.put("GET/signout", new SignoutAction());
-
 	actions.put("GET/create-account", new ShowCreateAccountPageAction());
 	actions.put("POST/create-account", new CreateAccountAction());
 	actions.put("GET/edit-account", new ShowEditAccountPageAction());
 	actions.put("POST/save-account", new SaveAccountAction());
-
 	actions.put("GET/manage-accounts",
 		new ShowAccountsManagementPageAction());
-	actions.put("POST/manage-account", new ManageAccountAction());
-	actions.put("GET/manage-account", new ShowAccountManagementPageAction());
+	actions.put("GET/deactivate-account", new DeactivateAccountAction());
+	actions.put("GET/activate-account", new ActivateAccountAction());
+	actions.put("POST/change-password", new ChangeAccountPasswordAction());
+
 	actions.put("GET/order", new ShowOrderPageAction());
 	actions.put("GET/customer-orders", new ShowCustomerOrdersPageAction());
 	actions.put("GET/create-order", new ShowCreateOrderPageAction());

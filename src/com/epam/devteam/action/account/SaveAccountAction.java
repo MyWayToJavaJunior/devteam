@@ -142,15 +142,15 @@ public class SaveAccountAction implements Action {
 	    userDao().update(account);
 	} catch (DaoException e) {
 	    LOGGER.warn("Customer cannot be updated.");
-	    throw new ActionDatabaseFailException();
+	    throw new ActionDatabaseFailException(e);
 	}
 	user = (User) session.getAttribute("user");
 	if (user.getId().equals(account.getId())) {
 	    session.setAttribute("user", account);
-	} else {
-	    session.removeAttribute("account");
 	}
+	session.removeAttribute("account");
 	session.setAttribute("success", "account.saveSuccess");
+	session.setAttribute("link", "do/edit-account?id=" + id);
 	LOGGER.debug("User " + account.getEmail() + " has been updated.");
 	return new ActionResult(ActionResult.METHOD.REDIRECT, "success");
     }

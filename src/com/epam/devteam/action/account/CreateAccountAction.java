@@ -58,6 +58,7 @@ public class CreateAccountAction implements Action {
 	User user;
 	UserRole role;
 	HttpSession session = request.getSession();
+	User currentUser = (User) session.getAttribute("user");
 	String email = request.getParameter("email");
 	String password1 = request.getParameter("password1");
 	String password2 = request.getParameter("password2");
@@ -89,6 +90,7 @@ public class CreateAccountAction implements Action {
 	    throw new ActionException(e);
 	}
 	if (!emailValid) {
+	    session.setAttribute("emailError", "account.emailEmpty");
 	    return new ActionResult(ActionResult.METHOD.REDIRECT,
 		    "create-account");
 	}
@@ -132,20 +134,17 @@ public class CreateAccountAction implements Action {
 	    LOGGER.warn("User cannot be created because of database fail.");
 	    throw new ActionDatabaseFailException(e);
 	}
-	if (session.getAttribute("user") == null) {
+	if (currentUser == null) {
 	    session.setAttribute("user", user);
-	    session.setAttribute("link", "do/edit-account");
-	} else {
-	    session.setAttribute("link", "do/manage-account?id=" + id);
 	}
 	session.setAttribute("success", "account.createSuccess");
+	session.setAttribute("link", "do/edit-account?id=" + user.getId());
 	session.removeAttribute("email");
 	session.removeAttribute("password1");
 	session.removeAttribute("password2");
 	session.removeAttribute("error");
 	session.removeAttribute("emailError");
 	session.removeAttribute("passwordError");
-	session.removeAttribute("passwordConfirmError");
 	LOGGER.debug("User " + user.getEmail() + " has been created. User id: "
 		+ user.getId());
 	return new ActionResult(ActionResult.METHOD.REDIRECT, "success");

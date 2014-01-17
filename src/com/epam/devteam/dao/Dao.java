@@ -40,7 +40,7 @@ public interface Dao<T> {
      *         {@code null}.
      * @throws DaoException If something fails at database level.
      */
-    T find(Integer id) throws DaoException;
+    T find(int id) throws DaoException;
 
     /**
      * Is used to update the given object.
@@ -51,12 +51,12 @@ public interface Dao<T> {
     void update(T object) throws DaoException;
 
     /**
-     * Is used to delete the given object from the database.
+     * Is used to delete the object with the given id from the database.
      * 
-     * @param object The object to delete.
+     * @param id The id of the object to be deleted.
      * @throws DaoException If something fails at database level.
      */
-    void delete(T object) throws DaoException;
+    void delete(int id) throws DaoException;
 
     /**
      * Is used to get all of the objects from the database.
