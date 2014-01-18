@@ -50,7 +50,7 @@ public class ShowAccountsManagementPageAction implements Action {
 	String tempRowNumber = (String) request.getParameter("row-number");
 	int firstRow = 0;
 	int rowNumber = 0;
-	if (RequestFieldsValidator.equalsNull(tempFirstRow, tempRowNumber)
+	if (RequestFieldsValidator.equalNull(tempFirstRow, tempRowNumber)
 		|| RequestFieldsValidator.empty(tempFirstRow, tempRowNumber)) {
 	    session.setAttribute("error", "error.badRequest");
 	    LOGGER.warn("Form fields are not valid: equas null");

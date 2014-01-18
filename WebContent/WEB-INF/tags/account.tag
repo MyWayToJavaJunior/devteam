@@ -43,9 +43,10 @@
 					<legend>
 						<fmt:message bundle="${msg}" key="action.signIn" />
 					</legend>
+					<t:error-info error="${signInError}" />
 					<p>
 						<label><fmt:message bundle="${msg}" key="common.email" /></label>
-						<input class="span-4" type="text" name="email" />
+						<input class="span-4" type="text" name="email" value="${not empty email ? email : ''}"/>
 					</p>
 					<p>
 						<label> <fmt:message bundle="${msg}" key="common.password" />

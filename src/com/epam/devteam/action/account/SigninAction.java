@@ -17,60 +17,91 @@ import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
 import com.epam.devteam.dao.UserDao;
 import com.epam.devteam.entity.user.User;
+import com.epam.devteam.service.validation.RequestFieldsValidator;
 
 /**
+ * The <code>SigninAction</code> is used to sign in.
+ * 
  * @date Jan 5, 2014
  * @author Andrey Kovalskiy
  * 
  */
 public class SigninAction implements Action {
     private static final Logger LOGGER = Logger.getLogger(SigninAction.class);
+    private DaoFactory factory;
+    private UserDao dao;
 
+    /**
+     * Is used to perform required actions and define method and view for
+     * <code>Controller</code>. Returns result as <code>ActionResult</code>.
+     * 
+     * @param request Request to process.
+     * @param response Response to send.
+     * @return ActionResult where to redirect user
+     * @throws ActionException If something fails during method performing.
+     */
     @Override
     public ActionResult execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
 	HttpSession session = request.getSession();
 	String email = request.getParameter("email");
 	String password = request.getParameter("password");
-	if (!isFormValuesValid(email, password)) {
-	    session.setAttribute("error",
-		    "account.signin.error.fieldsNotCorrect");
+	User user;
+	boolean fieldsEqualNull = false;
+	boolean fieldsEmpty = false;
+	fieldsEqualNull = RequestFieldsValidator.equalNull(email, password);
+	if (fieldsEqualNull) {
 	    LOGGER.debug("Sign in form fields are not valid.");
+	    throw new ActionBadRequestException();
+	}
+	fieldsEmpty = RequestFieldsValidator.empty(email, password);
+	if (fieldsEmpty) {
+	    session.setAttribute("signInError", "account.enterEmailAndPassword");
+	    LOGGER.debug("Email or/and password are empty.");
 	    return new ActionResult(ActionResult.METHOD.REDIRECT, "main");
 	}
-	DaoFactory factory;
+	session.setAttribute("email", email);
 	try {
-	    factory = DaoFactory.getDaoFactory();
-	} catch (DaoException e) {
-	    LOGGER.warn("Dao cannot be created.");
-	    throw new ActionException(e);
-	}
-	UserDao userDao = factory.getUserDao();
-	User user;
-	try {
-	    user = userDao.find(email, password);
+	    user = userDao().find(email, password);
 	} catch (DaoException e) {
 	    LOGGER.warn("Request cannot be executed.");
 	    throw new ActionBadRequestException(e);
 	}
 	if (user == null) {
-	    session.setAttribute("error", "account.create.error.notFound");
-	    LOGGER.debug("Account" + email + "is not found.");
-	} else {
-	    session.setAttribute("user", user);
-	    LOGGER.debug("User " + user.getEmail() + " has been registered.");
+	    session.setAttribute("signInError", "account.accountNotFound");
+	    LOGGER.debug("Email or/and password are empty.");
+	    return new ActionResult(ActionResult.METHOD.REDIRECT, "main");
 	}
+	session.setAttribute("user", user);
+	session.removeAttribute("email");
+	session.removeAttribute("signInError");
+	LOGGER.debug("User " + user.getEmail() + " has been registered.");
 	return new ActionResult(ActionResult.METHOD.REDIRECT, "main");
     }
 
-    private boolean isFormValuesValid(String email, String password) {
-	if (email.isEmpty()) {
-	    return false;
+    /**
+     * Is used to get dao factory. It initializes factory during the first use.
+     * 
+     * @return Dao factory.
+     * @throws DaoException If something fails.
+     */
+    private DaoFactory daoFactory() throws DaoException {
+	if (factory == null) {
+	    factory = DaoFactory.getDaoFactory();
 	}
-	if (password.isEmpty()) {
-	    return false;
-	}
-	return true;
+	return factory;
     }
 
+    /**
+     * Is used to get user dao. It initializes dao during the first use.
+     * 
+     * @return The user.
+     * @throws DaoException If something fails.
+     */
+    private UserDao userDao() throws DaoException {
+	if (dao == null) {
+	    dao = daoFactory().getUserDao();
+	}
+	return dao;
+    }
 }

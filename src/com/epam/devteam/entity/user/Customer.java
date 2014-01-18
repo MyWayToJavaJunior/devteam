@@ -3,11 +3,15 @@ package com.epam.devteam.entity.user;
 import java.sql.Date;
 
 /**
+ * The <code>Customer</code> class extends <code>User</code> class and contains
+ * unique fields for customers as company and position.
+ * 
  * @date Jan 4, 2014
  * @author Andrey Kovalskiy
+ * @see com.epam.devteam.entity.user.User
+ * @see com.epam.devteam.entity.user.UserRole
  */
 public class Customer extends User {
-
     private static final long serialVersionUID = 1L;
     private String company;
     private String position;
@@ -27,18 +31,21 @@ public class Customer extends User {
      * @param email The user email.
      * @param password The user password.
      * @param registrationDate The date of registration.
+     * @param role The role of the user.
+     * @param active The status of the user.
      * @param firstName The user first name.
      * @param lastName The user last name.
      * @param birthDate The user birth date.
-     * @param phone The contact phone number
+     * @param address The user address.
+     * @param phone The contact phone number.
      * @param company The company where the customer works.
      * @param position The position of the customer.
      */
-    public Customer(Integer id, String email, String password,
-	    Date registrationDate, UserRole role, Boolean isActive,
+    public Customer(int id, String email, String password,
+	    Date registrationDate, UserRole role, boolean active,
 	    String firstName, String lastName, Date birthDate, String address,
 	    String phone, String company, String position) {
-	super(id, email, password, registrationDate, role, isActive, firstName,
+	super(id, email, password, registrationDate, role, active, firstName,
 		lastName, birthDate, address, phone);
 	this.company = company;
 	this.position = position;
@@ -95,7 +102,7 @@ public class Customer extends User {
 	}
 	if (this.getClass() == obj.getClass()) {
 	    Customer otherCustomer = (Customer) obj;
-	    return (this.getId().equals(otherCustomer.getId()))
+	    return (this.getId() == otherCustomer.getId())
 		    && (this.getEmail().equals(otherCustomer.getEmail()))
 		    && (this.getPassword().equals(otherCustomer.getPassword()))
 		    && (this.getRegistrationDate().equals(otherCustomer
@@ -123,5 +130,16 @@ public class Customer extends User {
     public int hashCode() {
 	return super.hashCode() + ((company == null) ? 0 : company.hashCode())
 		+ ((position == null) ? 0 : position.hashCode());
+    }
+
+    /**
+     * Returns a string representation of the object.
+     */
+    @Override
+    public String toString() {
+	StringBuffer sb = new StringBuffer();
+	sb.append(super.toString()).append(" company:").append(company)
+		.append(" position:").append("position");
+	return sb.toString();
     }
 }

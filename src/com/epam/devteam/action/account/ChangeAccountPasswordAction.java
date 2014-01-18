@@ -78,7 +78,7 @@ public class ChangeAccountPasswordAction implements Action {
 	    session.removeAttribute("oldPasswordError");
 
 	}
-	passwordFieldsNull = RequestFieldsValidator.equalsNull(newPassword1,
+	passwordFieldsNull = RequestFieldsValidator.equalNull(newPassword1,
 		newPassword2);
 	if (passwordFieldsNull) {
 	    LOGGER.warn("Old password field is not valid.");
@@ -117,7 +117,7 @@ public class ChangeAccountPasswordAction implements Action {
 	    LOGGER.warn("Password cannot be changed.");
 	    throw new ActionDatabaseFailException(e);
 	}
-	if (user.getId().equals(id)) {
+	if (user.getId() == id) {
 	    user.setPassword(newPassword1);
 	    session.setAttribute("user", user);
 	}

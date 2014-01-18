@@ -38,7 +38,7 @@ public class ActivateAccountAction implements Action {
 	boolean idFieldEqualsNull = false;
 	boolean idFieldEmpty = false;
 	int id = 0;
-	idFieldEqualsNull = RequestFieldsValidator.equalsNull(tempId);
+	idFieldEqualsNull = RequestFieldsValidator.equalNull(tempId);
 	if (idFieldEqualsNull) {
 	    session.setAttribute("error", "error.badRequest");
 	    LOGGER.debug("Id form field equals null.");

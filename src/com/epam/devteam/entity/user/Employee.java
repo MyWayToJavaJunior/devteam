@@ -3,11 +3,15 @@ package com.epam.devteam.entity.user;
 import java.sql.Date;
 
 /**
+ * The <code>Employee</code> class extends <code>User</code> class and contains
+ * unique fields for employees as qualification.
+ * 
  * @date Jan 4, 2014
  * @author Andrey Kovalskiy
+ * @see com.epam.devteam.entity.user.User
+ * @see com.epam.devteam.entity.user.UserRole
  */
 public class Employee extends User {
-
     private static final long serialVersionUID = 1L;
     private String qualification;
 
@@ -26,18 +30,20 @@ public class Employee extends User {
      * @param email The user email.
      * @param password The user password.
      * @param registrationDate The date of registration.
+     * @param role The role of the user.
+     * @param active The status of the user.
      * @param firstName The user first name.
      * @param lastName The user last name.
      * @param birthDate The user birth date.
+     * @param address The user address.
      * @param phone The contact phone number.
-     * @param role The employee role {@link UserRole}.
      * @param qualifiaction The employee qualification.
      */
-    public Employee(Integer id, String email, String password,
-	    Date registrationDate, UserRole role, Boolean isActive,
+    public Employee(int id, String email, String password,
+	    Date registrationDate, UserRole role, boolean active,
 	    String firstName, String lastName, Date birthDate, String address,
 	    String phone, String qualification) {
-	super(id, email, password, registrationDate, role, isActive, firstName,
+	super(id, email, password, registrationDate, role, active, firstName,
 		lastName, birthDate, address, phone);
 	this.qualification = qualification;
     }
@@ -75,7 +81,7 @@ public class Employee extends User {
 	}
 	if (this.getClass() == obj.getClass()) {
 	    Employee otherEmployee = (Employee) obj;
-	    return (this.getId().equals(otherEmployee.getId()))
+	    return (this.getId() == otherEmployee.getId())
 		    && (this.getEmail().equals(otherEmployee.getEmail()))
 		    && (this.getPassword().equals(otherEmployee.getPassword()))
 		    && (this.getRegistrationDate().equals(otherEmployee
@@ -104,4 +110,14 @@ public class Employee extends User {
 		+ ((qualification == null) ? 0 : qualification.hashCode());
     }
 
+    /**
+     * Returns a string representation of the object.
+     */
+    @Override
+    public String toString() {
+	StringBuffer sb = new StringBuffer();
+	sb.append(super.toString()).append(" qualification:")
+		.append(qualification);
+	return sb.toString();
+    }
 }

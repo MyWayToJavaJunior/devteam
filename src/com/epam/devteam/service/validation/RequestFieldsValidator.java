@@ -26,7 +26,7 @@ public class RequestFieldsValidator {
      * @param values The values to check.
      * @return true if there is at least one null value, false otherwise.
      */
-    public static boolean equalsNull(String... values) {
+    public static boolean equalNull(String... values) {
 	boolean result = false;
 	for (int i = 0; i < values.length; i++) {
 	    if (values[i] == null) {
@@ -46,8 +46,8 @@ public class RequestFieldsValidator {
     public static boolean empty(String... values) {
 	boolean result = false;
 	for (int i = 0; i < values.length; i++) {
-	    if (values[i] == null) {
-		result = false;
+	    if (values[i].isEmpty()) {
+		result = true;
 		break;
 	    }
 	}
@@ -101,14 +101,14 @@ public class RequestFieldsValidator {
      * @throws ValidationException If property manager cannot be taken or email
      *             pattern is not valid
      */
-    public boolean emailValid(String email) throws ValidationException {
+    public static boolean emailValid(String email) throws ValidationException {
 	Pattern pattern;
 	Matcher matcher;
 	PropertyManager propertyManager;
 	String emailRegex;
 	try {
 	    propertyManager = PropertyManager.getInstance();
-	    emailRegex = propertyManager.getString("validation.password");
+	    emailRegex = propertyManager.getString("validation.email");
 	} catch (PropertyManagerException e) {
 	    LOGGER.debug("Email regex cannot be taken.");
 	    throw new ValidationException(e);

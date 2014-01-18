@@ -49,7 +49,7 @@ public class DeactivateAccountAction implements Action {
 	boolean idFieldEqualsNull = false;
 	boolean idFieldEmpty = false;
 	int id = 0;
-	idFieldEqualsNull = RequestFieldsValidator.equalsNull(tempId);
+	idFieldEqualsNull = RequestFieldsValidator.equalNull(tempId);
 	if (idFieldEqualsNull) {
 	    session.setAttribute("error", "error.badRequest");
 	    LOGGER.debug("Id form field equals null.");
@@ -68,7 +68,7 @@ public class DeactivateAccountAction implements Action {
 	    LOGGER.debug("Id format is wrong.");
 	    return new ActionResult(ActionResult.METHOD.FORWARD, "error");
 	}
-	if (user.getId().equals(id)
+	if ((user.getId() == id)
 		&& user.getRole().equals(UserRole.ADMINISTRATOR)) {
 	    session.setAttribute("error", "error.badRequest");
 	    LOGGER.debug("It is immpossible to delete administrator.");

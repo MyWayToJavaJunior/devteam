@@ -43,6 +43,8 @@ public class ActionFactory {
 	actions.put("GET/", new ShowMainPageAction());
 	actions.put("GET/*", new ShowMainPageAction());
 	actions.put("GET/main", new ShowMainPageAction());
+	actions.put("GET/contacts", new ShowContactsPageAction());
+	actions.put("GET/about-us", new ShowAboutUsPageAction());
 	actions.put("GET/error", new ShowErrorPageAction());
 	actions.put("GET/success", new ShowSuccessPageAction());
 	actions.put("POST/set-language", new SetLanguageAction());

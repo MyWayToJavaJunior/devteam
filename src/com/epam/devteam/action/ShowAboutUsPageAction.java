@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.epam.devteam.action;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,16 +8,15 @@ import org.apache.log4j.Logger;
 import com.epam.devteam.action.exception.ActionException;
 
 /**
- * The <code>ShowMainPageAction</code> returns main.jsp page's name and method
- * to show it.
+ * The <code>ShowAboutUsPageAction</code> is used to show page with information about company.
  * 
- * @date Jan 5, 2014
+ * @date Jan 18, 2014
  * @author Andrey Kovalskiy
  * 
  */
-public class ShowMainPageAction implements Action {
+public class ShowAboutUsPageAction implements Action {
     private final static Logger LOGGER = Logger
-	    .getLogger(ShowMainPageAction.class);
+	    .getLogger(ShowAboutUsPageAction.class);
 
     /**
      * Is used to perform required actions and define method and view for
@@ -34,7 +30,8 @@ public class ShowMainPageAction implements Action {
     @Override
     public ActionResult execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
-	LOGGER.debug("Action starts.");
-	return new ActionResult(ActionResult.METHOD.FORWARD, "main");
+	LOGGER.debug("Show about us page action...");
+	return new ActionResult(ActionResult.METHOD.FORWARD, "about-us");
     }
+
 }

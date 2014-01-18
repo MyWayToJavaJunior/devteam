@@ -68,7 +68,7 @@ public class ShowEditAccountPageAction implements Action {
 		throw new ActionDatabaseFailException(e);
 	    }
 	} else {
-	    if (!user.getId().equals(accountId)) {
+	    if (user.getId() != accountId) {
 		LOGGER.debug("User " + user.getEmail()
 			+ " tried to edit other user's account.");
 		session.setAttribute("error", "error.badRequest");

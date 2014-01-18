@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.epam.devteam.action.ShowAboutUsPageAction;
+import com.epam.devteam.action.ShowContactsPageAction;
 import com.epam.devteam.entity.user.User;
 import com.epam.devteam.entity.user.UserRole;
 
@@ -34,6 +36,8 @@ public class SecurityFilter implements Filter {
 	EnumSet<UserRole> administrator = EnumSet.of(UserRole.ADMINISTRATOR);
 	EnumSet<UserRole> manager = EnumSet.of(UserRole.MANAGER);
 	actions.put("GET/main", all);
+	actions.put("GET/contacts", all);
+	actions.put("GET/about-us", all);
 	actions.put("GET/error", all);
 	actions.put("GET/success", all);
 	actions.put("POST/set-language", all);

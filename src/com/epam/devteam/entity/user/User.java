@@ -7,19 +7,21 @@ import java.io.Serializable;
 import java.sql.Date;
 
 /**
+ * The <code>User</code> provides basic fields and methods for all users.
+ * 
  * @date Dec 15, 2013
  * @author Andrey Kovalskiy
- * 
+ * @see com.epam.devteam.entity.user.UserRole
  */
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private Integer id;
+    private int id;
     private String email;
     private String password;
     private Date registrationDate;
     private UserRole role;
-    private boolean isActive;
+    private boolean active;
     private String firstName;
     private String lastName;
     private Date birthDate;
@@ -41,15 +43,16 @@ public class User implements Serializable {
      * @param email The user email.
      * @param password The user password.
      * @param registrationDate The date of registration.
-     * @param role The user role.
+     * @param role The role of the user.
+     * @param active The status of the user.
      * @param firstName The user first name.
      * @param lastName The user last name.
      * @param birthDate The user birth date.
      * @param address The user address.
-     * @param phone The contact phone number
+     * @param phone The contact phone number.
      */
     public User(Integer id, String email, String password,
-	    Date registrationDate, UserRole role, boolean isActive,
+	    Date registrationDate, UserRole role, boolean active,
 	    String firstName, String lastName, Date birthDate, String address,
 	    String phone) {
 	super();
@@ -58,7 +61,7 @@ public class User implements Serializable {
 	this.password = password;
 	this.registrationDate = registrationDate;
 	this.role = role;
-	this.isActive = isActive;
+	this.active = active;
 	this.firstName = firstName;
 	this.lastName = lastName;
 	this.birthDate = birthDate;
@@ -71,7 +74,7 @@ public class User implements Serializable {
      * 
      * @return The id.
      */
-    public Integer getId() {
+    public int getId() {
 	return id;
     }
 
@@ -80,7 +83,7 @@ public class User implements Serializable {
      * 
      * @param id The id to set.
      */
-    public void setId(Integer id) {
+    public void setId(int id) {
 	this.id = id;
     }
 
@@ -162,7 +165,7 @@ public class User implements Serializable {
      * @return The isActive.
      */
     public boolean isActive() {
-	return isActive;
+	return active;
     }
 
     /**
@@ -170,8 +173,8 @@ public class User implements Serializable {
      * 
      * @param isActive The isActive to set.
      */
-    public void setActive(boolean isActive) {
-	this.isActive = isActive;
+    public void setActive(boolean active) {
+	this.active = active;
     }
 
     /**
@@ -279,13 +282,13 @@ public class User implements Serializable {
 	}
 	if (this.getClass() == obj.getClass()) {
 	    User otherUser = (User) obj;
-	    return (this.id.equals(otherUser.id))
+	    return (this.id == otherUser.id)
 		    && (this.email.equals(otherUser.email))
 		    && (this.password.equals(otherUser.password))
 		    && (this.registrationDate
 			    .equals(otherUser.registrationDate))
 		    && (this.role.equals(otherUser.role))
-		    && (this.isActive == otherUser.isActive)
+		    && (this.active == otherUser.active)
 		    && (this.firstName.equals(otherUser.firstName))
 		    && (this.lastName.equals(otherUser.lastName))
 		    && (this.birthDate.equals(otherUser.birthDate))
@@ -302,12 +305,12 @@ public class User implements Serializable {
      */
     @Override
     public int hashCode() {
-	return (int) (31 * id.hashCode()
-		+ ((email == null) ? 0 : email.hashCode()) + ((password == null) ? 0
-		    : password.hashCode()))
+	return (int) (31 * id)
+		+ ((email == null) ? 0 : email.hashCode())
+		+ ((password == null) ? 0 : password.hashCode())
 		+ ((registrationDate == null) ? 0 : registrationDate.hashCode())
 		+ ((role == null) ? 0 : role.hashCode())
-		+ Boolean.valueOf(isActive).hashCode()
+		+ Boolean.valueOf(active).hashCode()
 		+ ((firstName == null) ? 0 : firstName.hashCode())
 		+ ((lastName == null) ? 0 : lastName.hashCode())
 		+ ((birthDate == null) ? 0 : birthDate.hashCode())
@@ -321,12 +324,13 @@ public class User implements Serializable {
     @Override
     public String toString() {
 	StringBuffer sb = new StringBuffer();
-	sb.append("user:").append(lastName).append(" ").append(firstName)
-		.append(" role:").append(role).append(" birthdate:")
-		.append(birthDate).append(" email:").append(email)
+	sb.append("User id:").append(id).append(" email:").append(email)
+		.append(" registered:").append(registrationDate)
+		.append(" status:").append(active).append(" role:")
+		.append(role).append(" name:").append(lastName).append(" ")
+		.append(firstName).append(" birthdate:").append(birthDate)
 		.append(" address:").append(address).append(" phone:")
-		.append(phone).append(" registered:").append(registrationDate)
-		.append(" id:").append(id);
+		.append(phone);
 	return sb.toString();
     }
 }

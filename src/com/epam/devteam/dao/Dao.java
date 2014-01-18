@@ -5,8 +5,6 @@ package com.epam.devteam.dao;
 
 import java.util.List;
 
-import com.epam.devteam.entity.user.User;
-
 /**
  * @date Jan 2, 2014
  * @author Andrey Kovalskiy
@@ -21,15 +19,6 @@ public interface Dao<T> {
      * @throws DaoException If something fails at database level.
      */
     void create(T object) throws DaoException;
-
-    /**
-     * Is used to create and return id of a new object.
-     * 
-     * @param object The object to create.
-     * @return Object id.
-     * @throws DaoException If something fails at database level
-     */
-    int createWithIdReturn(User object) throws DaoException;
 
     /**
      * Is used to return an object from the database by the given id, otherwise

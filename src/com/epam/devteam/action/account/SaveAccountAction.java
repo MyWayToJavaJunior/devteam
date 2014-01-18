@@ -65,7 +65,7 @@ public class SaveAccountAction implements Action {
 	boolean fieldsEqualsNull = false;
 	boolean fieldsEmpty = false;
 	boolean fieldsLengthValid = false;
-	fieldsEqualsNull = RequestFieldsValidator.equalsNull(tempId, tempRole,
+	fieldsEqualsNull = RequestFieldsValidator.equalNull(tempId, tempRole,
 		tempActive);
 	if (fieldsEqualsNull) {
 	    LOGGER.warn("Fields are not valid: null");
@@ -145,7 +145,7 @@ public class SaveAccountAction implements Action {
 	    throw new ActionDatabaseFailException(e);
 	}
 	user = (User) session.getAttribute("user");
-	if (user.getId().equals(account.getId())) {
+	if (user.getId() == account.getId()) {
 	    session.setAttribute("user", account);
 	}
 	session.removeAttribute("account");

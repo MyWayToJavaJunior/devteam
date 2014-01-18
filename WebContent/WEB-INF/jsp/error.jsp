@@ -10,6 +10,7 @@
 			<h2>
 				<font color="red"><fmt:message bundle="${msg}" key="${error}" /></font>
 			</h2>
+			<img src="static/error.png"/>
 		</div>
 	</jsp:body>
 </t:genericpage>

@@ -17,7 +17,17 @@ import com.epam.devteam.entity.user.User;
  * @see com.epam.devteam.entity.User
  */
 public interface UserDao extends Dao<User> {
-
+    	
+    
+    /**
+     * Is used to create and return id of a new object.
+     * 
+     * @param object The object to create.
+     * @return Object id.
+     * @throws DaoException If something fails at database level
+     */
+    int createWithIdReturn(User object) throws DaoException;
+    
     /**
      * Is used to get user by email. Method returns null if there is no user in
      * database .

@@ -9,6 +9,9 @@ import com.epam.devteam.entity.order.Order;
 import com.epam.devteam.entity.order.OrderStatus;
 
 /**
+ * The <code>OrderDao</code> extends <code>Dao</code> interfaces and provides
+ * additional methods to work with database and <code>Order</code> entities.
+ * 
  * @date Jan 11, 2014
  * @author Andrey Kovalskiy
  */

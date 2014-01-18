@@ -22,7 +22,7 @@ public class DownloadFileAction implements Action {
     private static final int DEFAULT_BUFFER_SIZE = 10240;
 
     @Override
-    public String execute(HttpServletRequest request,
+    public ActionResult execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
 	HttpSession session;
 	Order order;
@@ -71,7 +71,7 @@ public class DownloadFileAction implements Action {
 	    close(output);
 	    close(input);
 	}
-	return request.getHeader("referer");
+	return new ActionResult(ActionResult.METHOD.REDIRECT, request.getHeader("referer"));
     }
 
     private void close(Closeable resource) {

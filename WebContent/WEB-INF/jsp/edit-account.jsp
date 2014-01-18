@@ -15,21 +15,21 @@
 						<fmt:message bundle="${msg}" key="common.email" />
 					</label>
 					<input class="span-13" type="text" name="email" disabled="disabled"
-						value="${account.email}" />
+							value="${account.email}" />
 				</p>
 				<p>
 					<label>
 						<fmt:message bundle="${msg}" key="common.firstName" />
 					</label>
 					<input class="span-13" type="text" name="first-name"
-						value="${account.firstName}" title="Enter email" />
+							value="${account.firstName}" title="Enter email" />
 				</p>
 				<p>
 					<label>
 						<fmt:message bundle="${msg}" key="common.lastName" />
 					</label>
 					<input class="span-13" type="text" name="last-name"
-						value="${account.lastName}" />
+							value="${account.lastName}" />
 				</p>
 			</fieldset>
 			<c:choose>
@@ -40,14 +40,14 @@
 								<fmt:message bundle="${msg}" key="common.company" />
 							</label>
 							<input class="span-13" type="text" name="company"
-								value="${account.company}" />
+									value="${account.company}" />
 						</p>
 						<p>
 							<label>
 								<fmt:message bundle="${msg}" key="common.position" />
 							</label>
 							<input class="span-13" type="text" name="position"
-								value="${account.position}" />
+									value="${account.position}" />
 						</p>
 					</fieldset>
 				</c:when>
@@ -60,11 +60,14 @@
 							<t:date />
 						</p>
 						<p>
-							<label><fmt:message bundle="${msg}" key="common.qualification" />
+							<label><fmt:message bundle="${msg}"
+										key="common.qualification" />
 						</label>
 						<input class="span-13" type="text" name="qualification"
-								value="${account.qualification}" />
-					</fieldset>
+									value="${account.qualification}" />
+					
+						
+						</fieldset>
 				</c:otherwise>
 			</c:choose>
 			<fieldset>
@@ -73,19 +76,19 @@
 						<fmt:message bundle="${msg}" key="common.address" />
 					</label>
 					<input class="span-13" type="text" name="address"
-						value="${account.address}" />
+							value="${account.address}" />
 				</p>
 				<p>
 					<label>
 						<fmt:message bundle="${msg}" key="common.phone" />
 					</label>
 					<input class="span-13" type="text" name="phone"
-						value="${account.phone}" />
+							value="${account.phone}" />
 				</p>
 			</fieldset>
 			<c:choose>
 				<c:when
-					test="${user.role == 'ADMINISTRATOR' and account.role != 'ADMINISTRATOR'}">
+						test="${user.role == 'ADMINISTRATOR' and account.role != 'ADMINISTRATOR'}">
 					<fieldset>
 
 						<select class="span-6" name="is-active">
@@ -94,16 +97,20 @@
 								Active</option>
 						</select> 
 						<select class="span-6" name="role">
-							<option value="CUSTOMER" ${account.role == 'CUSTOMER' ? 'selected' : ''}>
+							<option value="CUSTOMER"
+									${account.role == 'CUSTOMER' ? 'selected' : ''}>
 								<fmt:message bundle="${msg}" key="common.role.customer" />
 							</option>
-							<option value="DEVELOPER" ${account.role == 'DEVELOPER' ? 'selected' : ''}>
+							<option value="DEVELOPER"
+									${account.role == 'DEVELOPER' ? 'selected' : ''}>
 								<fmt:message bundle="${msg}" key="common.role.developer" />
 							</option>
-							<option value="MANAGER" ${account.role == 'MANAGER' ? 'selected' : ''}>
+							<option value="MANAGER"
+									${account.role == 'MANAGER' ? 'selected' : ''}>
 								<fmt:message bundle="${msg}" key="common.role.manager" />
 							</option>
-							<option value="ADMINISTRATOR" ${account.role == 'ADMINISTRATOR' ? 'selected' : ''}>
+							<option value="ADMINISTRATOR"
+									${account.role == 'ADMINISTRATOR' ? 'selected' : ''}>
 								<fmt:message bundle="${msg}" key="common.role.administrator" />
 							</option>
 						</select>
@@ -130,7 +137,7 @@
 						<t:error-info error="${oldPasswordError}" />
 					</c:if>
 					<input class="span-13" type="password" name="old-password"
-						value="${oldPassword}" />
+							value="${oldPassword}" />
 				</p>
 				<p>
 					<label> 
@@ -140,14 +147,14 @@
 						<t:error-info error="${passwordError}" />
 					</c:if>
 					<input class="span-13" type="password" name="new-password1"
-						value="${newPassword1}" />
+							value="${newPassword1}" />
 				</p>
 				<p>
 					<label> 
 						<fmt:message bundle="${msg}" key="common.confirmPassword" />
 					</label> 
 					<input class="span-13" type="password" name="new-password2"
-						value="${newPassword2}" />
+							value="${newPassword2}" />
 				</p>
 				<button class="span-13">
 					<fmt:message bundle="${msg}" key="action.changePassword" />
