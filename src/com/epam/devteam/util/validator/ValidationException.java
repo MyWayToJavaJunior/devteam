@@ -1,4 +1,4 @@
-package com.epam.devteam.service.validation;
+package com.epam.devteam.util.validator;
 
 /**
  * The <code>Class</code> ...

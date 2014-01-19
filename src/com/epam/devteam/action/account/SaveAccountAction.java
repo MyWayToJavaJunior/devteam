@@ -18,9 +18,9 @@ import com.epam.devteam.entity.user.Customer;
 import com.epam.devteam.entity.user.Employee;
 import com.epam.devteam.entity.user.User;
 import com.epam.devteam.entity.user.UserRole;
-import com.epam.devteam.service.validation.FieldType;
-import com.epam.devteam.service.validation.RequestFieldsValidator;
-import com.epam.devteam.service.validation.ValidationException;
+import com.epam.devteam.util.validator.FieldType;
+import com.epam.devteam.util.validator.RequestFieldsValidator;
+import com.epam.devteam.util.validator.ValidationException;
 
 /**
  * The <code>SaveAccountAction</code> is used to save account changes.

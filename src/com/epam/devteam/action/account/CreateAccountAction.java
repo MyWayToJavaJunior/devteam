@@ -21,8 +21,8 @@ import com.epam.devteam.entity.user.Customer;
 import com.epam.devteam.entity.user.Employee;
 import com.epam.devteam.entity.user.User;
 import com.epam.devteam.entity.user.UserRole;
-import com.epam.devteam.service.validation.RequestFieldsValidator;
-import com.epam.devteam.service.validation.ValidationException;
+import com.epam.devteam.util.validator.RequestFieldsValidator;
+import com.epam.devteam.util.validator.ValidationException;
 
 /**
  * The <code>CreateAccountAction</code> class is used to save new user to

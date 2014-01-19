@@ -22,7 +22,6 @@ import com.epam.devteam.action.account.ShowEditAccountPageAction;
 import com.epam.devteam.action.account.SigninAction;
 import com.epam.devteam.action.account.SignoutAction;
 import com.epam.devteam.action.feedback.CreateFeedbackAction;
-import com.epam.devteam.action.feedback.ShowFeedbackAction;
 import com.epam.devteam.action.order.CreateOrderAction;
 import com.epam.devteam.action.order.SaveOrderAction;
 import com.epam.devteam.action.order.ShowAllOrdersPageAction;
@@ -51,6 +50,7 @@ public class ActionFactory {
 	actions.put("GET/error", new ShowErrorPageAction());
 	actions.put("GET/success", new ShowSuccessPageAction());
 	actions.put("POST/set-language", new SetLanguageAction());
+	actions.put("GET/download-file", new DownloadFileAction());
 	actions.put("POST/signin", new SigninAction());
 	actions.put("GET/signout", new SignoutAction());
 	actions.put("GET/create-account", new ShowCreateAccountPageAction());
@@ -65,17 +65,13 @@ public class ActionFactory {
 	actions.put("GET/show-order", new ShowOrderPageAction());
 	actions.put("GET/create-order", new ShowCreateOrderPageAction());
 	actions.put("POST/create-order", new CreateOrderAction());
+	actions.put("GET/customer-orders", new ShowCustomerOrdersPageAction());
 	actions.put("GET/terminate-order", new TerminateOrderAction());
 	actions.put("GET/edit-order", new ShowEditOrderPageAction());
 	actions.put("POST/save-order", new SaveOrderAction());
-
-	actions.put("GET/customer-orders", new ShowCustomerOrdersPageAction());
-	actions.put("GET/all-orders", new ShowAllOrdersPageAction());
+	actions.put("GET/show-all-orders", new ShowAllOrdersPageAction());
 	actions.put("GET/process-order", new ShowProcessOrderPageAction());
 	actions.put("POST/create-feedback", new CreateFeedbackAction());
-	actions.put("GET/feedback", new ShowFeedbackAction());
-	actions.put("GET/download-file", new DownloadFileAction());
-
 	return actions;
     }
 

@@ -17,7 +17,7 @@ import com.epam.devteam.dao.DaoFactory;
 import com.epam.devteam.dao.OrderDao;
 import com.epam.devteam.entity.order.Order;
 import com.epam.devteam.entity.user.User;
-import com.epam.devteam.service.validation.RequestFieldsValidator;
+import com.epam.devteam.util.validator.RequestFieldsValidator;
 
 /**
  * The <code>ShowCustomerOrdersPageAction</code> is used to show page where user
@@ -46,7 +46,6 @@ public class ShowCustomerOrdersPageAction implements Action {
     @Override
     public ActionResult execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
-	LOGGER.debug("Show customer's orders action...");
 	HttpSession session = request.getSession();
 	User user = (User) session.getAttribute("user");
 	List<Order> orders = null;
@@ -54,6 +53,7 @@ public class ShowCustomerOrdersPageAction implements Action {
 	String tempRowNumber = (String) request.getParameter("row-number");
 	int firstRow = 0;
 	int rowNumber = 0;
+	LOGGER.debug("Show customer's orders action...");
 	if (RequestFieldsValidator.equalNull(tempFirstRow, tempRowNumber)
 		|| RequestFieldsValidator.empty(tempFirstRow, tempRowNumber)) {
 	    session.setAttribute("error", "error.badRequest");

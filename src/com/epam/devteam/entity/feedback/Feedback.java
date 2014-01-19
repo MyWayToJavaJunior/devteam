@@ -1,4 +1,4 @@
-package com.epam.devteam.entity.response;
+package com.epam.devteam.entity.feedback;
 
 import java.io.Serializable;
 import java.sql.Date;

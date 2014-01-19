@@ -12,41 +12,57 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import com.epam.devteam.action.exception.ActionBadRequestException;
 import com.epam.devteam.action.exception.ActionException;
+import com.epam.devteam.entity.feedback.Feedback;
 import com.epam.devteam.entity.order.Order;
-import com.epam.devteam.entity.response.Feedback;
 
+/**
+ * The <code>DownloadFileAction</code> is used to download files from order or
+ * feedback.
+ * 
+ * @date Jan 19, 2014
+ * @author Andrey Kovalskiy
+ * 
+ */
 public class DownloadFileAction implements Action {
     private static final Logger LOGGER = Logger
 	    .getLogger(DownloadFileAction.class);
     private static final int DEFAULT_BUFFER_SIZE = 10240;
+    private ActionResult result = new ActionResult();
 
+    /**
+     * Is used to perform required actions and define method and view for
+     * <code>Controller</code>. Returns result as <code>ActionResult</code>.
+     * 
+     * @param request Request to process.
+     * @param response Response to send.
+     * @return ActionResult where to redirect user
+     * @throws ActionException If something fails during method performing.
+     */
     @Override
     public ActionResult execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
-	HttpSession session;
+	HttpSession session = request.getSession();
 	Order order;
 	Feedback feedback;
+	String source = request.getParameter("source");
 	BufferedInputStream input = null;
 	BufferedOutputStream output = null;
 	String fileName;
 	byte[] fileContent;
-
-	session = request.getSession();
-	String source = request.getParameter("source");
-	if (source == null
-		|| (!"order".equals(source) && !"feedback".equals(source))) {
-	    LOGGER.warn("Source not defined.");
-	    throw new ActionException();
-	}
+	LOGGER.debug("Download file action...");
 	if ("order".equals(source)) {
 	    order = (Order) session.getAttribute("order");
 	    fileName = order.getFileName();
 	    fileContent = order.getFileContent();
-	} else {
+	} else if ("feedback".equals(source)) {
 	    feedback = (Feedback) session.getAttribute("feedback");
 	    fileName = feedback.getFileName();
 	    fileContent = feedback.getFileContent();
+	} else {
+	    LOGGER.warn("Source not defined.");
+	    throw new ActionBadRequestException();
 	}
 	response.reset();
 	response.setBufferSize(DEFAULT_BUFFER_SIZE);
@@ -65,19 +81,21 @@ public class DownloadFileAction implements Action {
 		output.write(buffer, 0, length);
 	    }
 	} catch (IOException e) {
-	    LOGGER.debug("File download failed.");
+	    LOGGER.debug("File cannot be downloaded.");
 	    throw new ActionException();
 	} finally {
 	    close(output);
 	    close(input);
 	}
-	return new ActionResult(ActionResult.METHOD.REDIRECT, request.getHeader("referer"));
+	result.setMethod(ActionResult.METHOD.REDIRECT);
+	result.setView(request.getHeader("referer"));
+	return result;
     }
-    
+
     /**
+     * Is used to close input and output streams.
      * 
-     * Is used to ...
-     * @param resource
+     * @param resource The resource to close.
      */
     private void close(Closeable resource) {
 	if (resource != null) {

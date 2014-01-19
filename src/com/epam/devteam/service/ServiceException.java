@@ -1,23 +1,20 @@
-/**
- * 
- */
-package com.epam.devteam.action.exception;
+package com.epam.devteam.service;
 
 /**
- * The <code>ActionException</code> is used when something fails during action.
- * It is a wrapper for all exceptions that occur during action performing.
+ * The <code>ServiceException</code> is used to wrap any exception that occurs
+ * during service performing.
  * 
- * @date Dec 14, 2013
+ * @date Jan 19, 2014
  * @author Andrey Kovalskiy
  * 
  */
-public class ActionException extends Exception {
+public class ServiceException extends Exception {
     private static final long serialVersionUID = 1L;
 
     /**
      * Constructs a new exception with <code>null</code> as its detail message.
      */
-    public ActionException() {
+    public ServiceException() {
 	super();
     }
 
@@ -27,7 +24,7 @@ public class ActionException extends Exception {
      * @param message the detail message.
      * @param cause the cause.
      */
-    public ActionException(String message, Throwable cause) {
+    public ServiceException(String message, Throwable cause) {
 	super(message, cause);
     }
 
@@ -36,7 +33,7 @@ public class ActionException extends Exception {
      * 
      * @param message the detail message.
      */
-    public ActionException(String message) {
+    public ServiceException(String message) {
 	super(message);
     }
 
@@ -46,8 +43,7 @@ public class ActionException extends Exception {
      * 
      * @param cause the cause.
      */
-    public ActionException(Throwable cause) {
+    public ServiceException(Throwable cause) {
 	super(cause);
     }
-
 }

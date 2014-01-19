@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <t:genericpage sidebar="true" title="Order">
@@ -12,12 +12,8 @@
 	<h3>
 		<fmt:message bundle="${msg}" key="common.date" /> : ${order.date} <br /> 
 		<fmt:message bundle="${msg}" key="common.status" /> : 
-			<t:order-status-info status="${order.status}"/><br />
-		<c:if test="${order.status == 'ACCEPTED' or order.status == 'DENIED'}">
-			<a href="do/feedback">
-				<fmt:message bundle="${msg}" key="action.readFeedback" /> 
-			</a>
-		</c:if>
+			<t:order-status-info status="${order.status}" />
+			<br />
 		</h3>
 	<div class="span-18 last">
 		<fieldset>
@@ -47,7 +43,7 @@
 					<fmt:message bundle="${msg}" key="common.subject" /><br />
 				</label>
 				<input class="span-18" type="text" disabled="disabled"
-					value="<t:order-subject-info subject="${order.subject }"/>"/>
+					value="<t:order-subject-info subject="${order.subject }"/>" />
 			</p>
 			<p>
 				<label>
@@ -67,7 +63,7 @@
 					<label>
 						<fmt:message bundle="${msg}" key="common.file" />:
 					</label>
-					<a href="do/download-file?source=feedback">${order.fileName}</a>
+					<a href="do/download-file?source=order">${order.fileName}</a>
 				</p>
 			</c:if>
 		</div>
@@ -100,6 +96,9 @@
 					</form>
 				</c:otherwise>
 			</c:choose>
+		</c:if>
+		<c:if test="${not empty feedback}">
+			<t:feedback-info feedback="${feedback}" />
 		</c:if>
 	</jsp:body>
 </t:genericpage>

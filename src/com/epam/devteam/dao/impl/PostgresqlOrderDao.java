@@ -258,8 +258,45 @@ public class PostgresqlOrderDao extends AbstractDao implements OrderDao {
      */
     @Override
     public List<Order> list(int firstRow, int rowNumber) throws DaoException {
-	LOGGER.warn("Method is not implemented.");
-	throw new DaoException();
+	List<Order> orders;
+	Order order;
+	Connection connection;
+	PreparedStatement statement = null;
+	ResultSet resultSet;
+	LOGGER.debug("List orders action...");
+	try {
+	    connection = getConnectionPool().takeConnection();
+	    LOGGER.debug("Connection has been taken.");
+	} catch (ConnectionPoolException e) {
+	    LOGGER.warn("Connection cannot be taken.");
+	    throw new DaoException(e);
+	}
+	try {
+	    statement = connection
+		    .prepareStatement("SELECT orders.id, orders.date, orders.status, orders.subject, orders.topic, orders.message, orders.file_content, orders.file_name, orders.customer_id, users.first_name, users.last_name, users.company, users.position, users.phone, users.address, users.email FROM orders JOIN users ON orders.customer_id=users.id ORDER BY date DESC OFFSET ? LIMIT ?");
+	    statement.setInt(1, firstRow);
+	    statement.setInt(2, rowNumber);
+	    LOGGER.debug("Statement has been created.");
+	} catch (SQLException e) {
+	    freeConnection(connection, statement);
+	    LOGGER.warn("Statement cannot be created.");
+	    throw new DaoException(e);
+	}
+	try {
+	    resultSet = statement.executeQuery();
+	    LOGGER.debug("Statement has been executed.");
+	    orders = new ArrayList<Order>();
+	    while (resultSet.next()) {
+		order = createOrder(resultSet, true);
+		orders.add(order);
+	    }
+	} catch (SQLException e) {
+	    freeConnection(connection, statement);
+	    LOGGER.warn("Statement cannot be executed.");
+	    throw new DaoException(e);
+	}
+	freeConnection(connection, statement);
+	return orders;
     }
 
     /**

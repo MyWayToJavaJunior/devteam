@@ -28,9 +28,9 @@ import com.epam.devteam.entity.order.Order;
 import com.epam.devteam.entity.order.OrderStatus;
 import com.epam.devteam.entity.order.OrderSubject;
 import com.epam.devteam.entity.user.Customer;
-import com.epam.devteam.service.validation.FieldType;
-import com.epam.devteam.service.validation.RequestFieldsValidator;
-import com.epam.devteam.service.validation.ValidationException;
+import com.epam.devteam.util.validator.FieldType;
+import com.epam.devteam.util.validator.RequestFieldsValidator;
+import com.epam.devteam.util.validator.ValidationException;
 
 /**
  * The <code>CreateOrderAction</code> is used to create an order.
@@ -93,7 +93,7 @@ public class CreateOrderAction implements Action {
 			subject = OrderSubject.valueOf(fieldValue);
 		    } catch (IllegalArgumentException e) {
 			LOGGER.warn("Unknown order subject: " + fieldValue);
-			throw new ActionException();
+			throw new ActionBadRequestException(e);
 		    }
 		}
 		if ("topic".equals(fieldName)) {

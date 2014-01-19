@@ -15,7 +15,7 @@ import com.epam.devteam.dao.DaoFactory;
 import com.epam.devteam.dao.UserDao;
 import com.epam.devteam.entity.user.User;
 import com.epam.devteam.entity.user.UserRole;
-import com.epam.devteam.service.validation.RequestFieldsValidator;
+import com.epam.devteam.util.validator.RequestFieldsValidator;
 
 /**
  * The <code>DeactivateAccountAction</code> class is used to deactivate user. It

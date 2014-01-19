@@ -60,7 +60,7 @@ public interface Dao<T> {
      * 
      * @param firstRow The row from where to start list objects.
      * @param rowNumber The number of objects to list.
-     * @return The list of all objects in the database.
+     * @return The list of objects in the database.
      * @throws DaoException If something fails at database level.
      */
     List<T> list(int firstRow, int rowNumber) throws DaoException;

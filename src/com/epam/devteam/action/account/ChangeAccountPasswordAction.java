@@ -16,8 +16,8 @@ import com.epam.devteam.dao.DaoFactory;
 import com.epam.devteam.dao.UserDao;
 import com.epam.devteam.entity.user.User;
 import com.epam.devteam.entity.user.UserRole;
-import com.epam.devteam.service.validation.RequestFieldsValidator;
-import com.epam.devteam.service.validation.ValidationException;
+import com.epam.devteam.util.validator.RequestFieldsValidator;
+import com.epam.devteam.util.validator.ValidationException;
 
 /**
  * The <code>ChangeAccountPasswordAction</code> is used to set new account

@@ -1,4 +1,4 @@
-package com.epam.devteam.service.validation;
+package com.epam.devteam.util.validator;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

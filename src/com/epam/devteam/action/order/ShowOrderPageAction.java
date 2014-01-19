@@ -12,8 +12,11 @@ import com.epam.devteam.action.exception.ActionBadRequestException;
 import com.epam.devteam.action.exception.ActionException;
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
+import com.epam.devteam.dao.FeedbackDao;
 import com.epam.devteam.dao.OrderDao;
+import com.epam.devteam.entity.feedback.Feedback;
 import com.epam.devteam.entity.order.Order;
+import com.epam.devteam.entity.order.OrderStatus;
 import com.epam.devteam.entity.user.User;
 import com.epam.devteam.entity.user.UserRole;
 
@@ -30,8 +33,8 @@ public class ShowOrderPageAction implements Action {
     private static final Logger LOGGER = Logger
 	    .getLogger(ShowOrderPageAction.class);
     private ActionResult result = new ActionResult();
-    private DaoFactory factory;
-    private OrderDao dao;
+    private OrderDao orderDao;
+    private FeedbackDao feedbackDao;
 
     /**
      * Is used to perform required actions and define method and view for
@@ -49,6 +52,8 @@ public class ShowOrderPageAction implements Action {
 	HttpSession session;
 	User user;
 	Order order;
+	OrderStatus status;
+	Feedback feedback;
 	int id;
 	try {
 	    id = Integer.valueOf(request.getParameter("id"));
@@ -80,23 +85,22 @@ public class ShowOrderPageAction implements Action {
 		return result;
 	    }
 	}
+	status = order.getStatus();
+	if (status.equals(OrderStatus.ACCEPTED)
+		|| status.equals(OrderStatus.DENIED)) {
+	    try {
+		feedback = feedbackDao().findByOrderId(id);
+		session.setAttribute("feedback", feedback);
+	    } catch (DaoException e) {
+		LOGGER.warn("Feedback cannot be fetched from database.");
+	    }
+	} else {
+	    session.removeAttribute("feedback");
+	}
 	session.setAttribute("order", order);
 	result.setMethod(ActionResult.METHOD.FORWARD);
 	result.setView("order");
 	return result;
-    }
-
-    /**
-     * Is used to get dao factory. It initializes factory during the first use.
-     * 
-     * @return Dao factory.
-     * @throws DaoException If something fails.
-     */
-    private DaoFactory daoFactory() throws DaoException {
-	if (factory == null) {
-	    factory = DaoFactory.getDaoFactory();
-	}
-	return factory;
     }
 
     /**
@@ -106,9 +110,22 @@ public class ShowOrderPageAction implements Action {
      * @throws DaoException If something fails.
      */
     private OrderDao orderDao() throws DaoException {
-	if (dao == null) {
-	    dao = daoFactory().getOrderDao();
+	if (orderDao == null) {
+	    orderDao = DaoFactory.getDaoFactory().getOrderDao();
 	}
-	return dao;
+	return orderDao;
+    }
+
+    /**
+     * Is used to get feedback dao. It initializes dao during the first use.
+     * 
+     * @return The feedback dao.
+     * @throws DaoException If something fails.
+     */
+    private FeedbackDao feedbackDao() throws DaoException {
+	if (feedbackDao == null) {
+	    feedbackDao = DaoFactory.getDaoFactory().getFeedbackDao();
+	}
+	return feedbackDao;
     }
 }

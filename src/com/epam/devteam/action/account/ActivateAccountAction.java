@@ -13,7 +13,7 @@ import com.epam.devteam.action.exception.ActionException;
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
 import com.epam.devteam.dao.UserDao;
-import com.epam.devteam.service.validation.RequestFieldsValidator;
+import com.epam.devteam.util.validator.RequestFieldsValidator;
 
 public class ActivateAccountAction implements Action {
     private static final Logger LOGGER = Logger

@@ -15,8 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.epam.devteam.action.ShowAboutUsPageAction;
-import com.epam.devteam.action.ShowContactsPageAction;
 import com.epam.devteam.entity.user.User;
 import com.epam.devteam.entity.user.UserRole;
 
@@ -31,8 +29,6 @@ public class SecurityFilter implements Filter {
 	EnumSet<UserRole> authorized = EnumSet.of(UserRole.CUSTOMER,
 		UserRole.DEVELOPER, UserRole.MANAGER, UserRole.ADMINISTRATOR);
 	EnumSet<UserRole> customer = EnumSet.of(UserRole.CUSTOMER);
-	EnumSet<UserRole> employee = EnumSet.of(UserRole.DEVELOPER,
-		UserRole.MANAGER, UserRole.ADMINISTRATOR);
 	EnumSet<UserRole> administrator = EnumSet.of(UserRole.ADMINISTRATOR);
 	EnumSet<UserRole> manager = EnumSet.of(UserRole.MANAGER);
 	actions.put("GET/main", all);
@@ -40,6 +36,7 @@ public class SecurityFilter implements Filter {
 	actions.put("GET/about-us", all);
 	actions.put("GET/error", all);
 	actions.put("GET/success", all);
+	actions.put("GET/download-file", authorized);
 	actions.put("POST/set-language", all);
 	actions.put("POST/signin", all);
 	actions.put("GET/signout", authorized);
@@ -58,6 +55,9 @@ public class SecurityFilter implements Filter {
 	actions.put("GET/terminate-order", customer);
 	actions.put("GET/edit-order", customer);
 	actions.put("POST/save-order", customer);
+	actions.put("GET/show-all-orders", manager);
+	actions.put("GET/process-order", manager);
+	actions.put("POST/create-feedback", manager);
 
     }
 

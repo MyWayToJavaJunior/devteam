@@ -17,7 +17,7 @@ import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
 import com.epam.devteam.dao.UserDao;
 import com.epam.devteam.entity.user.User;
-import com.epam.devteam.service.validation.RequestFieldsValidator;
+import com.epam.devteam.util.validator.RequestFieldsValidator;
 
 /**
  * The <code>SigninAction</code> is used to sign in.
