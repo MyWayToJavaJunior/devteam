@@ -33,13 +33,13 @@ import com.epam.devteam.service.validation.RequestFieldsValidator;
 import com.epam.devteam.service.validation.ValidationException;
 
 /**
- * The <code>CreateOrderAction</code> is used to create an order.
+ * The <code>Class</code> ...
  * 
- * @date Jan 11, 2014
+ * @date Jan 19, 2014
  * @author Andrey Kovalskiy
  * 
  */
-public class CreateOrderAction implements Action {
+public class SaveOrderAction implements Action {
     private static final Logger LOGGER = Logger
 	    .getLogger(CreateOrderAction.class);
     private static final long fileMaxSize = 10485760L;
@@ -65,17 +65,19 @@ public class CreateOrderAction implements Action {
 	Order order;
 	List<FileItem> items;
 	InputStream stream;
+	String tempId = null;
 	OrderSubject subject = null;
 	String topic = null;
 	String message = null;
 	String fieldName;
 	String fieldValue;
 	String fileName = null;
+	int id = 0;
 	byte[] fileContent = null;
 	boolean formFieldsEqualNull = false;
 	boolean topicLengthValid = false;
 	boolean messageLengthValid = false;
-	LOGGER.debug("Create order action...");
+	LOGGER.debug("Save order action...");
 	session.removeAttribute("topicError");
 	session.removeAttribute("messageError");
 	try {
@@ -95,6 +97,9 @@ public class CreateOrderAction implements Action {
 			LOGGER.warn("Unknown order subject: " + fieldValue);
 			throw new ActionException();
 		    }
+		}
+		if ("id".equals(fieldName)) {
+		    tempId = fieldValue;
 		}
 		if ("topic".equals(fieldName)) {
 		    topic = fieldValue;
@@ -117,23 +122,38 @@ public class CreateOrderAction implements Action {
 		}
 	    }
 	}
-	formFieldsEqualNull = RequestFieldsValidator.equalNull(topic, message);
+	formFieldsEqualNull = RequestFieldsValidator.equalNull(tempId, topic,
+		message);
 	if (formFieldsEqualNull) {
 	    LOGGER.warn("Form fields are not valid");
 	    throw new ActionBadRequestException();
+	}
+	try {
+	    id = Integer.valueOf(tempId);
+	} catch (IllegalArgumentException e) {
+	    LOGGER.warn("Order id is not valid.");
+	    throw new ActionBadRequestException(e);
+	}
+	customer = (Customer) session.getAttribute("user");
+	order = (Order) session.getAttribute("order");
+	if ((order == null) || (order.getId() != id)) {
+	    session.setAttribute("error", "error.badRequest");
+	    result.setMethod(ActionResult.METHOD.REDIRECT);
+	    result.setView("error");
+	    return result;
 	}
 	session.setAttribute("topic", topic);
 	session.setAttribute("message", message);
 	if (RequestFieldsValidator.empty(topic)) {
 	    session.setAttribute("topicError", "order.topicEmpty");
 	    result.setMethod(ActionResult.METHOD.REDIRECT);
-	    result.setView("create-order");
+	    result.setView("edit-order");
 	    return result;
 	}
 	if (RequestFieldsValidator.empty(message)) {
 	    session.setAttribute("messageError", "order.messageEmpty");
 	    result.setMethod(ActionResult.METHOD.REDIRECT);
-	    result.setView("create-order");
+	    result.setView("edit-order");
 	    return result;
 	}
 	try {
@@ -149,8 +169,6 @@ public class CreateOrderAction implements Action {
 	    LOGGER.warn("Fields are not valid.");
 	    throw new ActionBadRequestException();
 	}
-	customer = (Customer) session.getAttribute("user");
-	order = new Order();
 	order.setDate(new Date(new java.util.Date().getTime()));
 	order.setStatus(OrderStatus.PENDING);
 	order.setSubject(subject);
@@ -160,13 +178,13 @@ public class CreateOrderAction implements Action {
 	order.setFileContent(fileContent);
 	order.setCustomer(customer);
 	try {
-	    orderDao().create(order);
-	    LOGGER.debug("Order has been created.");
+	    orderDao().update(order);
+	    LOGGER.debug("Order has been updated.");
 	} catch (DaoException e) {
-	    LOGGER.warn("Order cannot be created.");
+	    LOGGER.warn("Order cannot be updated.");
 	    throw new ActionException();
 	}
-	session.setAttribute("success", "order.createSuccess");
+	session.setAttribute("success", "order.saveSuccess");
 	session.removeAttribute("topic");
 	session.removeAttribute("message");
 	result.setMethod(ActionResult.METHOD.REDIRECT);
@@ -212,4 +230,5 @@ public class CreateOrderAction implements Action {
 	}
 	return dao;
     }
+
 }

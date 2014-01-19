@@ -24,11 +24,14 @@ import com.epam.devteam.action.account.SignoutAction;
 import com.epam.devteam.action.feedback.CreateFeedbackAction;
 import com.epam.devteam.action.feedback.ShowFeedbackAction;
 import com.epam.devteam.action.order.CreateOrderAction;
+import com.epam.devteam.action.order.SaveOrderAction;
 import com.epam.devteam.action.order.ShowAllOrdersPageAction;
 import com.epam.devteam.action.order.ShowCreateOrderPageAction;
 import com.epam.devteam.action.order.ShowCustomerOrdersPageAction;
+import com.epam.devteam.action.order.ShowEditOrderPageAction;
 import com.epam.devteam.action.order.ShowOrderPageAction;
 import com.epam.devteam.action.order.ShowProcessOrderPageAction;
+import com.epam.devteam.action.order.TerminateOrderAction;
 
 /**
  * @date Jan 5, 2014
@@ -59,11 +62,14 @@ public class ActionFactory {
 	actions.put("GET/deactivate-account", new DeactivateAccountAction());
 	actions.put("GET/activate-account", new ActivateAccountAction());
 	actions.put("POST/change-password", new ChangeAccountPasswordAction());
-
-	actions.put("GET/order", new ShowOrderPageAction());
-	actions.put("GET/customer-orders", new ShowCustomerOrdersPageAction());
+	actions.put("GET/show-order", new ShowOrderPageAction());
 	actions.put("GET/create-order", new ShowCreateOrderPageAction());
 	actions.put("POST/create-order", new CreateOrderAction());
+	actions.put("GET/terminate-order", new TerminateOrderAction());
+	actions.put("GET/edit-order", new ShowEditOrderPageAction());
+	actions.put("POST/save-order", new SaveOrderAction());
+
+	actions.put("GET/customer-orders", new ShowCustomerOrdersPageAction());
 	actions.put("GET/all-orders", new ShowAllOrdersPageAction());
 	actions.put("GET/process-order", new ShowProcessOrderPageAction());
 	actions.put("POST/create-feedback", new CreateFeedbackAction());

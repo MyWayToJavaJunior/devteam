@@ -10,8 +10,8 @@
 		</button>
 	</form>
 	<form action="do/manage-accounts" method="get">
-		<input type="hidden" name="first-row" value="0"> <input
-			type="hidden" name="row-number" value="5">
+		<input type="hidden" name="first-row" value="0"> 
+		<input type="hidden" name="row-number" value="5">
 		<button class="span-4">
 			<fmt:message bundle="${msg}" key="action.editAccounts" />
 		</button>

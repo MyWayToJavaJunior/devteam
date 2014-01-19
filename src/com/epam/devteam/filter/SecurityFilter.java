@@ -51,6 +51,13 @@ public class SecurityFilter implements Filter {
 	actions.put("GET/deactivate-account", administrator);
 	actions.put("GET/activate-account", administrator);
 	actions.put("POST/change-password", authorized);
+	actions.put("GET/create-order", customer);
+	actions.put("POST/create-order", customer);
+	actions.put("GET/customer-orders", customer);
+	actions.put("GET/show-order", authorized);
+	actions.put("GET/terminate-order", customer);
+	actions.put("GET/edit-order", customer);
+	actions.put("POST/save-order", customer);
 
     }
 

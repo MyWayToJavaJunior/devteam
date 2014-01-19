@@ -15,20 +15,18 @@ import com.epam.devteam.dao.DaoFactory;
 import com.epam.devteam.dao.OrderDao;
 import com.epam.devteam.entity.order.Order;
 import com.epam.devteam.entity.user.User;
-import com.epam.devteam.entity.user.UserRole;
 
 /**
- * The <code>ShowOrderPageAction</code> is used to show page with required id.
- * Any customer can't watch other customers' orders. Managers can watch every
- * order.
+ * The <code>ShowEditOrderPageAction</code> is used to prepare and show page
+ * where customer can edit his order.
  * 
  * @date Jan 19, 2014
  * @author Andrey Kovalskiy
  * 
  */
-public class ShowOrderPageAction implements Action {
+public class ShowEditOrderPageAction implements Action {
     private static final Logger LOGGER = Logger
-	    .getLogger(ShowOrderPageAction.class);
+	    .getLogger(ShowEditOrderPageAction.class);
     private ActionResult result = new ActionResult();
     private DaoFactory factory;
     private OrderDao dao;
@@ -45,24 +43,41 @@ public class ShowOrderPageAction implements Action {
     @Override
     public ActionResult execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
-	LOGGER.debug("Show order page action...");
 	HttpSession session;
 	User user;
 	Order order;
 	int id;
+	LOGGER.debug("Show order page action...");
 	try {
 	    id = Integer.valueOf(request.getParameter("id"));
 	} catch (IllegalArgumentException e) {
 	    LOGGER.warn("Order id is not valid.");
 	    throw new ActionBadRequestException(e);
 	}
+	session = request.getSession();
+	order = (Order) session.getAttribute("order");
+	user = (User) session.getAttribute("user");
+	if ((order != null) && (order.getId() == id)) {
+	    if (order.getCustomer().getId() == user.getId()) {
+		LOGGER.debug("Order from session.");
+		result.setMethod(ActionResult.METHOD.FORWARD);
+		result.setView("edit-order");
+		return result;
+	    } else {
+		LOGGER.debug("Order cannot be edited: access denied.");
+		session.setAttribute("error", "error.badRequest");
+		result.setMethod(ActionResult.METHOD.FORWARD);
+		result.setView("error");
+		return result;
+	    }
+	}
 	try {
+	    LOGGER.debug("Order from database.");
 	    order = orderDao().find(id);
 	} catch (DaoException e) {
 	    LOGGER.warn("Order cannot be fetched from database.");
 	    throw new ActionBadRequestException(e);
 	}
-	session = request.getSession();
 	if (order == null) {
 	    LOGGER.debug("Order with required id is absent.");
 	    session.setAttribute("error", "error.badRequest");
@@ -70,19 +85,16 @@ public class ShowOrderPageAction implements Action {
 	    result.setView("error");
 	    return result;
 	}
-	user = (User) session.getAttribute("user");
-	if (user.getRole().equals(UserRole.CUSTOMER)) {
-	    if (order.getCustomer().getId() != user.getId()) {
-		LOGGER.debug("Order cannot be shown: access denied.");
-		session.setAttribute("error", "error.badRequest");
-		result.setMethod(ActionResult.METHOD.FORWARD);
-		result.setView("error");
-		return result;
-	    }
+	if (order.getCustomer().getId() != user.getId()) {
+	    LOGGER.debug("Order cannot be edited: access denied.");
+	    session.setAttribute("error", "error.badRequest");
+	    result.setMethod(ActionResult.METHOD.FORWARD);
+	    result.setView("error");
+	    return result;
 	}
 	session.setAttribute("order", order);
 	result.setMethod(ActionResult.METHOD.FORWARD);
-	result.setView("order");
+	result.setView("edit-order");
 	return result;
     }
 

@@ -73,7 +73,12 @@ public class DownloadFileAction implements Action {
 	}
 	return new ActionResult(ActionResult.METHOD.REDIRECT, request.getHeader("referer"));
     }
-
+    
+    /**
+     * 
+     * Is used to ...
+     * @param resource
+     */
     private void close(Closeable resource) {
 	if (resource != null) {
 	    try {

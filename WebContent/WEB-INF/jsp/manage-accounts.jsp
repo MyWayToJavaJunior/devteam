@@ -6,7 +6,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <t:genericpage sidebar="true" title="Accounts management">
 	<jsp:body>
-		<h1><fmt:message bundle="${msg}" key="common.accounts" /></h1>
+		<h1>
+			<fmt:message bundle="${msg}" key="common.accounts" />
+		</h1>
 		<table>
 			<thead>
 				<tr>
@@ -29,9 +31,11 @@
 							<td>${user.lastName}</td>
 							<td><t:role-info role="${user.role}" /></td>
 							<td>${user.registrationDate}</td>
-							<td><a href="do/edit-account?id=${user.id}"><img
-									src="static/edit.png"></a> <c:if
-									test="${user.role != 'ADMINISTRATOR'}">
+							<td>
+								<a href="do/edit-account?id=${user.id}">
+									<img src="static/edit.png">
+								</a> 
+								<c:if test="${user.role != 'ADMINISTRATOR'}">
 									<c:choose>
 										<c:when test="${user.active == true}">
 											<a href="do/deactivate-account?id=${user.id}">
@@ -40,16 +44,17 @@
 										</c:when>
 										<c:otherwise>
 											<a href="do/activate-account?id=${user.id}">
-											<img src="static/activate.png">
-										</a>
+												<img src="static/activate.png">
+											</a>
 										</c:otherwise>
 									</c:choose>
-								</c:if></td>
+								</c:if>
+							</td>
 						</tr>
 					</c:forEach>
 				</tbody>
 			</c:if>
 		</table>
-		<t:paging-controller />
+		<t:paging-controller action="do/manage-accounts" />
 	</jsp:body>
 </t:genericpage>

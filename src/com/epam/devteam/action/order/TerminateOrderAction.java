@@ -14,21 +14,20 @@ import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
 import com.epam.devteam.dao.OrderDao;
 import com.epam.devteam.entity.order.Order;
+import com.epam.devteam.entity.order.OrderStatus;
 import com.epam.devteam.entity.user.User;
-import com.epam.devteam.entity.user.UserRole;
 
 /**
- * The <code>ShowOrderPageAction</code> is used to show page with required id.
- * Any customer can't watch other customers' orders. Managers can watch every
- * order.
+ * The <code>TerminateOrderAction</code> is used to terminate order. Only a
+ * customer who created order can terminate it.
  * 
  * @date Jan 19, 2014
  * @author Andrey Kovalskiy
  * 
  */
-public class ShowOrderPageAction implements Action {
+public class TerminateOrderAction implements Action {
     private static final Logger LOGGER = Logger
-	    .getLogger(ShowOrderPageAction.class);
+	    .getLogger(ShowCustomerOrdersPageAction.class);
     private ActionResult result = new ActionResult();
     private DaoFactory factory;
     private OrderDao dao;
@@ -45,11 +44,11 @@ public class ShowOrderPageAction implements Action {
     @Override
     public ActionResult execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
-	LOGGER.debug("Show order page action...");
 	HttpSession session;
 	User user;
 	Order order;
 	int id;
+	LOGGER.debug("Terminate order action...");
 	try {
 	    id = Integer.valueOf(request.getParameter("id"));
 	} catch (IllegalArgumentException e) {
@@ -71,18 +70,22 @@ public class ShowOrderPageAction implements Action {
 	    return result;
 	}
 	user = (User) session.getAttribute("user");
-	if (user.getRole().equals(UserRole.CUSTOMER)) {
-	    if (order.getCustomer().getId() != user.getId()) {
-		LOGGER.debug("Order cannot be shown: access denied.");
-		session.setAttribute("error", "error.badRequest");
-		result.setMethod(ActionResult.METHOD.FORWARD);
-		result.setView("error");
-		return result;
-	    }
+	if (order.getCustomer().getId() != user.getId()) {
+	    LOGGER.debug("Order cannot be nreminated: access denied.");
+	    session.setAttribute("error", "error.badRequest");
+	    result.setMethod(ActionResult.METHOD.FORWARD);
+	    result.setView("error");
+	    return result;
 	}
-	session.setAttribute("order", order);
+	try {
+	    orderDao().updateStatus(id, OrderStatus.TERMINATED);
+	} catch (DaoException e) {
+	    LOGGER.warn("Order status cannot be updated.");
+	    throw new ActionBadRequestException(e);
+	}
+	session.setAttribute("success", "order.terminateSuccess");
 	result.setMethod(ActionResult.METHOD.FORWARD);
-	result.setView("order");
+	result.setView("success");
 	return result;
     }
 
@@ -111,4 +114,5 @@ public class ShowOrderPageAction implements Action {
 	}
 	return dao;
     }
+
 }

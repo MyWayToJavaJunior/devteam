@@ -3,8 +3,6 @@
  */
 package com.epam.devteam.dao;
 
-import java.util.List;
-
 import com.epam.devteam.entity.user.User;
 
 /**
@@ -48,16 +46,6 @@ public interface UserDao extends Dao<User> {
      * @throws DaoException If something fails during method performing.
      */
     User find(String email, String password) throws DaoException;
-    
-    /**
-     * Is used to get active users from the database with paging.
-     * 
-     * @param firstRow The row from where to start list user.
-     * @param rowNumber The number of users to list.
-     * @return The list of all users in the database.
-     * @throws DaoException If something fails at database level.
-     */
-    List<User> list(int firstRow, int rowNumber) throws DaoException;
     
     /**
      * Is used to set new status for a user wit the given id in database .

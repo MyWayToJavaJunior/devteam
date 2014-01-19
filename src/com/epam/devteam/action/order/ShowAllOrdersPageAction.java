@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import com.epam.devteam.action.Action;
+import com.epam.devteam.action.ActionResult;
 import com.epam.devteam.action.exception.ActionException;
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
@@ -18,9 +19,10 @@ import com.epam.devteam.entity.order.Order;
 public class ShowAllOrdersPageAction implements Action {
     private static final Logger LOGGER = Logger
 	    .getLogger(ShowAllOrdersPageAction.class);
+    private static ActionResult result = new ActionResult();
 
     @Override
-    public String execute(HttpServletRequest request,
+    public ActionResult execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
 	LOGGER.debug("Action start.");
 	HttpSession session;
@@ -41,9 +43,10 @@ public class ShowAllOrdersPageAction implements Action {
 	    LOGGER.warn("Order cannot be created.");
 	    throw new ActionException();
 	}
-	System.out.println(orders);
 	session.setAttribute("orders", orders);
-	return "all-orders";
+	result.setMethod(ActionResult.METHOD.FORWARD);
+	result.setView("all-orders");
+	return result;
     }
 
 }

@@ -16,11 +16,16 @@
 		oldInput.parentNode.replaceChild(newInput, oldInput);
 	}
 </script>
-<t:genericpage sidebar="true" title="New Order">
+<t:genericpage sidebar="true" title="Edit Order">
 	<jsp:body>
 	<h1>
-			<fmt:message bundle="${msg}" key="common.newOrder" />
+		<fmt:message bundle="${msg}" key="action.editOrder" /> #${order.id}
 	</h1>
+	<h3>
+		<fmt:message bundle="${msg}" key="common.date" /> : ${order.date} <br /> 
+		<fmt:message bundle="${msg}" key="common.status" /> : 
+			<t:order-status-info status="${order.status}"/>
+	</h3>
 	<div class="span-18 last">
 		<fieldset>
 			<legend>
@@ -36,8 +41,9 @@
 		</fieldset>
 	</div>
 	<div class="span-18">
-		<form action="do/create-order" method="post"
+		<form action="do/save-order" method="post"
 				enctype="multipart/form-data">
+			<input type="hidden" name="id" value="${order.id}">
 			<p>
 				<label>
 					<fmt:message bundle="${msg}" key="common.subject" /><br />
@@ -63,7 +69,7 @@
 						color="red">*</font>
 				</label>
 				<t:error-info error="${topicError}" />
-				<input class="span-18" type="text" name="topic" value="${topic}"
+				<input class="span-18" type="text" name="topic" value="${order.topic}"
 						maxlength="256" />
 			</p>
 			<p>
@@ -73,7 +79,13 @@
 				</label>
 				<t:error-info error="${messageError}" />
 				<textarea class="span-18" name="message" style="resize: none"
-						maxlength="2000">${message}</textarea>
+						maxlength="2000">${order.message}</textarea>
+			</p>
+			<p>
+				<label>
+					<fmt:message bundle="${msg}" key="common.file" />:
+				</label>
+				${not empty order.fileName ? order.fileName : ''}
 			</p>
 			<p>
 				<label>
@@ -83,11 +95,10 @@
 				<input id="file" type="file" name="file" onchange="AlertFilesize();" /><br />
 			</p>
 			<button class="span-18" type="submit">
-				<fmt:message bundle="${msg}" key="action.createOrder" />
+				<fmt:message bundle="${msg}" key="action.saveOrder" />
 			</button>
 			
 		</form>
 	</div>
 	</jsp:body>
 </t:genericpage>
-

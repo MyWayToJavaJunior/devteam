@@ -55,4 +55,14 @@ public interface Dao<T> {
      */
     List<T> list() throws DaoException;
 
+    /**
+     * Is used to get objects from the database with paging.
+     * 
+     * @param firstRow The row from where to start list objects.
+     * @param rowNumber The number of objects to list.
+     * @return The list of all objects in the database.
+     * @throws DaoException If something fails at database level.
+     */
+    List<T> list(int firstRow, int rowNumber) throws DaoException;
+
 }
