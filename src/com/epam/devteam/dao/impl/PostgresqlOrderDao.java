@@ -138,6 +138,12 @@ public class PostgresqlOrderDao extends AbstractDao implements OrderDao {
 	    LOGGER.warn("Statement cannot be executed.");
 	    throw new DaoException(e);
 	}
+	try {
+	    resultSet.close();
+	    LOGGER.debug("Result set has been closed.");
+	} catch (SQLException e) {
+	    LOGGER.debug("Result set cannot be closed.");
+	}
 	freeConnection(connection, statement);
 	return order;
     }
@@ -244,6 +250,12 @@ public class PostgresqlOrderDao extends AbstractDao implements OrderDao {
 	    LOGGER.warn("Statement cannot be executed.");
 	    throw new DaoException(e);
 	}
+	try {
+	    resultSet.close();
+	    LOGGER.debug("Result set has been closed.");
+	} catch (SQLException e) {
+	    LOGGER.debug("Result set cannot be closed.");
+	}
 	freeConnection(connection, statement);
 	return orders;
     }
@@ -273,7 +285,7 @@ public class PostgresqlOrderDao extends AbstractDao implements OrderDao {
 	}
 	try {
 	    statement = connection
-		    .prepareStatement("SELECT orders.id, orders.date, orders.status, orders.subject, orders.topic, orders.message, orders.file_content, orders.file_name, orders.customer_id, users.first_name, users.last_name, users.company, users.position, users.phone, users.address, users.email FROM orders JOIN users ON orders.customer_id=users.id ORDER BY date DESC OFFSET ? LIMIT ?");
+		    .prepareStatement("SELECT orders.id, orders.date, orders.status, orders.subject, orders.topic, orders.message, orders.file_content, orders.file_name, orders.customer_id, users.first_name, users.last_name, users.company, users.position, users.phone, users.address, users.email FROM orders JOIN users ON orders.customer_id=users.id WHERE orders.status != 'TERMINATED' ORDER BY date DESC OFFSET ? LIMIT ?");
 	    statement.setInt(1, firstRow);
 	    statement.setInt(2, rowNumber);
 	    LOGGER.debug("Statement has been created.");
@@ -294,6 +306,12 @@ public class PostgresqlOrderDao extends AbstractDao implements OrderDao {
 	    freeConnection(connection, statement);
 	    LOGGER.warn("Statement cannot be executed.");
 	    throw new DaoException(e);
+	}
+	try {
+	    resultSet.close();
+	    LOGGER.debug("Result set has been closed.");
+	} catch (SQLException e) {
+	    LOGGER.debug("Result set cannot be closed.");
 	}
 	freeConnection(connection, statement);
 	return orders;
@@ -349,6 +367,12 @@ public class PostgresqlOrderDao extends AbstractDao implements OrderDao {
 	    freeConnection(connection, statement);
 	    LOGGER.warn("Statement cannot be executed.");
 	    throw new DaoException(e);
+	}
+	try {
+	    resultSet.close();
+	    LOGGER.debug("Result set has been closed.");
+	} catch (SQLException e) {
+	    LOGGER.debug("Result set cannot be closed.");
 	}
 	freeConnection(connection, statement);
 	return orders;

@@ -140,6 +140,7 @@ public class SaveOrderAction implements Action {
 	    session.setAttribute("error", "error.badRequest");
 	    result.setMethod(ActionResult.METHOD.REDIRECT);
 	    result.setView("error");
+	    LOGGER.debug("Order cannot be saved: not in the session.");
 	    return result;
 	}
 	session.setAttribute("topic", topic);
@@ -147,26 +148,28 @@ public class SaveOrderAction implements Action {
 	if (RequestFieldsValidator.empty(topic)) {
 	    session.setAttribute("topicError", "order.topicEmpty");
 	    result.setMethod(ActionResult.METHOD.REDIRECT);
-	    result.setView("edit-order");
+	    result.setView(request.getHeader("referer"));
+	    LOGGER.debug("Order topic is empty.");
 	    return result;
 	}
 	if (RequestFieldsValidator.empty(message)) {
 	    session.setAttribute("messageError", "order.messageEmpty");
 	    result.setMethod(ActionResult.METHOD.REDIRECT);
-	    result.setView("edit-order");
+	    result.setView(request.getHeader("referer"));
+	    LOGGER.debug("Order message is empty.");
 	    return result;
 	}
 	try {
 	    topicLengthValid = RequestFieldsValidator.lengthValid(
-		    FieldType.INPUT_TEXT, topic);
+		    FieldType.INPUT_TEXT, topic, fileName);
 	    messageLengthValid = RequestFieldsValidator.lengthValid(
 		    FieldType.TEXTAREA, message);
 	} catch (ValidationException e) {
-	    LOGGER.warn("Fields cannot be validated.");
+	    LOGGER.warn("Fields length cannot be validated.");
 	    throw new ActionException(e);
 	}
 	if (!topicLengthValid || !messageLengthValid) {
-	    LOGGER.warn("Fields are not valid.");
+	    LOGGER.warn("Fields length is not valid.");
 	    throw new ActionBadRequestException();
 	}
 	order.setDate(new Date(new java.util.Date().getTime()));
@@ -185,8 +188,6 @@ public class SaveOrderAction implements Action {
 	    throw new ActionException();
 	}
 	session.setAttribute("success", "order.saveSuccess");
-	session.removeAttribute("topic");
-	session.removeAttribute("message");
 	result.setMethod(ActionResult.METHOD.REDIRECT);
 	result.setView("success");
 	return result;

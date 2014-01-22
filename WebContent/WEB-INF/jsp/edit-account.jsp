@@ -8,6 +8,7 @@
 	<jsp:body>
 	<div class="span-14 ">
 		<form action="do/save-account" method="post">
+			<t:error-info error="${accountEditError}"/>
 			<input type="hidden" name="id" value="${account.id}">
 			<fieldset>
 				<p>
@@ -22,14 +23,14 @@
 						<fmt:message bundle="${msg}" key="common.firstName" />
 					</label>
 					<input class="span-13" type="text" name="first-name"
-							value="${account.firstName}" title="Enter email" />
+							maxlength="256" value="${account.firstName}" title="Enter email" />
 				</p>
 				<p>
 					<label>
 						<fmt:message bundle="${msg}" key="common.lastName" />
 					</label>
 					<input class="span-13" type="text" name="last-name"
-							value="${account.lastName}" />
+							maxlength="256" value="${account.lastName}" />
 				</p>
 			</fieldset>
 			<c:choose>
@@ -40,14 +41,14 @@
 								<fmt:message bundle="${msg}" key="common.company" />
 							</label>
 							<input class="span-13" type="text" name="company"
-									value="${account.company}" />
+									maxlength="256" value="${account.company}" />
 						</p>
 						<p>
 							<label>
 								<fmt:message bundle="${msg}" key="common.position" />
 							</label>
 							<input class="span-13" type="text" name="position"
-									value="${account.position}" />
+									maxlength="256" value="${account.position}" />
 						</p>
 					</fieldset>
 				</c:when>
@@ -57,17 +58,16 @@
 							<label>
 								<fmt:message bundle="${msg}" key="common.birthDate" />
 							</label><br />
-							<t:date />
+							<t:date date="${account.birthDate}"/>
 						</p>
 						<p>
 							<label><fmt:message bundle="${msg}"
 										key="common.qualification" />
 						</label>
 						<input class="span-13" type="text" name="qualification"
-									value="${account.qualification}" />
+									maxlength="256" value="${account.qualification}" />
 					
-						
-						</fieldset>
+					</fieldset>
 				</c:otherwise>
 			</c:choose>
 			<fieldset>
@@ -76,14 +76,14 @@
 						<fmt:message bundle="${msg}" key="common.address" />
 					</label>
 					<input class="span-13" type="text" name="address"
-							value="${account.address}" />
+							maxlength="256" value="${account.address}" />
 				</p>
 				<p>
 					<label>
 						<fmt:message bundle="${msg}" key="common.phone" />
 					</label>
 					<input class="span-13" type="text" name="phone"
-							value="${account.phone}" />
+							maxlength="256" value="${account.phone}" />
 				</p>
 			</fieldset>
 			<c:choose>
@@ -92,9 +92,12 @@
 					<fieldset>
 
 						<select class="span-6" name="is-active">
-							<option value="true" ${account.active ? 'selected' :''}>Active</option>
-							<option value="false" ${not account.active ? 'selected' :''}>Not
-								Active</option>
+							<option value="true" ${account.active ? 'selected' :''}>
+								<fmt:message bundle="${msg}" key="common.active" />
+							</option>
+							<option value="false" ${not account.active ? 'selected' :''}>
+								<fmt:message bundle="${msg}" key="common.notActive" />
+							</option>
 						</select> 
 						<select class="span-6" name="role">
 							<option value="CUSTOMER"
@@ -156,6 +159,7 @@
 					<input class="span-13" type="password" name="new-password2"
 							value="${newPassword2}" />
 				</p>
+				<font size="1"><fmt:message bundle="${msg}" key="password.help" /></font>
 				<button class="span-13">
 					<fmt:message bundle="${msg}" key="action.changePassword" />
 				</button>

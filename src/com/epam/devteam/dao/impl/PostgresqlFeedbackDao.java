@@ -201,6 +201,12 @@ public class PostgresqlFeedbackDao extends AbstractDao implements FeedbackDao {
 	    LOGGER.warn("Statement cannot be executed.", e);
 	    throw new DaoException();
 	}
+	try {
+	    resultSet.close();
+	    LOGGER.debug("Result set has been closed.");
+	} catch (SQLException e) {
+	    LOGGER.debug("Result set cannot be closed.");
+	}
 	freeConnection(connection, statement);
 	return feedback;
     }

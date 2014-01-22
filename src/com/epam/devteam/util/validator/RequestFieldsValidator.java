@@ -85,6 +85,9 @@ public class RequestFieldsValidator {
 	    throw new ValidationException(e);
 	}
 	for (int i = 0; i < values.length; i++) {
+	    if (values[i] == null){
+		return false;
+	    }
 	    if (values[i].length() > maxLength) {
 		result = false;
 		break;

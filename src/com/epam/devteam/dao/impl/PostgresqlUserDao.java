@@ -153,6 +153,12 @@ public class PostgresqlUserDao extends AbstractDao implements UserDao {
 	    LOGGER.warn("Statement cannot be executed.");
 	    throw new DaoException(e);
 	}
+	try {
+	    resultSet.close();
+	    LOGGER.debug("Result set has been closed.");
+	} catch (SQLException e) {
+	    LOGGER.debug("Result set cannot be closed.");
+	}
 	freeConnection(connection, statement);
 	return id;
     }
@@ -231,6 +237,12 @@ public class PostgresqlUserDao extends AbstractDao implements UserDao {
 	    freeConnection(connection, statement);
 	    LOGGER.warn("Statement cannot be executed.");
 	    throw new DaoException(e);
+	}
+	try {
+	    resultSet.close();
+	    LOGGER.debug("Result set has been closed.");
+	} catch (SQLException e) {
+	    LOGGER.debug("Result set cannot be closed.");
 	}
 	freeConnection(connection, statement);
 	return user;
@@ -385,6 +397,12 @@ public class PostgresqlUserDao extends AbstractDao implements UserDao {
 	    LOGGER.warn("Statement cannot be executed.");
 	    throw new DaoException(e);
 	}
+	try {
+	    resultSet.close();
+	    LOGGER.debug("Result set has been closed.");
+	} catch (SQLException e) {
+	    LOGGER.debug("Result set cannot be closed.");
+	}
 	freeConnection(connection, statement);
 	return users;
     }
@@ -451,6 +469,12 @@ public class PostgresqlUserDao extends AbstractDao implements UserDao {
 	    freeConnection(connection, statement);
 	    LOGGER.warn("Statement cannot be executed.");
 	    throw new DaoException(e);
+	}
+	try {
+	    resultSet.close();
+	    LOGGER.debug("Result set has been closed.");
+	} catch (SQLException e) {
+	    LOGGER.debug("Result set cannot be closed.");
 	}
 	freeConnection(connection, statement);
 	return users;
@@ -533,6 +557,12 @@ public class PostgresqlUserDao extends AbstractDao implements UserDao {
 	    LOGGER.warn("Statement cannot be executed.");
 	    throw new DaoException(e);
 	}
+	try {
+	    resultSet.close();
+	    LOGGER.debug("Result set has been closed.");
+	} catch (SQLException e) {
+	    LOGGER.debug("Result set cannot be closed.");
+	}
 	freeConnection(connection, statement);
 	return user;
     }
@@ -580,6 +610,12 @@ public class PostgresqlUserDao extends AbstractDao implements UserDao {
 	    LOGGER.warn("Statement cannot be executed.");
 	    freeConnection(connection, statement);
 	    throw new DaoException(e);
+	}
+	try {
+	    resultSet.close();
+	    LOGGER.debug("Result set has been closed.");
+	} catch (SQLException e) {
+	    LOGGER.debug("Result set cannot be closed.");
 	}
 	freeConnection(connection, statement);
 	return user;

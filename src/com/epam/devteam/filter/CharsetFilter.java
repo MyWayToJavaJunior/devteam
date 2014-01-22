@@ -10,30 +10,27 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 /**
- * Is used to process  to log then and forward to the error page.
+ * The <code>CharsetFilter</code> is used to set UTF-8 encoding for request.
+ * 
+ * @date Jan 22, 2014
+ * @author Andrey Kovalskiy
+ * 
  */
-public class ErrorFilter implements Filter {
+public class CharsetFilter implements Filter {
 
-    /**
-     * @see Filter#init(FilterConfig)
-     */
-    public void init(FilterConfig fConfig) throws ServletException {
-	// TODO Auto-generated method stub
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
     }
 
-    /**
-     * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
-     */
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response,
 	    FilterChain chain) throws IOException, ServletException {
-	System.out.println("Error filter.");
+	request.setCharacterEncoding("UTF-8");
 	chain.doFilter(request, response);
     }
 
     @Override
     public void destroy() {
-	// TODO Auto-generated method stub
-
     }
 
 }

@@ -27,7 +27,7 @@ import com.epam.devteam.entity.user.User;
  */
 public class TerminateOrderAction implements Action {
     private static final Logger LOGGER = Logger
-	    .getLogger(ShowCustomerOrdersPageAction.class);
+	    .getLogger(TerminateOrderAction.class);
     private ActionResult result = new ActionResult();
     private DaoFactory factory;
     private OrderDao dao;
@@ -63,7 +63,7 @@ public class TerminateOrderAction implements Action {
 	}
 	session = request.getSession();
 	if (order == null) {
-	    LOGGER.debug("Order with required id is absent.");
+	    LOGGER.debug("Order with required id is not found.");
 	    session.setAttribute("error", "error.badRequest");
 	    result.setMethod(ActionResult.METHOD.FORWARD);
 	    result.setView("error");
@@ -71,7 +71,7 @@ public class TerminateOrderAction implements Action {
 	}
 	user = (User) session.getAttribute("user");
 	if (order.getCustomer().getId() != user.getId()) {
-	    LOGGER.debug("Order cannot be nreminated: access denied.");
+	    LOGGER.debug("Order cannot be terminated: access denied.");
 	    session.setAttribute("error", "error.badRequest");
 	    result.setMethod(ActionResult.METHOD.FORWARD);
 	    result.setView("error");

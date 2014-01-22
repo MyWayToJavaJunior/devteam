@@ -69,7 +69,7 @@ public class ShowOrderPageAction implements Action {
 	}
 	session = request.getSession();
 	if (order == null) {
-	    LOGGER.debug("Order with required id is absent.");
+	    LOGGER.debug("Order with required id not found.");
 	    session.setAttribute("error", "error.badRequest");
 	    result.setMethod(ActionResult.METHOD.FORWARD);
 	    result.setView("error");

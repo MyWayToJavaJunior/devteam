@@ -22,6 +22,13 @@ import com.epam.devteam.action.account.ShowEditAccountPageAction;
 import com.epam.devteam.action.account.SigninAction;
 import com.epam.devteam.action.account.SignoutAction;
 import com.epam.devteam.action.feedback.CreateFeedbackAction;
+import com.epam.devteam.action.general.DownloadFileAction;
+import com.epam.devteam.action.general.SetLanguageAction;
+import com.epam.devteam.action.general.ShowAboutUsPageAction;
+import com.epam.devteam.action.general.ShowContactsPageAction;
+import com.epam.devteam.action.general.ShowErrorPageAction;
+import com.epam.devteam.action.general.ShowMainPageAction;
+import com.epam.devteam.action.general.ShowSuccessPageAction;
 import com.epam.devteam.action.order.CreateOrderAction;
 import com.epam.devteam.action.order.SaveOrderAction;
 import com.epam.devteam.action.order.ShowAllOrdersPageAction;
@@ -82,7 +89,7 @@ public class ActionFactory {
 	if (action == null) {
 	    action = actions.get("GET/error");
 	    session = request.getSession();
-	    session.setAttribute("error", "error.badRequest");
+	    session.setAttribute("error", "error.notFound");
 	    LOGGER.debug("Unknown request.");
 	    return action;
 	}

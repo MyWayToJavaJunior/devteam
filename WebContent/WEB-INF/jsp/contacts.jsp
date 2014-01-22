@@ -6,13 +6,13 @@
 <t:genericpage sidebar="true" title="Contacts">
 	<jsp:body>
 		<h3>
-			<fmt:message bundle="${msg}" key="common.address" />
+			<fmt:message bundle="${msg}" key="common.address" />: 7 Gogol str.  
 		</h3>
 		<h3>
-			<fmt:message bundle="${msg}" key="common.phone" />
+			<fmt:message bundle="${msg}" key="common.phone" />: 8-7869-35-643-69
 		</h3>
 		<h3>
-			<fmt:message bundle="${msg}" key="common.email" />
+			<fmt:message bundle="${msg}" key="common.email" />: postus@devteam.com
 		</h3>
 	</jsp:body>
 </t:genericpage>

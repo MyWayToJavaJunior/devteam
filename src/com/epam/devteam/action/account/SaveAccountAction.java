@@ -1,5 +1,10 @@
 package com.epam.devteam.action.account;
 
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -31,7 +36,6 @@ import com.epam.devteam.util.validator.ValidationException;
 public class SaveAccountAction implements Action {
     private static final Logger LOGGER = Logger
 	    .getLogger(SaveAccountAction.class);
-    private DaoFactory factory;
     private UserDao dao;
 
     /**
@@ -48,7 +52,8 @@ public class SaveAccountAction implements Action {
 	    HttpServletResponse response) throws ActionException {
 	HttpSession session = request.getSession();
 	User user;
-	User account;
+	User accountBefore = (User) session.getAttribute("account");
+	User accountAfter;
 	UserRole role;
 	String tempId = request.getParameter("id");
 	String tempRole = request.getParameter("role");
@@ -60,11 +65,16 @@ public class SaveAccountAction implements Action {
 	String address = request.getParameter("address");
 	String phone = request.getParameter("phone");
 	String qualification = request.getParameter("qualification");
+	String day = request.getParameter("day");
+	String month = request.getParameter("month");
+	String year = request.getParameter("year");
+	Date date;
 	int id = 0;
 	boolean active = false;
 	boolean fieldsEqualsNull = false;
 	boolean fieldsEmpty = false;
 	boolean fieldsLengthValid = false;
+	boolean changed = false;
 	fieldsEqualsNull = RequestFieldsValidator.equalNull(tempId, tempRole,
 		tempActive);
 	if (fieldsEqualsNull) {
@@ -96,7 +106,14 @@ public class SaveAccountAction implements Action {
 	    throw new ActionBadRequestException(e);
 	}
 	try {
-	    switch (role) {
+	    date = new Date(new SimpleDateFormat("yyyy-MM-d", Locale.ENGLISH)
+		    .parse(year + "-" + month + "-" + day).getTime());
+	} catch (ParseException e) {
+	    LOGGER.warn("Birth date is wrong");
+	    throw new ActionBadRequestException(e);
+	}
+	try {
+	    switch (accountBefore.getRole()) {
 	    case CUSTOMER:
 		fieldsLengthValid = RequestFieldsValidator.lengthValid(
 			FieldType.INPUT_TEXT, firstName, lastName, company,
@@ -121,51 +138,100 @@ public class SaveAccountAction implements Action {
 	    Customer customer = new Customer();
 	    customer.setCompany(company);
 	    customer.setPosition(position);
-	    account = customer;
+	    accountAfter = customer;
 	    break;
 	default:
 	    Employee employee = new Employee();
 	    employee.setQualification(qualification);
-	    account = employee;
+	    accountAfter = employee;
 	    break;
 	}
-	account.setId(id);
-	account.setRole(role);
-	account.setActive(active);
-	account.setFirstName(firstName);
-	account.setLastName(lastName);
-	// DateManager.dateFromRequest(request);
-	account.setBirthDate(null);
-	account.setAddress(address);
-	account.setPhone(phone);
+	accountAfter.setEmail(accountBefore.getEmail());
+	accountAfter.setRegistrationDate(accountBefore.getRegistrationDate());
+	accountAfter.setId(id);
+	accountAfter.setRole(role);
+	accountAfter.setActive(active);
+	accountAfter.setFirstName(firstName);
+	accountAfter.setLastName(lastName);
+	accountAfter.setBirthDate(date);
+	accountAfter.setAddress(address);
+	accountAfter.setPhone(phone);
+	changed = isChanged(accountAfter, accountBefore);
+	if (!changed) {
+	    LOGGER.debug("There is no changes to save.");
+	    session.setAttribute("accountEditError", "account.notChanged");
+	    return new ActionResult(ActionResult.METHOD.REDIRECT,
+		    request.getHeader("referer"));
+	}
+	LOGGER.debug("Account has been changed.");
 	try {
-	    userDao().update(account);
+	    userDao().update(accountAfter);
+	    LOGGER.debug("User " + accountAfter.getEmail()
+		    + " has been updated.");
 	} catch (DaoException e) {
-	    LOGGER.warn("Customer cannot be updated.");
+	    LOGGER.warn("User cannot be updated.");
 	    throw new ActionDatabaseFailException(e);
 	}
 	user = (User) session.getAttribute("user");
-	if (user.getId() == account.getId()) {
-	    session.setAttribute("user", account);
+	if (user.getId() == accountAfter.getId()) {
+	    LOGGER.debug("User's own account.");
+	    accountAfter.setEmail(user.getEmail());
+	    accountAfter.setRegistrationDate(user.getRegistrationDate());
+	    session.setAttribute("user", accountAfter);
 	}
 	session.removeAttribute("account");
+	session.removeAttribute("accountEditError");
 	session.setAttribute("success", "account.saveSuccess");
-	session.setAttribute("link", "do/edit-account?id=" + id);
-	LOGGER.debug("User " + account.getEmail() + " has been updated.");
+	session.setAttribute("link",
+		"do/edit-account?id=" + accountAfter.getId());
 	return new ActionResult(ActionResult.METHOD.REDIRECT, "success");
     }
 
     /**
-     * Is used to get dao factory. It initializes factory during the first use.
+     * Is used to check whether account was modified.
      * 
-     * @return Dao factory.
-     * @throws DaoException If something fails.
+     * @param accountAfter Account 
+     * @param accountBefore
+     * @return
      */
-    private DaoFactory daoFactory() throws DaoException {
-	if (factory == null) {
-	    factory = DaoFactory.getDaoFactory();
+    private boolean isChanged(User accountAfter, User accountBefore) {
+	Customer customerAfter;
+	Customer customerBefore;
+	Employee employeeAfter;
+	Employee employeeBefore;
+	if (accountAfter.getRole() != accountBefore.getRole()
+		|| accountAfter.isActive() != accountBefore.isActive()
+		|| !accountAfter.getFirstName().equals(
+			accountBefore.getFirstName())
+		|| !accountAfter.getLastName().equals(
+			accountBefore.getLastName())
+		|| !accountAfter.getBirthDate().equals(
+			accountBefore.getBirthDate())
+		|| !accountAfter.getAddress()
+			.equals(accountBefore.getAddress())
+		|| !accountAfter.getPhone().equals(accountBefore.getPhone())) {
+	    return true;
 	}
-	return factory;
+	switch (accountAfter.getRole()) {
+	case CUSTOMER:
+	    customerAfter = (Customer) accountAfter;
+	    customerBefore = (Customer) accountBefore;
+	    if (!customerAfter.getCompany().equals(customerBefore.getCompany())
+		    || !customerAfter.getPosition().equals(
+			    customerBefore.getPosition())) {
+		return true;
+	    }
+	default:
+	    employeeAfter = (Employee) accountAfter;
+	    employeeBefore = (Employee) accountBefore;
+	    if (!employeeAfter.getQualification().equals(
+		    employeeBefore.getQualification())) {
+		return true;
+	    }
+
+	}
+	return false;
+
     }
 
     /**
@@ -176,7 +242,7 @@ public class SaveAccountAction implements Action {
      */
     private UserDao userDao() throws DaoException {
 	if (dao == null) {
-	    dao = daoFactory().getUserDao();
+	    dao = DaoFactory.getDaoFactory().getUserDao();
 	}
 	return dao;
     }

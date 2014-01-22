@@ -11,9 +11,9 @@ import com.epam.devteam.db.ConnectionPoolException;
 import com.epam.devteam.entity.feedback.Feedback;
 import com.epam.devteam.entity.order.Order;
 
-public class FeedbackCreator {
+public class FeedbackService {
     private final static Logger LOGGER = Logger
-	    .getLogger(FeedbackCreator.class);
+	    .getLogger(FeedbackService.class);
     private ConnectionPool connectionPool;
 
     public void createFeedback(Feedback feedback, Order order)
@@ -31,7 +31,7 @@ public class FeedbackCreator {
 	}
 	try {
 	    connection.setAutoCommit(false);
-	    LOGGER.debug("Auto commit has been set.");
+	    LOGGER.debug("Auto commit has been disabled.");
 	} catch (SQLException e) {
 	    connectionPool.returnConnection(connection);
 	    LOGGER.warn("Auto commit cannot be set.");
@@ -58,6 +58,8 @@ public class FeedbackCreator {
 	    LOGGER.debug("Order statement has been executed.");
 	    connection.commit();
 	    LOGGER.debug("Commit success.");
+	    connection.setAutoCommit(true);
+	    LOGGER.debug("Auto commit has been enabled.");
 	} catch (SQLException e) {
 	    LOGGER.debug("Feedback cannot be created");
 	    try {

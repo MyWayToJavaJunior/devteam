@@ -49,17 +49,20 @@
 					<fmt:message bundle="${msg}" key="common.subject" /><br />
 				</label>
 				<select class="span-18" name="subject">
-					<option value="OTHER" selected>
+					<option value="OTHER" ${order.subject == 'OTHER' ? 'selected' : ''}>
 						<fmt:message bundle="${msg}" key="common.other" />
 					</option>
-					<option value="APPLICATION_DEVELOPMENT">
-						<fmt:message bundle="${msg}" key="common.applicationDevelopment" />
+					<option value="APPLICATION_DEVELOPMENT" 
+						${order.subject == 'APPLICATION_DEVELOPMENT' ? 'selected' : ''}>
+							<fmt:message bundle="${msg}" key="common.applicationDevelopment" />
 					</option>
-					<option value="APPLICATION_TESTING">
-						<fmt:message bundle="${msg}" key="common.applicationTesting" />
+					<option value="APPLICATION_TESTING" 
+						${order.subject == 'APPLICATION_TESTING' ? 'selected' : ''}>
+							<fmt:message bundle="${msg}" key="common.applicationTesting" />
 					</option>
-					<option value="APPLICATION_SUPPORT">
-						<fmt:message bundle="${msg}" key="common.applicationSupport" />
+					<option value="APPLICATION_SUPPORT" 
+						${order.subject == 'APPLICATION_SUPPORT' ? 'selected' : ''}>
+							<fmt:message bundle="${msg}" key="common.applicationSupport" />
 					</option>
 				</select>
 			</p>
@@ -81,12 +84,14 @@
 				<textarea class="span-18" name="message" style="resize: none"
 						maxlength="2000">${order.message}</textarea>
 			</p>
-			<p>
-				<label>
-					<fmt:message bundle="${msg}" key="common.file" />:
-				</label>
-				${not empty order.fileName ? order.fileName : ''}
-			</p>
+			<c:if test="${not empty order.fileName}">
+				<p>
+					<label>
+						<fmt:message bundle="${msg}" key="common.file" />:
+					</label>
+					<a href="do/download-file?source=order">${order.fileName}</a>
+				</p>
+			</c:if>
 			<p>
 				<label>
 					<fmt:message bundle="${msg}" key="common.attachFile" /><br />

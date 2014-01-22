@@ -88,48 +88,45 @@ public class Customer extends User {
     }
 
     /**
+     * Returns a hash code value for the object.
+     * 
+     * @param The object's hash code.
+     */
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = super.hashCode();
+	result = prime * result + ((company == null) ? 0 : company.hashCode());
+	result = prime * result
+		+ ((position == null) ? 0 : position.hashCode());
+	return result;
+    }
+
+    /**
      * Indicates whether some other object is "equal to" this one.
      * 
      * @param obj The reference object with which to compare.
      */
     @Override
     public boolean equals(Object obj) {
-	if (this == obj) {
+	if (this == obj)
 	    return true;
-	}
-	if (obj == null) {
+	if (!super.equals(obj))
 	    return false;
-	}
-	if (this.getClass() == obj.getClass()) {
-	    Customer otherCustomer = (Customer) obj;
-	    return (this.getId() == otherCustomer.getId())
-		    && (this.getEmail().equals(otherCustomer.getEmail()))
-		    && (this.getPassword().equals(otherCustomer.getPassword()))
-		    && (this.getRegistrationDate().equals(otherCustomer
-			    .getRegistrationDate()))
-		    && (this.getRole().equals(otherCustomer.getRole()))
-		    && (this.isActive() == otherCustomer.isActive())
-		    && (this.getFirstName()
-			    .equals(otherCustomer.getFirstName()))
-		    && (this.getLastName().equals(otherCustomer.getLastName()))
-		    && (this.getBirthDate()
-			    .equals(otherCustomer.getBirthDate()))
-		    && (this.getAddress().equals(otherCustomer.getAddress()))
-		    && (this.getPhone().equals(otherCustomer.getPhone()))
-		    && (this.company.equals(otherCustomer.company))
-		    && (this.position.equals(otherCustomer.position));
-	} else {
+	if (getClass() != obj.getClass())
 	    return false;
-	}
-    }
-
-    /**
-     * Returns a hash code value for the object.
-     */
-    @Override
-    public int hashCode() {
-	return super.hashCode() + ((company == null) ? 0 : company.hashCode())
-		+ ((position == null) ? 0 : position.hashCode());
+	Customer other = (Customer) obj;
+	if (company == null) {
+	    if (other.company != null)
+		return false;
+	} else if (!company.equals(other.company))
+	    return false;
+	if (position == null) {
+	    if (other.position != null)
+		return false;
+	} else if (!position.equals(other.position))
+	    return false;
+	return true;
     }
 
     /**
@@ -139,7 +136,7 @@ public class Customer extends User {
     public String toString() {
 	StringBuffer sb = new StringBuffer();
 	sb.append(super.toString()).append(" company:").append(company)
-		.append(" position:").append("position");
+		.append(" position:").append(position);
 	return sb.toString();
     }
 }

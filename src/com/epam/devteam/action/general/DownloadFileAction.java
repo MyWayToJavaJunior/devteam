@@ -1,4 +1,4 @@
-package com.epam.devteam.action;
+package com.epam.devteam.action.general;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -12,6 +12,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import com.epam.devteam.action.Action;
+import com.epam.devteam.action.ActionResult;
 import com.epam.devteam.action.exception.ActionBadRequestException;
 import com.epam.devteam.action.exception.ActionException;
 import com.epam.devteam.entity.feedback.Feedback;

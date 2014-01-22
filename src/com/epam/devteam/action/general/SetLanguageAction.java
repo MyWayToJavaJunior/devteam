@@ -1,22 +1,22 @@
-package com.epam.devteam.action;
+package com.epam.devteam.action.general;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.jsp.jstl.core.Config;
 
-import org.apache.log4j.Logger;
-
+import com.epam.devteam.action.Action;
+import com.epam.devteam.action.ActionResult;
 import com.epam.devteam.action.exception.ActionException;
 
 /**
- * The <code>ShowContactsPageAction</code> is used to show page with contacts.
+ * The <code>SetLanguageAction</code> to set localization.
  * 
- * @date Jan 18, 2014
+ * @date Jan 13, 2014
  * @author Andrey Kovalskiy
  * 
  */
-public class ShowContactsPageAction implements Action {
-    private final static Logger LOGGER = Logger
-	    .getLogger(ShowContactsPageAction.class);
+public class SetLanguageAction implements Action {
 
     /**
      * Is used to perform required actions and define method and view for
@@ -30,7 +30,11 @@ public class ShowContactsPageAction implements Action {
     @Override
     public ActionResult execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
-	LOGGER.debug("Show contacts page action...");
-	return new ActionResult(ActionResult.METHOD.FORWARD, "contacts");
+	HttpSession session = request.getSession();
+	String locale = request.getParameter("locale");
+	Config.set(session, Config.FMT_LOCALE, new java.util.Locale(locale));
+	return new ActionResult(ActionResult.METHOD.REDIRECT,
+		request.getHeader("referer"));
     }
+
 }

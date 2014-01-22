@@ -6,25 +6,28 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
 import com.epam.devteam.action.Action;
 import com.epam.devteam.action.ActionFactory;
 import com.epam.devteam.action.ActionResult;
-import com.epam.devteam.action.exception.ActionBadRequestException;
-import com.epam.devteam.action.exception.ActionDatabaseFailException;
 import com.epam.devteam.action.exception.ActionException;
 
 /**
- * Servlet implementation class Controller
+ * Is used to handle all the requests that are addressed to this web site.
  */
 public class Controller extends HttpServlet {
     private static final Logger LOGGER = Logger.getLogger(Controller.class);
     private static final long serialVersionUID = 1L;
 
     /**
+     * Is used to process GET request.
+     * 
+     * @param request Http request.
+     * @param response Http response.
+     * @throws ServletException If the target resource throws this exception
+     * @throws IOException If the target resource throws this exception
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
      *      response)
      */
@@ -34,6 +37,12 @@ public class Controller extends HttpServlet {
     }
 
     /**
+     * Is used to process POST request.
+     * 
+     * @param request Http request.
+     * @param response Http response.
+     * @throws ServletException If the target resource throws this exception
+     * @throws IOException If the target resource throws this exception
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
      *      response)
      */
@@ -42,6 +51,15 @@ public class Controller extends HttpServlet {
 	doAction(request, response);
     }
 
+    /**
+     * Is used to process current request, perform any action and show jsp page
+     * with result.
+     * 
+     * @param request Http request
+     * @param response Http response
+     * @throws ServletException If the target resource throws this exception
+     * @throws IOException If the target resource throws this exception
+     */
     protected void doAction(HttpServletRequest request,
 	    HttpServletResponse response) throws ServletException, IOException {
 	Action action;
@@ -49,11 +67,10 @@ public class Controller extends HttpServlet {
 	ActionResult.METHOD method;
 	String view;
 	action = ActionFactory.getAction(request);
-	try {
+	try { 
 	    result = action.execute(request, response);
 	} catch (ActionException e) {
-	    handleException(request.getSession(), e);
-	    result = new ActionResult(ActionResult.METHOD.REDIRECT, "error");
+	    throw new ServletException(e);
 	}
 	method = result.getMethod();
 	view = result.getView();
@@ -70,15 +87,4 @@ public class Controller extends HttpServlet {
 
     }
 
-    private void handleException(HttpSession session, Exception e) {
-	LOGGER.debug("Action execution failed.", e);
-	LOGGER.error("Action execution failed.");
-	if (e.getClass().equals(ActionBadRequestException.class)) {
-	    session.setAttribute("error", "error.badRequest");
-	} else if (e.getClass().equals(ActionDatabaseFailException.class)) {
-	    session.setAttribute("error", "error.serverError");
-	} else {
-	    session.setAttribute("error", "error.serverError");
-	}
-    }
 }

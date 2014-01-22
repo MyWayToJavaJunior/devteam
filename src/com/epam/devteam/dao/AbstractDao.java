@@ -6,6 +6,9 @@ package com.epam.devteam.dao;
 import com.epam.devteam.db.ConnectionPool;
 
 /**
+ * The <code>AbstractDao</code> determines constructors, fields, and methods
+ * that should has every dao class, which works with database.
+ * 
  * @date Jan 2, 2014
  * @author Andrey Kovalskiy
  * 

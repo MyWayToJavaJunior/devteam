@@ -268,54 +268,95 @@ public class User implements Serializable {
     }
 
     /**
+     * Returns a hash code value for the object.
+     * 
+     * @param The object's hash code.
+     */
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + (active ? 1231 : 1237);
+	result = prime * result + ((address == null) ? 0 : address.hashCode());
+	result = prime * result
+		+ ((birthDate == null) ? 0 : birthDate.hashCode());
+	result = prime * result + ((email == null) ? 0 : email.hashCode());
+	result = prime * result
+		+ ((firstName == null) ? 0 : firstName.hashCode());
+	result = prime * result + id;
+	result = prime * result
+		+ ((lastName == null) ? 0 : lastName.hashCode());
+	result = prime * result
+		+ ((password == null) ? 0 : password.hashCode());
+	result = prime * result + ((phone == null) ? 0 : phone.hashCode());
+	result = prime
+		* result
+		+ ((registrationDate == null) ? 0 : registrationDate.hashCode());
+	result = prime * result + ((role == null) ? 0 : role.hashCode());
+	return result;
+    }
+
+    /**
      * Indicates whether some other object is "equal to" this one.
      * 
      * @param obj The reference object with which to compare.
      */
     @Override
     public boolean equals(Object obj) {
-	if (this == obj) {
+	if (this == obj)
 	    return true;
-	}
-	if (obj == null) {
+	if (obj == null)
 	    return false;
-	}
-	if (this.getClass() == obj.getClass()) {
-	    User otherUser = (User) obj;
-	    return (this.id == otherUser.id)
-		    && (this.email.equals(otherUser.email))
-		    && (this.password.equals(otherUser.password))
-		    && (this.registrationDate
-			    .equals(otherUser.registrationDate))
-		    && (this.role.equals(otherUser.role))
-		    && (this.active == otherUser.active)
-		    && (this.firstName.equals(otherUser.firstName))
-		    && (this.lastName.equals(otherUser.lastName))
-		    && (this.birthDate.equals(otherUser.birthDate))
-		    && (this.address.equals(otherUser.address))
-		    && (this.phone.equals(otherUser.phone));
-
-	} else {
+	if (getClass() != obj.getClass())
 	    return false;
-	}
-    }
-
-    /**
-     * Returns a hash code value for the object.
-     */
-    @Override
-    public int hashCode() {
-	return (int) (31 * id)
-		+ ((email == null) ? 0 : email.hashCode())
-		+ ((password == null) ? 0 : password.hashCode())
-		+ ((registrationDate == null) ? 0 : registrationDate.hashCode())
-		+ ((role == null) ? 0 : role.hashCode())
-		+ Boolean.valueOf(active).hashCode()
-		+ ((firstName == null) ? 0 : firstName.hashCode())
-		+ ((lastName == null) ? 0 : lastName.hashCode())
-		+ ((birthDate == null) ? 0 : birthDate.hashCode())
-		+ ((address == null) ? 0 : address.hashCode())
-		+ ((phone == null) ? 0 : phone.hashCode());
+	User other = (User) obj;
+	if (active != other.active)
+	    return false;
+	if (address == null) {
+	    if (other.address != null)
+		return false;
+	} else if (!address.equals(other.address))
+	    return false;
+	if (birthDate == null) {
+	    if (other.birthDate != null)
+		return false;
+	} else if (!birthDate.equals(other.birthDate))
+	    return false;
+	if (email == null) {
+	    if (other.email != null)
+		return false;
+	} else if (!email.equals(other.email))
+	    return false;
+	if (firstName == null) {
+	    if (other.firstName != null)
+		return false;
+	} else if (!firstName.equals(other.firstName))
+	    return false;
+	if (id != other.id)
+	    return false;
+	if (lastName == null) {
+	    if (other.lastName != null)
+		return false;
+	} else if (!lastName.equals(other.lastName))
+	    return false;
+	if (password == null) {
+	    if (other.password != null)
+		return false;
+	} else if (!password.equals(other.password))
+	    return false;
+	if (phone == null) {
+	    if (other.phone != null)
+		return false;
+	} else if (!phone.equals(other.phone))
+	    return false;
+	if (registrationDate == null) {
+	    if (other.registrationDate != null)
+		return false;
+	} else if (!registrationDate.equals(other.registrationDate))
+	    return false;
+	if (role != other.role)
+	    return false;
+	return true;
     }
 
     /**

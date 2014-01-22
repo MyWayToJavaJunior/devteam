@@ -138,7 +138,7 @@ public class CreateOrderAction implements Action {
 	}
 	try {
 	    topicLengthValid = RequestFieldsValidator.lengthValid(
-		    FieldType.INPUT_TEXT, topic);
+		    FieldType.INPUT_TEXT, topic, fileName);
 	    messageLengthValid = RequestFieldsValidator.lengthValid(
 		    FieldType.TEXTAREA, message);
 	} catch (ValidationException e) {

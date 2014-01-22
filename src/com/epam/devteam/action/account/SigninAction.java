@@ -20,7 +20,10 @@ import com.epam.devteam.entity.user.User;
 import com.epam.devteam.util.validator.RequestFieldsValidator;
 
 /**
- * The <code>SigninAction</code> is used to sign in.
+ * The <code>SigninAction</code> is used to sign in. Implements
+ * <code>Action</code> interface.
+ * 
+ * @see com.epam.devteam.action.Action
  * 
  * @date Jan 5, 2014
  * @author Andrey Kovalskiy
@@ -28,7 +31,7 @@ import com.epam.devteam.util.validator.RequestFieldsValidator;
  */
 public class SigninAction implements Action {
     private static final Logger LOGGER = Logger.getLogger(SigninAction.class);
-    private DaoFactory factory;
+    private ActionResult result = new ActionResult();
     private UserDao dao;
 
     /**
@@ -68,28 +71,29 @@ public class SigninAction implements Action {
 	    throw new ActionBadRequestException(e);
 	}
 	if (user == null) {
-	    session.setAttribute("signInError", "account.accountNotFound");
-	    LOGGER.debug("Email or/and password are empty.");
-	    return new ActionResult(ActionResult.METHOD.REDIRECT, "main");
+	    session.setAttribute("signInError", "account.notFound");
+	    LOGGER.debug("Account not found.");
+	    result.setMethod(ActionResult.METHOD.REDIRECT);
+	    result.setView("main");
+	    return result;
+	}
+	if (user.isActive() == false) {
+	    session.setAttribute("error", "account.notActive");
+	    session.setAttribute("link", "do/contacts");
+	    LOGGER.debug("Account is not active.");
+	    result.setMethod(ActionResult.METHOD.REDIRECT);
+	    result.setView("error");
+	    return result;
 	}
 	session.setAttribute("user", user);
 	session.removeAttribute("email");
 	session.removeAttribute("signInError");
+	session.removeAttribute("error");
+	session.removeAttribute("link");
 	LOGGER.debug("User " + user.getEmail() + " has been registered.");
-	return new ActionResult(ActionResult.METHOD.REDIRECT, "main");
-    }
-
-    /**
-     * Is used to get dao factory. It initializes factory during the first use.
-     * 
-     * @return Dao factory.
-     * @throws DaoException If something fails.
-     */
-    private DaoFactory daoFactory() throws DaoException {
-	if (factory == null) {
-	    factory = DaoFactory.getDaoFactory();
-	}
-	return factory;
+	result.setMethod(ActionResult.METHOD.REDIRECT);
+	result.setView("main");
+	return result;
     }
 
     /**
@@ -100,7 +104,7 @@ public class SigninAction implements Action {
      */
     private UserDao userDao() throws DaoException {
 	if (dao == null) {
-	    dao = daoFactory().getUserDao();
+	    dao = DaoFactory.getDaoFactory().getUserDao();
 	}
 	return dao;
     }

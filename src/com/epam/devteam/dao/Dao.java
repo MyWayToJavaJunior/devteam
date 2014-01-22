@@ -6,6 +6,9 @@ package com.epam.devteam.dao;
 import java.util.List;
 
 /**
+ * The <code></code> provides methods to work with database and required
+ * entities. Every dao class should instantiate this interface.
+ * 
  * @date Jan 2, 2014
  * @author Andrey Kovalskiy
  * 

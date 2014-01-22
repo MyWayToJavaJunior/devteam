@@ -12,15 +12,26 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.epam.devteam.entity.user.User;
 import com.epam.devteam.entity.user.UserRole;
 
+/**
+ * The <code>SecurityFilter</code> is used to check user right to access any
+ * resource or perform any action. If access is denied user will be forwarded at
+ * "Error" page.
+ * 
+ * @date Jan 22, 2014
+ * @author Andrey Kovalskiy
+ * 
+ */
 public class SecurityFilter implements Filter {
     private Map<String, EnumSet<UserRole>> actions = new HashMap<String, EnumSet<UserRole>>();
 
+    /**
+     * Creates a map of URLs and users who have rights to access it.
+     */
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 	EnumSet<UserRole> all = EnumSet.of(UserRole.UNREGISTERED_USER,
@@ -61,11 +72,15 @@ public class SecurityFilter implements Filter {
 
     }
 
+    /**
+     * Checks current request URL. If User has rights to access this URL filter
+     * pass request to next filter, otherwise User will be forwarded to the
+     * 'Error' page.
+     */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
 	    FilterChain chain) throws IOException, ServletException {
 	HttpServletRequest httpRequest = (HttpServletRequest) request;
-	HttpServletResponse httpResponse = (HttpServletResponse) response;
 	HttpSession session = httpRequest.getSession();
 	EnumSet<UserRole> allowedRoles = actions.get(httpRequest.getMethod()
 		+ httpRequest.getPathInfo());

@@ -76,6 +76,7 @@ public class ShowEditAccountPageAction implements Action {
 	    }
 	    account = user;
 	}
+	LOGGER.debug(account);
 	session.setAttribute("account", account);
 	session.removeAttribute("error");
 	return new ActionResult(ActionResult.METHOD.FORWARD, "edit-account");

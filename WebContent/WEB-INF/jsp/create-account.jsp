@@ -53,6 +53,7 @@
 					<input type="hidden" name="role" value="CUSTOMER">
 				</c:otherwise>
 			</c:choose>
+			<font size="1"><fmt:message bundle="${msg}" key="password.help" /></font>
 			<button class="span-6">
 				<fmt:message bundle="${msg}" key="action.createAccount" />
 			</button>

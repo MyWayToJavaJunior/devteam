@@ -72,7 +72,7 @@
 						color="red">*</font><br />
 				</label>
 				<t:error-info error="${messageError}" />
-				<textarea class="span-18" name="message" style="resize: none"
+				<textarea class="span-18" name="message" style="resize: none" 
 						maxlength="2000">${message}</textarea>
 			</p>
 			<p>

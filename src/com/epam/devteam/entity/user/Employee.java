@@ -67,47 +67,39 @@ public class Employee extends User {
     }
 
     /**
+     * Returns a hash code value for the object.
+     * 
+     * @param The object's hash code.
+     */
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = super.hashCode();
+	result = prime * result
+		+ ((qualification == null) ? 0 : qualification.hashCode());
+	return result;
+    }
+
+    /**
      * Indicates whether some other object is "equal to" this one.
      * 
      * @param obj The reference object with which to compare.
      */
     @Override
     public boolean equals(Object obj) {
-	if (this == obj) {
+	if (this == obj)
 	    return true;
-	}
-	if (obj == null) {
+	if (!super.equals(obj))
 	    return false;
-	}
-	if (this.getClass() == obj.getClass()) {
-	    Employee otherEmployee = (Employee) obj;
-	    return (this.getId() == otherEmployee.getId())
-		    && (this.getEmail().equals(otherEmployee.getEmail()))
-		    && (this.getPassword().equals(otherEmployee.getPassword()))
-		    && (this.getRegistrationDate().equals(otherEmployee
-			    .getRegistrationDate()))
-		    && (this.getRole().equals(otherEmployee.getRole()))
-		    && (this.isActive() == otherEmployee.isActive())
-		    && (this.getFirstName()
-			    .equals(otherEmployee.getFirstName()))
-		    && (this.getLastName().equals(otherEmployee.getLastName()))
-		    && (this.getBirthDate()
-			    .equals(otherEmployee.getBirthDate()))
-		    && (this.getAddress().equals(otherEmployee.getAddress()))
-		    && (this.getPhone().equals(otherEmployee.getPhone()))
-		    && (this.qualification.equals(otherEmployee.qualification));
-	} else {
+	if (getClass() != obj.getClass())
 	    return false;
-	}
-    }
-
-    /**
-     * Returns a hash code value for the object.
-     */
-    @Override
-    public int hashCode() {
-	return super.hashCode()
-		+ ((qualification == null) ? 0 : qualification.hashCode());
+	Employee other = (Employee) obj;
+	if (qualification == null) {
+	    if (other.qualification != null)
+		return false;
+	} else if (!qualification.equals(other.qualification))
+	    return false;
+	return true;
     }
 
     /**

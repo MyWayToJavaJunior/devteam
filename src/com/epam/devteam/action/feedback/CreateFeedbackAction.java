@@ -25,7 +25,7 @@ import com.epam.devteam.entity.feedback.Feedback;
 import com.epam.devteam.entity.order.Order;
 import com.epam.devteam.entity.order.OrderStatus;
 import com.epam.devteam.entity.user.Employee;
-import com.epam.devteam.service.FeedbackCreator;
+import com.epam.devteam.service.FeedbackService;
 import com.epam.devteam.service.ServiceException;
 import com.epam.devteam.util.validator.FieldType;
 import com.epam.devteam.util.validator.RequestFieldsValidator;
@@ -37,7 +37,7 @@ public class CreateFeedbackAction implements Action {
     private static final long fileMaxSize = 10485760L;
     private static final ServletFileUpload fileUpload = initServletFileUpload();
     private ActionResult result = new ActionResult();
-    private FeedbackCreator feedbackCreator = new FeedbackCreator();
+    private FeedbackService feedbackCreator = new FeedbackService();
 
     @Override
     public ActionResult execute(HttpServletRequest request,
@@ -57,6 +57,7 @@ public class CreateFeedbackAction implements Action {
 	int orderId = 0;
 	byte[] fileContent = null;
 	boolean formFieldsEqualNull = false;
+	boolean fileNameLengthValid = false;
 	boolean messageLengthValid = false;
 	LOGGER.debug("Create feedback action...");
 	session.removeAttribute("messageError");
@@ -122,6 +123,17 @@ public class CreateFeedbackAction implements Action {
 	    result.setMethod(ActionResult.METHOD.REDIRECT);
 	    result.setView(request.getHeader("referer"));
 	    return result;
+	}
+	try {
+	    fileNameLengthValid = RequestFieldsValidator.lengthValid(
+		    FieldType.INPUT_TEXT, fileName);
+	} catch (ValidationException e) {
+	    LOGGER.warn("File name cannot be validated.");
+	    throw new ActionException(e);
+	}
+	if (!fileNameLengthValid) {
+	    LOGGER.warn("File name value is not valid.");
+	    throw new ActionBadRequestException();
 	}
 	try {
 	    messageLengthValid = RequestFieldsValidator.lengthValid(
