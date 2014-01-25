@@ -2,6 +2,7 @@ package com.epam.devteam.action.order;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.util.List;
 
@@ -87,7 +88,11 @@ public class CreateOrderAction implements Action {
 	for (FileItem item : items) {
 	    if (item.isFormField()) {
 		fieldName = item.getFieldName();
-		fieldValue = item.getString();
+		try {
+		    fieldValue = new String (item.get(),"UTF-8");
+		} catch (UnsupportedEncodingException e1) {
+		    throw new ActionException();
+		}
 		if ("subject".equals(fieldName)) {
 		    try {
 			subject = OrderSubject.valueOf(fieldValue);
@@ -98,6 +103,7 @@ public class CreateOrderAction implements Action {
 		}
 		if ("topic".equals(fieldName)) {
 		    topic = fieldValue;
+		    System.out.println("Topic :" + topic);
 		}
 		if ("message".equals(fieldName)) {
 		    message = fieldValue;

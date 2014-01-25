@@ -84,6 +84,7 @@ public class Customer extends User {
      * @param position The position to set.
      */
     public void setPosition(String position) {
+	super.setFirstName("name");
 	this.position = position;
     }
 

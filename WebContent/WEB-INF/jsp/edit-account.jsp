@@ -55,12 +55,6 @@
 				<c:otherwise>
 					<fieldset>
 						<p>
-							<label>
-								<fmt:message bundle="${msg}" key="common.birthDate" />
-							</label><br />
-							<t:date date="${account.birthDate}"/>
-						</p>
-						<p>
 							<label><fmt:message bundle="${msg}"
 										key="common.qualification" />
 						</label>
@@ -70,6 +64,14 @@
 					</fieldset>
 				</c:otherwise>
 			</c:choose>
+			<fieldset>
+						<p>
+							<label>
+								<fmt:message bundle="${msg}" key="common.birthDate" />
+							</label><br />
+							<t:date date="${account.birthDate}"/>
+						</p>
+			</fieldset>
 			<fieldset>
 				<p>
 					<label>

@@ -66,6 +66,10 @@ public class ChangeAccountPasswordAction implements Action {
 	session.setAttribute("oldPassword", oldPassword);
 	session.setAttribute("newPassword1", newPassword1);
 	session.setAttribute("newPassword2", newPassword2);
+	LOGGER.debug(oldPassword);
+	LOGGER.debug(newPassword1);
+	LOGGER.debug(newPassword2);
+	LOGGER.debug(user.getPassword());
 	if (!userRole.equals(UserRole.ADMINISTRATOR)) {
 	    if (!user.getPassword().equals(oldPassword)) {
 		session.removeAttribute("passwordError");

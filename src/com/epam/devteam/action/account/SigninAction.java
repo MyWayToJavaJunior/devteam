@@ -85,6 +85,7 @@ public class SigninAction implements Action {
 	    result.setView("error");
 	    return result;
 	}
+	LOGGER.debug(user.getPassword());
 	session.setAttribute("user", user);
 	session.removeAttribute("email");
 	session.removeAttribute("signInError");

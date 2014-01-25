@@ -37,7 +37,7 @@
 	</div>
 	<div class="span-18">
 		<form action="do/create-order" method="post"
-				enctype="multipart/form-data">
+				enctype="multipart/form-data" >
 			<p>
 				<label>
 					<fmt:message bundle="${msg}" key="common.subject" /><br />
