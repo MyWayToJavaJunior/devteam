@@ -9,10 +9,6 @@ package com.epam.devteam.util.property;
  * 
  */
 public class PropertyManagerException extends Exception {
-
-    /**
-     * Serial version ID.
-     */
     private static final long serialVersionUID = 1L;
 
     /**

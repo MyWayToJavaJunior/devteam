@@ -14,9 +14,17 @@ import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.FeedbackDao;
 import com.epam.devteam.db.ConnectionPool;
 import com.epam.devteam.db.ConnectionPoolException;
-import com.epam.devteam.entity.response.Feedback;
+import com.epam.devteam.entity.feedback.Feedback;
 import com.epam.devteam.entity.user.Employee;
 
+/**
+ * The <code>PostgresqlFeedbackDao</code> implements <code>FeedbackDao</code>
+ * interface for Postgresql database.
+ * 
+ * @date Jan 20, 2014
+ * @author Andrey Kovalskiy
+ * 
+ */
 public class PostgresqlFeedbackDao extends AbstractDao implements FeedbackDao {
     private static final Logger LOGGER = Logger
 	    .getLogger(PostgresqlFeedbackDao.class);
@@ -39,13 +47,18 @@ public class PostgresqlFeedbackDao extends AbstractDao implements FeedbackDao {
 	super(connectionPool);
     }
 
+    /**
+     * Is used to create the given feedback in the database.
+     * 
+     * @param object The feedback to create.
+     * @throws DaoException If something fails at database level.
+     */
     @Override
     public void create(Feedback object) throws DaoException {
 	LOGGER.debug("create()");
 	Feedback feedback;
 	Connection connection;
 	PreparedStatement statement;
-
 	try {
 	    connection = getConnectionPool().takeConnection();
 	    LOGGER.debug("Connection has been taken.");
@@ -80,30 +93,80 @@ public class PostgresqlFeedbackDao extends AbstractDao implements FeedbackDao {
 
     }
 
+    /**
+     * Is used to return a feedback from the database by the given id, otherwise
+     * {@code null}.
+     * 
+     * @param id The id of the feedback to be returned.
+     * @return The object from the database with required id, otherwise
+     *         {@code null}.
+     * @throws DaoException If something fails at database level.
+     */
     @Override
-    public Feedback find(Integer id) throws DaoException {
-	// TODO Auto-generated method stub
-	return null;
+    public Feedback find(int id) throws DaoException {
+	LOGGER.warn("Method is not implemeted");
+	throw new DaoException();
     }
 
+    /**
+     * Is used to update the given feedback.
+     * 
+     * @param object The feedback to update.
+     * @throws DaoException If something fails at database level.
+     */
     @Override
     public void update(Feedback object) throws DaoException {
-	// TODO Auto-generated method stub
-
+	LOGGER.warn("Method is not implemeted");
+	throw new DaoException();
     }
 
+    /**
+     * Is used to delete the feedback with the given id from the database.
+     * 
+     * @param id The id of the feedback to be deleted.
+     * @throws DaoException If something fails at database level.
+     */
     @Override
-    public void delete(Feedback object) throws DaoException {
-	// TODO Auto-generated method stub
-
+    public void delete(int id) throws DaoException {
+	LOGGER.warn("Method is not implemeted");
+	throw new DaoException();
     }
 
+    /**
+     * Is used to get all of the feedbacks from the database.
+     * 
+     * @return The list of all feedbacks in the database.
+     * @throws DaoException If something fails at database level.
+     */
     @Override
     public List<Feedback> list() throws DaoException {
-	// TODO Auto-generated method stub
-	return null;
+	LOGGER.warn("Method is not implemeted");
+	throw new DaoException();
     }
 
+    /**
+     * Is used to get feedbacks from the database with paging.
+     * 
+     * @param firstRow The row from where to start list feedbacks.
+     * @param rowNumber The number of feedbacks to list.
+     * @return The list of feedbacks in the database.
+     * @throws DaoException If something fails at database level.
+     */
+    @Override
+    public List<Feedback> list(int firstRow, int rowNumber) throws DaoException {
+	LOGGER.warn("Method is not implemeted");
+	throw new DaoException();
+    }
+
+    /**
+     * 
+     * Is used to find feedback by order id. if there is now feedback with
+     * required id it returns null.
+     * 
+     * @param id The order id.
+     * @return The feedback, null otherwise.
+     * @throws DaoException If something fails during method performing.
+     */
     @Override
     public Feedback findByOrderId(int id) throws DaoException {
 	LOGGER.debug("findByOrderId()");
@@ -111,7 +174,6 @@ public class PostgresqlFeedbackDao extends AbstractDao implements FeedbackDao {
 	Connection connection;
 	Statement statement;
 	ResultSet resultSet;
-
 	try {
 	    connection = getConnectionPool().takeConnection();
 	    LOGGER.debug("Connection has been taken.");
@@ -138,6 +200,12 @@ public class PostgresqlFeedbackDao extends AbstractDao implements FeedbackDao {
 	    freeConnection(connection, statement);
 	    LOGGER.warn("Statement cannot be executed.", e);
 	    throw new DaoException();
+	}
+	try {
+	    resultSet.close();
+	    LOGGER.debug("Result set has been closed.");
+	} catch (SQLException e) {
+	    LOGGER.debug("Result set cannot be closed.");
 	}
 	freeConnection(connection, statement);
 	return feedback;

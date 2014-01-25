@@ -6,13 +6,16 @@ import java.sql.Date;
 import com.epam.devteam.entity.user.Customer;
 
 /**
+ * The <code>Order</code> class contain all information about order.
+ * 
  * @date Jan 11, 2014
  * @author Andrey Kovalskiy
+ * @see com.epam.devteam.entity.order.OrderStatus
+ * @see com.epam.devteam.entity.order.OrderSubject
  */
 public class Order implements Serializable {
-
     private static final long serialVersionUID = 1L;
-    private Integer id;
+    private int id;
     private Date date;
     private OrderStatus status;
     private OrderSubject subject;
@@ -32,19 +35,19 @@ public class Order implements Serializable {
     /**
      * Initializes a newly created {@code Object} object.
      * 
-     * @param id
-     * @param date
-     * @param status
-     * @param subject
-     * @param topic
-     * @param message
-     * @param fileName
-     * @param fileContent
-     * @param customer
+     * @param id The order id.
+     * @param date The date of creation of the order.
+     * @param status The order status.
+     * @param subject The order subject.
+     * @param topic The order topic.
+     * @param message The order message.
+     * @param fileName The name of the file attached to the order.
+     * @param fileContent The content of the file attached to the order.
+     * @param customer The customer who created the order.
      */
-    public Order(Integer id, Date date, OrderStatus status,
-	    OrderSubject subject, String topic, String message,
-	    String fileName, byte[] fileContent, Customer customer) {
+    public Order(int id, Date date, OrderStatus status, OrderSubject subject,
+	    String topic, String message, String fileName, byte[] fileContent,
+	    Customer customer) {
 	super();
 	this.id = id;
 	this.date = date;
@@ -62,7 +65,7 @@ public class Order implements Serializable {
      * 
      * @return The id.
      */
-    public Integer getId() {
+    public int getId() {
 	return id;
     }
 
@@ -71,7 +74,7 @@ public class Order implements Serializable {
      * 
      * @param id The id to set.
      */
-    public void setId(Integer id) {
+    public void setId(int id) {
 	this.id = id;
     }
 
@@ -219,90 +222,63 @@ public class Order implements Serializable {
 	this.customer = customer;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
+    /**
+     * Returns hashcode of the object.
      */
     @Override
     public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result
-		+ ((customer == null) ? 0 : customer.hashCode());
-	result = prime * result + ((date == null) ? 0 : date.hashCode());
-	result = prime * result
-		+ ((fileName == null) ? 0 : fileName.hashCode());
-	result = prime * result + ((id == null) ? 0 : id.hashCode());
-	result = prime * result + ((message == null) ? 0 : message.hashCode());
-	result = prime * result + ((status == null) ? 0 : status.hashCode());
-	result = prime * result + ((subject == null) ? 0 : subject.hashCode());
-	result = prime * result + ((topic == null) ? 0 : topic.hashCode());
-	return result;
+	return 31 * id + ((customer == null) ? 0 : customer.hashCode())
+		+ ((date == null) ? 0 : date.hashCode())
+		+ ((fileName == null) ? 0 : fileName.hashCode())
+		+ ((message == null) ? 0 : message.hashCode())
+		+ ((status == null) ? 0 : status.hashCode())
+		+ ((subject == null) ? 0 : subject.hashCode())
+		+ ((topic == null) ? 0 : topic.hashCode());
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Indicates whether some other object is "equal to" this one.
      * 
-     * @see java.lang.Object#equals(java.lang.Object)
+     * @param obj The reference object with which to compare.
      */
     @Override
     public boolean equals(Object obj) {
-	if (this == obj)
+	if (this == obj) {
 	    return true;
-	if (obj == null)
+	}
+	if (obj == null) {
 	    return false;
-	if (getClass() != obj.getClass())
+	}
+	if (this.getClass() == obj.getClass()) {
+	    Order otherOrder = (Order) obj;
+	    return (this.id == otherOrder.id)
+		    && (this.date.equals(otherOrder.date))
+		    && (this.status.equals(otherOrder.status))
+		    && (this.subject.equals(otherOrder.subject))
+		    && (this.topic.equals(otherOrder.topic))
+		    && (this.message.equals(otherOrder.message))
+		    && (this.fileName.equals(otherOrder.fileName))
+		    && (this.fileContent.equals(otherOrder.fileContent))
+		    && (this.customer.equals(otherOrder.customer));
+	} else {
 	    return false;
-	Order other = (Order) obj;
-	if (customer == null) {
-	    if (other.customer != null)
-		return false;
-	} else if (!customer.equals(other.customer))
-	    return false;
-	if (date == null) {
-	    if (other.date != null)
-		return false;
-	} else if (!date.equals(other.date))
-	    return false;
-	if (fileName == null) {
-	    if (other.fileName != null)
-		return false;
-	} else if (!fileName.equals(other.fileName))
-	    return false;
-	if (id == null) {
-	    if (other.id != null)
-		return false;
-	} else if (!id.equals(other.id))
-	    return false;
-	if (message == null) {
-	    if (other.message != null)
-		return false;
-	} else if (!message.equals(other.message))
-	    return false;
-	if (status != other.status)
-	    return false;
-	if (subject != other.subject)
-	    return false;
-	if (topic == null) {
-	    if (other.topic != null)
-		return false;
-	} else if (!topic.equals(other.topic))
-	    return false;
-	return true;
+	}
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
+    /**
+     * Returns a string representation of the object.
      */
     @Override
     public String toString() {
-	return "Order [id=" + id + ", date=" + date + ", status=" + status
-		+ ", subject=" + subject + ", topic=" + topic + ", message="
-		+ message + ", fileName=" + fileName + ", customer=" + customer
-		+ "]";
+	StringBuffer sb = new StringBuffer();
+	sb.append("Order id:").append(id).append(", date:").append(date)
+		.append(", status:").append(status).append(", subject:")
+		.append(subject).append(", topic:").append(topic)
+		.append(", message:").append(message).append(", fileName:")
+		.append(fileName).append(", customer:")
+		.append(customer.getFirstName()).append(" ")
+		.append(customer.getLastName());
+	return sb.toString();
     }
 
 }

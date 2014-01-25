@@ -4,11 +4,10 @@
 package com.epam.devteam.util.property;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
-
-import com.epam.devteam.util.property.PropertyManager;
 
 /**
  * @date Dec 18, 2013
@@ -21,7 +20,6 @@ public class PropertyManager {
 	    .getLogger(PropertyManager.class);
     private static volatile PropertyManager instance = null;
     private Properties properties = null;
-    private String message = null;
 
     /**
      * Is used to get property manager implementation instance. Initialization
@@ -51,13 +49,17 @@ public class PropertyManager {
      */
     private void init() throws PropertyManagerException {
 	properties = new Properties();
+	InputStream stream = PropertyManager.class.getClassLoader()
+		.getResourceAsStream("properties.properties");
+	if (stream == null) {
+	    LOGGER.error("Property file cannot be found.");
+	    throw new PropertyManagerException();
+	}
 	try {
-	    properties.load(PropertyManager.class.getClassLoader()
-		    .getResourceAsStream("properties.properties"));
+	    properties.load(stream);
 	} catch (IOException e) {
-	    message = "Can not load property file.";
-	    LOGGER.error(message);
-	    throw new PropertyManagerException(message);
+	    LOGGER.error("Can not load property file.");
+	    throw new PropertyManagerException(e);
 	}
     }
 
@@ -73,9 +75,8 @@ public class PropertyManager {
 	String value = null;
 	value = properties.getProperty(key);
 	if (value == null) {
-	    message = "Value " + key + " is not defined.";
-	    LOGGER.warn(message);
-	    throw new PropertyManagerException(message);
+	    LOGGER.warn("Value " + key + " is not defined.");
+	    throw new PropertyManagerException();
 	}
 	return value;
     }
@@ -115,9 +116,8 @@ public class PropertyManager {
 	try {
 	    value = Long.parseLong(temp);
 	} catch (NumberFormatException e) {
-	    message = "Wrong " + key + " value format.";
-	    LOGGER.warn(message);
-	    throw new PropertyManagerException(message);
+	    LOGGER.warn("Wrong " + key + " value format.");
+	    throw new PropertyManagerException(e);
 	}
 	return value;
     }
@@ -157,9 +157,8 @@ public class PropertyManager {
 	try {
 	    value = Integer.parseInt(temp);
 	} catch (NumberFormatException e) {
-	    message = "Wrong " + key + " value format.";
-	    LOGGER.warn(message);
-	    throw new PropertyManagerException(message);
+	    LOGGER.warn("Wrong " + key + " value format.");
+	    throw new PropertyManagerException(e);
 	}
 	return value;
     }
@@ -199,9 +198,8 @@ public class PropertyManager {
 	try {
 	    value = Double.parseDouble(temp);
 	} catch (NumberFormatException e) {
-	    message = "Wrong " + key + " value format.";
-	    LOGGER.warn(message);
-	    throw new PropertyManagerException(message);
+	    LOGGER.warn("Wrong " + key + " value format.");
+	    throw new PropertyManagerException(e);
 	}
 	return value;
     }

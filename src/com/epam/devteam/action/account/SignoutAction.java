@@ -8,7 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.epam.devteam.action.Action;
-import com.epam.devteam.action.ActionException;
+import com.epam.devteam.action.ActionResult;
+import com.epam.devteam.action.exception.ActionException;
 import com.epam.devteam.entity.user.User;
 
 /**
@@ -19,25 +20,27 @@ import com.epam.devteam.entity.user.User;
 public class SignoutAction implements Action {
 
     @Override
-    public String execute(HttpServletRequest request,
+    public ActionResult execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
 	HttpSession session = request.getSession();
 	User user = (User) session.getAttribute("user");
 	switch (user.getRole()) {
 	case CUSTOMER:
 	case MANAGER:
-	    request.getSession().removeAttribute("orders");
-	    request.getSession().removeAttribute("order");
-	    request.getSession().removeAttribute("feedback");
+	    session.removeAttribute("orders");
+	    session.removeAttribute("order");
+	    session.removeAttribute("feedback");
 	    break;
 	case ADMINISTRATOR:
-	    request.getSession().removeAttribute("users");
-	    request.getSession().removeAttribute("accountToManage");
+	    session.removeAttribute("users");
+	    session.removeAttribute("accountToManage");
 	    break;
 	default:
 	    break;
 	}
-	request.getSession().removeAttribute("user");
-	return "main";
+	session.removeAttribute("user");
+	session.removeAttribute("error");
+	session.removeAttribute("success");
+	return new ActionResult(ActionResult.METHOD.FORWARD, "main");
     }
 }

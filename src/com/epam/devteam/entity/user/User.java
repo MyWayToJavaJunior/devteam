@@ -7,19 +7,21 @@ import java.io.Serializable;
 import java.sql.Date;
 
 /**
+ * The <code>User</code> provides basic fields and methods for all users.
+ * 
  * @date Dec 15, 2013
  * @author Andrey Kovalskiy
- * 
+ * @see com.epam.devteam.entity.user.UserRole
  */
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private Integer id;
+    private int id;
     private String email;
     private String password;
     private Date registrationDate;
     private UserRole role;
-    private boolean isActive;
+    private boolean active;
     private String firstName;
     private String lastName;
     private Date birthDate;
@@ -41,15 +43,16 @@ public class User implements Serializable {
      * @param email The user email.
      * @param password The user password.
      * @param registrationDate The date of registration.
-     * @param role The user role.
+     * @param role The role of the user.
+     * @param active The status of the user.
      * @param firstName The user first name.
      * @param lastName The user last name.
      * @param birthDate The user birth date.
      * @param address The user address.
-     * @param phone The contact phone number
+     * @param phone The contact phone number.
      */
     public User(Integer id, String email, String password,
-	    Date registrationDate, UserRole role, boolean isActive,
+	    Date registrationDate, UserRole role, boolean active,
 	    String firstName, String lastName, Date birthDate, String address,
 	    String phone) {
 	super();
@@ -58,7 +61,7 @@ public class User implements Serializable {
 	this.password = password;
 	this.registrationDate = registrationDate;
 	this.role = role;
-	this.isActive = isActive;
+	this.active = active;
 	this.firstName = firstName;
 	this.lastName = lastName;
 	this.birthDate = birthDate;
@@ -71,7 +74,7 @@ public class User implements Serializable {
      * 
      * @return The id.
      */
-    public Integer getId() {
+    public int getId() {
 	return id;
     }
 
@@ -80,7 +83,7 @@ public class User implements Serializable {
      * 
      * @param id The id to set.
      */
-    public void setId(Integer id) {
+    public void setId(int id) {
 	this.id = id;
     }
 
@@ -162,7 +165,7 @@ public class User implements Serializable {
      * @return The isActive.
      */
     public boolean isActive() {
-	return isActive;
+	return active;
     }
 
     /**
@@ -170,8 +173,8 @@ public class User implements Serializable {
      * 
      * @param isActive The isActive to set.
      */
-    public void setActive(boolean isActive) {
-	this.isActive = isActive;
+    public void setActive(boolean active) {
+	this.active = active;
     }
 
     /**
@@ -265,54 +268,95 @@ public class User implements Serializable {
     }
 
     /**
+     * Returns a hash code value for the object.
+     * 
+     * @param The object's hash code.
+     */
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + (active ? 1231 : 1237);
+	result = prime * result + ((address == null) ? 0 : address.hashCode());
+	result = prime * result
+		+ ((birthDate == null) ? 0 : birthDate.hashCode());
+	result = prime * result + ((email == null) ? 0 : email.hashCode());
+	result = prime * result
+		+ ((firstName == null) ? 0 : firstName.hashCode());
+	result = prime * result + id;
+	result = prime * result
+		+ ((lastName == null) ? 0 : lastName.hashCode());
+	result = prime * result
+		+ ((password == null) ? 0 : password.hashCode());
+	result = prime * result + ((phone == null) ? 0 : phone.hashCode());
+	result = prime
+		* result
+		+ ((registrationDate == null) ? 0 : registrationDate.hashCode());
+	result = prime * result + ((role == null) ? 0 : role.hashCode());
+	return result;
+    }
+
+    /**
      * Indicates whether some other object is "equal to" this one.
      * 
      * @param obj The reference object with which to compare.
      */
     @Override
     public boolean equals(Object obj) {
-	if (this == obj) {
+	if (this == obj)
 	    return true;
-	}
-	if (obj == null) {
+	if (obj == null)
 	    return false;
-	}
-	if (this.getClass() == obj.getClass()) {
-	    User otherUser = (User) obj;
-	    return (this.id.equals(otherUser.id))
-		    && (this.email.equals(otherUser.email))
-		    && (this.password.equals(otherUser.password))
-		    && (this.registrationDate
-			    .equals(otherUser.registrationDate))
-		    && (this.role.equals(otherUser.role))
-		    && (this.isActive == otherUser.isActive)
-		    && (this.firstName.equals(otherUser.firstName))
-		    && (this.lastName.equals(otherUser.lastName))
-		    && (this.birthDate.equals(otherUser.birthDate))
-		    && (this.address.equals(otherUser.address))
-		    && (this.phone.equals(otherUser.phone));
-
-	} else {
+	if (getClass() != obj.getClass())
 	    return false;
-	}
-    }
-
-    /**
-     * Returns a hash code value for the object.
-     */
-    @Override
-    public int hashCode() {
-	return (int) (31 * id.hashCode()
-		+ ((email == null) ? 0 : email.hashCode()) + ((password == null) ? 0
-		    : password.hashCode()))
-		+ ((registrationDate == null) ? 0 : registrationDate.hashCode())
-		+ ((role == null) ? 0 : role.hashCode())
-		+ Boolean.valueOf(isActive).hashCode()
-		+ ((firstName == null) ? 0 : firstName.hashCode())
-		+ ((lastName == null) ? 0 : lastName.hashCode())
-		+ ((birthDate == null) ? 0 : birthDate.hashCode())
-		+ ((address == null) ? 0 : address.hashCode())
-		+ ((phone == null) ? 0 : phone.hashCode());
+	User other = (User) obj;
+	if (active != other.active)
+	    return false;
+	if (address == null) {
+	    if (other.address != null)
+		return false;
+	} else if (!address.equals(other.address))
+	    return false;
+	if (birthDate == null) {
+	    if (other.birthDate != null)
+		return false;
+	} else if (!birthDate.equals(other.birthDate))
+	    return false;
+	if (email == null) {
+	    if (other.email != null)
+		return false;
+	} else if (!email.equals(other.email))
+	    return false;
+	if (firstName == null) {
+	    if (other.firstName != null)
+		return false;
+	} else if (!firstName.equals(other.firstName))
+	    return false;
+	if (id != other.id)
+	    return false;
+	if (lastName == null) {
+	    if (other.lastName != null)
+		return false;
+	} else if (!lastName.equals(other.lastName))
+	    return false;
+	if (password == null) {
+	    if (other.password != null)
+		return false;
+	} else if (!password.equals(other.password))
+	    return false;
+	if (phone == null) {
+	    if (other.phone != null)
+		return false;
+	} else if (!phone.equals(other.phone))
+	    return false;
+	if (registrationDate == null) {
+	    if (other.registrationDate != null)
+		return false;
+	} else if (!registrationDate.equals(other.registrationDate))
+	    return false;
+	if (role != other.role)
+	    return false;
+	return true;
     }
 
     /**
@@ -321,12 +365,13 @@ public class User implements Serializable {
     @Override
     public String toString() {
 	StringBuffer sb = new StringBuffer();
-	sb.append("user:").append(lastName).append(" ").append(firstName)
-		.append(" role:").append(role).append(" birthdate:")
-		.append(birthDate).append(" email:").append(email)
+	sb.append("User id:").append(id).append(" email:").append(email)
+		.append(" registered:").append(registrationDate)
+		.append(" status:").append(active).append(" role:")
+		.append(role).append(" name:").append(lastName).append(" ")
+		.append(firstName).append(" birthdate:").append(birthDate)
 		.append(" address:").append(address).append(" phone:")
-		.append(phone).append(" registered:").append(registrationDate)
-		.append(" id:").append(id);
+		.append(phone);
 	return sb.toString();
     }
 }

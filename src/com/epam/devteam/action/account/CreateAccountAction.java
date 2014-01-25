@@ -3,9 +3,6 @@
  */
 package com.epam.devteam.action.account;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -13,7 +10,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import com.epam.devteam.action.Action;
-import com.epam.devteam.action.ActionException;
+import com.epam.devteam.action.ActionResult;
+import com.epam.devteam.action.exception.ActionBadRequestException;
+import com.epam.devteam.action.exception.ActionDatabaseFailException;
+import com.epam.devteam.action.exception.ActionException;
 import com.epam.devteam.dao.DaoException;
 import com.epam.devteam.dao.DaoFactory;
 import com.epam.devteam.dao.UserDao;
@@ -21,9 +21,16 @@ import com.epam.devteam.entity.user.Customer;
 import com.epam.devteam.entity.user.Employee;
 import com.epam.devteam.entity.user.User;
 import com.epam.devteam.entity.user.UserRole;
-import com.epam.devteam.util.property.PropertyManager;
+import com.epam.devteam.util.validator.RequestFieldsValidator;
+import com.epam.devteam.util.validator.ValidationException;
 
 /**
+ * The <code>CreateAccountAction</code> class is used to save new user to
+ * database. If every field is available new user will save to database and will
+ * save in session. Success message contains a link to edit new account. If new
+ * user was created by administrator success message will contain link to manage
+ * new account. Implements <code>Action</code> interface.
+ * 
  * @date Jan 4, 2014
  * @author Andrey Kovalskiy
  * 
@@ -31,40 +38,104 @@ import com.epam.devteam.util.property.PropertyManager;
 public class CreateAccountAction implements Action {
     private static final Logger LOGGER = Logger
 	    .getLogger(CreateAccountAction.class);
+    private DaoFactory factory;
+    private UserDao dao;
 
+    /**
+     * Is used to perform required actions and define method and view for
+     * <code>Controller</code>. Returns result as <code>ActionResult</code>.
+     * 
+     * @param request Request to process.
+     * @param response Response to send.
+     * @return ActionResult where to redirect user
+     * @throws ActionException If something fails during method performing.
+     */
     @Override
-    public String execute(HttpServletRequest request,
+    public ActionResult execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException {
-	HttpSession session;
-	DaoFactory factory;
-	UserDao dao;
 	User user;
-	String email;
-	String password1;
-	String password2;
 	UserRole role;
-	
-	session = request.getSession();
-	email = request.getParameter("email");
-	password1 = request.getParameter("password1");
-	password2 = request.getParameter("password2");
+	HttpSession session = request.getSession();
+	User currentUser = (User) session.getAttribute("user");
+	String email = request.getParameter("email");
+	String password1 = request.getParameter("password1");
+	String password2 = request.getParameter("password2");
+	String stringRole = request.getParameter("role");
+	int id = 0;
+	boolean formFieldsEqualNull = false;
+	boolean emailEmpty = false;
+	boolean emailValid = false;
+	boolean passwordEmpty = false;
+	boolean passwordValid = false;
+	LOGGER.debug("Create user action...");
+	formFieldsEqualNull = RequestFieldsValidator.equalNull(stringRole,
+		email, password1, password2);
+	if (formFieldsEqualNull) {
+	    LOGGER.warn("Form fields are not valid.");
+	    throw new ActionBadRequestException();
+	}
 	try {
-	    role = UserRole.valueOf(request.getParameter("role"));
+	    role = UserRole.valueOf(stringRole);
 	} catch (IllegalArgumentException e) {
-	    LOGGER.warn("Unknown role was detected: "
-		    + request.getParameter("role"));
-	    throw new ActionException();
+	    LOGGER.warn("Unknown role: " + stringRole);
+	    throw new ActionBadRequestException(e);
 	}
-	if (!isFormValuesValid(session, email, password1, password2)) {
-	    return request.getHeader("referer");
+	session.setAttribute("email", email);
+	session.setAttribute("password1", password1);
+	session.setAttribute("password2", password2);
+	session.removeAttribute("emailError");
+	session.removeAttribute("passwordError");
+	emailEmpty = RequestFieldsValidator.empty(email);
+	if (emailEmpty) {
+	    session.setAttribute("emailError", "account.emailEmpty");
+	    return new ActionResult(ActionResult.METHOD.REDIRECT,
+		    "create-account");
 	}
 	try {
-	    factory = DaoFactory.getDaoFactory();
-	} catch (DaoException e) {
-	    LOGGER.warn("Dao factory cannot be taked.");
-	    throw new ActionException();
+	    emailValid = RequestFieldsValidator.emailValid(email);
+	} catch (ValidationException e) {
+	    LOGGER.warn("Email " + email + " cannot be validated.");
+	    throw new ActionException(e);
 	}
-	dao = factory.getUserDao();
+	if (!emailValid) {
+	    session.setAttribute("emailError", "account.emailNotValid");
+	    return new ActionResult(ActionResult.METHOD.REDIRECT,
+		    "create-account");
+	}
+	try {
+	    user = userDao().find(email);
+	} catch (DaoException e) {
+	    LOGGER.warn("User existence cannot be checked.");
+	    throw new ActionDatabaseFailException(e);
+	}
+	if (user != null) {
+	    session.setAttribute("error", "account.userAlreadyExists");
+	    LOGGER.debug("User " + email + " is already exist");
+	    return new ActionResult(ActionResult.METHOD.REDIRECT, "error");
+	}
+	passwordEmpty = RequestFieldsValidator.empty(password1);
+	if (passwordEmpty) {
+	    session.setAttribute("passwordError", "account.passwordEmpty");
+	    return new ActionResult(ActionResult.METHOD.REDIRECT,
+		    "create-account");
+	}
+	try {
+	    passwordValid = RequestFieldsValidator.passwordValid(password1);
+	} catch (ValidationException e) {
+	    LOGGER.warn("Password cannot be validated.");
+	    throw new ActionException(e);
+	}
+	if (!passwordValid) {
+	    session.setAttribute("passwordError", "account.passwordNotValid");
+	    LOGGER.debug("Password is not valid");
+	    return new ActionResult(ActionResult.METHOD.REDIRECT,
+		    "create-account");
+	}
+	if (!password1.equals(password2)) {
+	    session.setAttribute("passwordError", "account.passwordsDontMatch");
+	    return new ActionResult(ActionResult.METHOD.REDIRECT,
+		    "create-account");
+	}
 	switch (role) {
 	case CUSTOMER:
 	    user = new Customer();
@@ -77,46 +148,52 @@ public class CreateAccountAction implements Action {
 	user.setPassword(password1);
 	user.setRole(role);
 	try {
-	    dao.create(user);
+	    id = userDao().createWithIdReturn(user);
+	    user.setId(id);
+	    LOGGER.debug("User " + user.getEmail()
+		    + " has been created. User id: " + user.getId());
 	} catch (DaoException e) {
 	    LOGGER.warn("User cannot be created.");
-	    throw new ActionException();
+	    throw new ActionDatabaseFailException(e);
 	}
-	LOGGER.debug("Account " + email + " has been created.");
-	session.setAttribute("success", "account.create.success");
-	return "success";
+	if (currentUser == null) {
+	    session.setAttribute("user", user);
+	}
+	session.setAttribute("success", "account.createSuccess");
+	session.setAttribute("link", "do/edit-account?id=" + user.getId());
+	session.removeAttribute("email");
+	session.removeAttribute("password1");
+	session.removeAttribute("password2");
+	session.removeAttribute("error");
+	session.removeAttribute("emailError");
+	session.removeAttribute("passwordError");
+	return new ActionResult(ActionResult.METHOD.REDIRECT, "success");
     }
 
-    private boolean isFormValuesValid(HttpSession session, String email,
-	    String password1, String password2) throws ActionException {
-	Pattern pattern;
-	Matcher matcher;
-	PropertyManager propertyManager;
-	String emailRegex;
-	if (email.isEmpty() || password1.isEmpty() || password2.isEmpty()) {
-	    session.setAttribute("error", "account.error.fieldsNotCorrect");
-	    return false;
+    /**
+     * Is used to get dao factory. It initializes factory during the first use.
+     * 
+     * @return Dao factory.
+     * @throws DaoException If something fails.
+     */
+    private DaoFactory daoFactory() throws DaoException {
+	if (factory == null) {
+	    factory = DaoFactory.getDaoFactory();
 	}
-	if (!password1.equals(password2)) {
-	    session.setAttribute("error",
-		    "account.create.error.passwordConfirm");
-	    return false;
+	return factory;
+    }
+
+    /**
+     * Is used to get user dao. It initializes dao during the first use.
+     * 
+     * @return The user.
+     * @throws DaoException If something fails.
+     */
+    private UserDao userDao() throws DaoException {
+	if (dao == null) {
+	    dao = daoFactory().getUserDao();
 	}
-	try {
-	    propertyManager = PropertyManager.getInstance();
-	    emailRegex = propertyManager.getString("validation.email");
-	    pattern = Pattern.compile(emailRegex);
-	    matcher = pattern.matcher(email);
-	    if (!matcher.matches()) {
-		session.setAttribute("error",
-			"account.create.error.emailNotValid");
-		return false;
-	    }
-	} catch (Exception e) {
-	    LOGGER.warn("Email cannot be validate.");
-	    throw new ActionException();
-	}
-	return true;
+	return dao;
     }
 
 }

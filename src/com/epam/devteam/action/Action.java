@@ -6,21 +6,28 @@ package com.epam.devteam.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.epam.devteam.action.exception.ActionException;
+
 /**
- * @date Dec 14, 2013
- * @author Andrey Kovalskiy
+ * The <code>Action</code> interface provides a method for http request
+ * processing.
  * 
+ * @date Dec 14, 2014
+ * @author Andrey Kovalskiy
+ * @see com.epam.devteam.action.ActionResult
  */
 public interface Action {
 
     /**
-     * Is used to make required action and get view where to redirect user.
+     * Is used to perform required actions and define method and view for
+     * <code>Controller</code>. Returns result as <code>ActionResult</code>.
      * 
      * @param request Request to process.
      * @param response Response to send.
-     * @return View where to redirect user
-     * @throws ActionException
+     * @return ActionResult where to redirect user
+     * @throws ActionException If something fails during method performing.
      */
-    public String execute(HttpServletRequest request,
+    public ActionResult execute(HttpServletRequest request,
 	    HttpServletResponse response) throws ActionException;
+
 }

@@ -13,6 +13,9 @@ import com.epam.devteam.util.property.PropertyManager;
 import com.epam.devteam.util.property.PropertyManagerException;
 
 /**
+ * The <code>DaoFactory</code> is used to get instances of required dao
+ * implementations.
+ * 
  * @date Dec 15, 2013
  * @author Andrey Kovalskiy
  * 

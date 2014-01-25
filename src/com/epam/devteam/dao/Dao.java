@@ -6,6 +6,9 @@ package com.epam.devteam.dao;
 import java.util.List;
 
 /**
+ * The <code></code> provides methods to work with database and required
+ * entities. Every dao class should instantiate this interface.
+ * 
  * @date Jan 2, 2014
  * @author Andrey Kovalskiy
  * 
@@ -21,7 +24,7 @@ public interface Dao<T> {
     void create(T object) throws DaoException;
 
     /**
-     * Is used to return an object in the database by the given id, otherwise
+     * Is used to return an object from the database by the given id, otherwise
      * {@code null}.
      * 
      * @param id The id of the object to be returned.
@@ -29,7 +32,7 @@ public interface Dao<T> {
      *         {@code null}.
      * @throws DaoException If something fails at database level.
      */
-    T find(Integer id) throws DaoException;
+    T find(int id) throws DaoException;
 
     /**
      * Is used to update the given object.
@@ -40,12 +43,12 @@ public interface Dao<T> {
     void update(T object) throws DaoException;
 
     /**
-     * Is used to delete the given object from the database.
+     * Is used to delete the object with the given id from the database.
      * 
-     * @param object The object to delete.
+     * @param id The id of the object to be deleted.
      * @throws DaoException If something fails at database level.
      */
-    void delete(T object) throws DaoException;
+    void delete(int id) throws DaoException;
 
     /**
      * Is used to get all of the objects from the database.
@@ -54,5 +57,15 @@ public interface Dao<T> {
      * @throws DaoException If something fails at database level.
      */
     List<T> list() throws DaoException;
+
+    /**
+     * Is used to get objects from the database with paging.
+     * 
+     * @param firstRow The row from where to start list objects.
+     * @param rowNumber The number of objects to list.
+     * @return The list of objects in the database.
+     * @throws DaoException If something fails at database level.
+     */
+    List<T> list(int firstRow, int rowNumber) throws DaoException;
 
 }
